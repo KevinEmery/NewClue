@@ -116,20 +116,39 @@ public class PathingTest {
 		Assert.assertTrue(targets.contains(4));
 	}
 
-	// NOT DONE
+//								    /;    ;\
+//								__  \\____//
+//								/{_\_/   `'\____
+//								\___   (o)  (o  }
+//_____________________________/          :--'   DRINKA
+//,-,'`@@@@@@@@       @@@@@@         \_    `__\
+//;:(  @@@@@@@@@        @@@             \___(o'o)
+//:: )  @@@@          @@@@@@        ,'@@(  `===='        PINTA
+//:: : @@@@@:          @@@@         `@@@:
+//:: \  @@@@@:       @@@@@@@)    (  '@@@'
+//;; /\      /`,    @@@@@@@@@\   :@@@@@)                   MILKA
+//::/  )    {_----------------:  :~`,~~;
+//;;'`; :   )                  :  / `; ;
+//;;;; : :   ;                  :  ;  ; :                        DAY !!!
+//`'`' / :  :                   :  :  : :
+//)_ \__;      ";"          :_ ;  \_\       `,','
+//:__\  \    * `,'*         \  \  :  \   *  8`;'*  *
+//`^'     \ :/           `^'  `-^-'   \v/ :  \/   -Bill Ames-
+//	// NOT DONE
 	@Test
 	public void testTargets0_6()
 	{
+		//I get 2, 5, 8, 10, 15.
 		myBoard.startTargets(0, 6);
 		Set<Integer> targets= myBoard.getTargets();
 		// NEED TO FIND THE RIGHT NODES
-		Assert.assertEquals(6, targets.size());
-		Assert.assertTrue(targets.contains(12));
-		Assert.assertTrue(targets.contains(9));
-		Assert.assertTrue(targets.contains(1));
-		Assert.assertTrue(targets.contains(6));
-		Assert.assertTrue(targets.contains(3));
-		Assert.assertTrue(targets.contains(4));
+		Assert.assertEquals(5, targets.size());
+		Assert.assertTrue(targets.contains(2));
+		Assert.assertTrue(targets.contains(5));
+		Assert.assertTrue(targets.contains(8));
+		Assert.assertTrue(targets.contains(10));
+		Assert.assertTrue(targets.contains(15));
+		
 	}
 	
 	@Test
