@@ -1,4 +1,4 @@
-package Testing;
+package testing;
 
 // All of the imports required to test.
 import java.util.LinkedList;
@@ -7,7 +7,9 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import Utilities.IntBoard;
+import utilities.IntBoard;
+
+
 public class PathingTest {
 	
 	IntBoard myBoard;
@@ -125,10 +127,6 @@ public class PathingTest {
 	@Test
 	public void testTargets0_6()
 	{
-		//I get 2, 5, 8, 10, 15.
-		//I get those, as well as 7 and 13
-		//7 - 1,5,6,2,3,7
-		//13 - 1,2,6,5,9,13
 		myBoard.startTargets(0, 6);
 		Set<Integer> targets= myBoard.getTargets();
 		Assert.assertEquals(7, targets.size());
@@ -194,7 +192,8 @@ public class PathingTest {
 		Assert.assertTrue(targets.contains(1));
 		Assert.assertTrue(targets.contains(9));
 	}
-	
+
+
 //								        /;    ;\
 //								    __  \\____//
 //								   /{_\_/   `'\____
