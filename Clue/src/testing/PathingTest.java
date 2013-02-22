@@ -151,7 +151,7 @@ public class PathingTest {
 		Assert.assertTrue(targets.contains(10));
 		Assert.assertTrue(targets.contains(2));
 	}
-	
+	//stupid change!
 	@Test
 	public void testTargets8_4() {
 		myBoard.startTargets(8, 4);
