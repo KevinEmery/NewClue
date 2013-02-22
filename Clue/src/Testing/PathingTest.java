@@ -1,8 +1,8 @@
 package Testing;
 
+// All of the imports required to test.
 import java.util.LinkedList;
 import java.util.Set;
-
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,12 +11,14 @@ public class PathingTest {
 	
 	IntBoard myBoard;
 	
+	// Initializes the board and sets the adjancency lists
 	@Before
 	public void setup() {
 		myBoard = new IntBoard();
 		myBoard.calcAdjacencies();
 	}
 	
+	// Tests the calc index function
 	@Test
 	public void testCalcIndex() {
 		
@@ -29,6 +31,7 @@ public class PathingTest {
 		
 	}
 
+	// Tests the adjacency lists of the corners.
 	@Test
 	public void testAdjCorners() {
 		// Tests the top left corner
@@ -44,6 +47,7 @@ public class PathingTest {
 		Assert.assertEquals(2, testList.size());
 	}
 	
+	// Tests the adjacency lists of the edges
 	@Test
 	public void testAdjEdges() {
 		// Tests a right edge
@@ -61,6 +65,7 @@ public class PathingTest {
 		Assert.assertEquals(3, testList.size());
 	}
 
+	// Tests the adjacency lists of the one off cases
 	@Test
 	public void testAdjOneOff() {
 		// Tests one off the left edge and top
@@ -116,41 +121,27 @@ public class PathingTest {
 		Assert.assertTrue(targets.contains(4));
 	}
 
-//								        /;    ;\
-//								    __  \\____//
-//								   /{_\_/   `'\____
-//								   \___   (o)  (o  }
-//	   _____________________________/          :--'   DRINKA
-//,- ,'`@@@@@@@@       @@@@@@         \_    `__\
-//;: (  @@@@@@@@@        @@@             \___(o'o)
-//::  )  @@@@          @@@@@@        ,'@@(  `===='        PINTA
-//::  : @@@@@:          @@@@         `@@@:
-//::  \  @@@@@:       @@@@@@@)    (  '@@@'
-//;;  /\      /`,    @@@@@@@@@\   :@@@@@)                   MILKA
-//:: /  )    {_----------------:  :~`,~~;
-//;;'`; :   )                  :  / `; ;
-//;;;; ::   ;                  :  ;  ; :                        DAY !!!
-//`'`'/ :  :                   :  :  : :
-//    )_ \__;      ";"          :_ ;  \_\       `,','
-//    :__\  \    * `,'*         \  \  :  \   *  8`;'*  *
-//       `^'     \ :/           `^'  `-^-'   \v/ :  \/   -Bill Ames-
-//	// NOT DONE
 	@Test
 	public void testTargets0_6()
 	{
 		//I get 2, 5, 8, 10, 15.
+		//I get those, as well as 7 and 13
+		//7 - 1,5,6,2,3,7
+		//13 - 1,2,6,5,9,13
 		myBoard.startTargets(0, 6);
 		Set<Integer> targets= myBoard.getTargets();
-		// NEED TO FIND THE RIGHT NODES
-		Assert.assertEquals(5, targets.size());
+		Assert.assertEquals(7, targets.size());
 		Assert.assertTrue(targets.contains(2));
 		Assert.assertTrue(targets.contains(5));
 		Assert.assertTrue(targets.contains(8));
 		Assert.assertTrue(targets.contains(10));
 		Assert.assertTrue(targets.contains(15));
+		Assert.assertTrue(targets.contains(7));
+		Assert.assertTrue(targets.contains(13));
 		
 	}
 	
+	// Tests pathing along an edge of lengths 2 and 4
 	@Test
 	public void testTargets7_2() {
 		myBoard.startTargets(7, 2);
@@ -174,6 +165,7 @@ public class PathingTest {
 		Assert.assertTrue(targets.contains(5));
 	}
 	
+	// Tests pathing from the inside cases of lengths 2 and 3
 	@Test
 	public void testTargets10_2() {
 		myBoard.startTargets(10, 2);
@@ -201,4 +193,25 @@ public class PathingTest {
 		Assert.assertTrue(targets.contains(1));
 		Assert.assertTrue(targets.contains(9));
 	}
+	
+//								        /;    ;\
+//								    __  \\____//
+//								   /{_\_/   `'\____
+//								   \___   (o)  (o  }
+//	   _____________________________/          :--'   DRINKA
+//,- ,'`@@@@@@@@       @@@@@@         \_    `__\
+//;: (  @@@@@@@@@        @@@             \___(o'o)
+//::  )  @@@@          @@@@@@        ,'@@(  `===='        PINTA
+//::  : @@@@@:          @@@@         `@@@:
+//::  \  @@@@@:       @@@@@@@)    (  '@@@'
+//;;  /\      /`,    @@@@@@@@@\   :@@@@@)                   MILKA
+//:: /  )    {_----------------:  :~`,~~;
+//;;'`; :   )                  :  / `; ;
+//;;;; ::   ;                  :  ;  ; :                        DAY !!!
+//`'`'/ :  :                   :  :  : :
+//    )_ \__;      ";"          :_ ;  \_\       `,','
+//    :__\  \    * `,'*         \  \  :  \   *  8`;'*  *
+//       `^'     \ :/           `^'  `-^-'   \v/ :  \/   -Bill Ames-
+//
+
 }
