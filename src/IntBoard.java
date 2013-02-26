@@ -22,37 +22,39 @@ public class IntBoard {
 	public HashSet<Integer> calcAdjacencies(int loc,int steps,HashSet<Integer> adjlist){
 		//This function needs to do a recursive loop that counts down the steps to check if the space to the right, left, top and bottom
 		//are valid places, if so it adds to adjlist, we need not worry about copies since this is a hashset.
-		if(steps>0){
-			if((loc-boardDim[0])>=0 && !adjlist.contains(loc-boardDim[0])){
+		if(steps!=0){
+			if((loc-boardDim[0])>=0){
 				//Go up?
-				adjlist.add(loc-boardDim[0]);
-				return calcAdjacencies(loc-boardDim[0],steps-1,adjlist);
-			} else if(loc+boardDim[0]<(boardDim[0]*boardDim[1]) && (!adjlist.contains(loc+boardDim[0]))){
-				//Go down?
-				adjlist.add(loc+boardDim[0]);
-				return calcAdjacencies(loc+boardDim[0],steps-1,adjlist);
-			} else if((loc-1)%boardDim[0]!=0 && !adjlist.contains(loc-1)){
-				//Go left?
-				adjlist.add(loc-1);
-				return calcAdjacencies(loc-1,steps-1,adjlist);
-			} else if((loc+1)%boardDim[0]!=0 && !adjlist.contains(loc+1)){
-				//Go right?
-				adjlist.add(loc+1);
-				return calcAdjacencies(loc+1,steps-1,adjlist);
-			} else {
-				return adjlist;
+				adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist));
 			}
+			if(loc+boardDim[0]<(boardDim[0]*boardDim[1])){
+				//Go down?
+				adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist));
+			}
+			if((loc)%boardDim[0]!=0 && (loc-1)>=0){
+				//Go left?
+				adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist));
+			}
+			if((loc+1)%boardDim[0]!=0 && (loc+1)<=(boardDim[0]*boardDim[1])){
+				//Go right?
+				adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist));
+			}
+			return adjlist;
+		} else if(steps==0){
+			if(!adjlist.contains(loc)){
+				adjlist.add(loc);
+			}
+			return adjlist;
 		} else {
 			return adjlist;
 		}
 	}
 	public void startTargets(int loc, int steps){
-		HashSet<Integer> targetList = new HashSet<Integer>();
-		targetList.add(loc);
-		targetList=calcAdjacencies(loc, steps, targetList);
+		this.targetList = new HashSet<Integer>();
+		this.targetList=calcAdjacencies(loc, steps, targetList);
 	}
 	public HashSet<Integer> getTargets(){	// just used to return the target
-		return targetList;
+		return this.targetList;
 	}
 	public HashSet<Integer> getAdjList(int i){	// just used to return the adjlist
 		HashSet<Integer> adjlist = new HashSet<Integer>();
