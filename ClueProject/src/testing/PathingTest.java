@@ -85,7 +85,7 @@ public class PathingTest {
 		Assert.assertTrue(testList.contains(9));
 		Assert.assertTrue(testList.contains(11));
 		Assert.assertTrue(testList.contains(14));
-		Assert.assertEquals(3, testList.size());		
+		Assert.assertEquals(4, testList.size());		
 	}
 
 	// Tests paths of length 1, 2, 3, and 6 from a corner.
@@ -156,12 +156,14 @@ public class PathingTest {
 	public void testTargets8_4() {
 		myBoard.startTargets(8, 4);
 		Set<Integer> targets= myBoard.getTargets();
-		Assert.assertEquals(5, targets.size());
+		Assert.assertEquals(7, targets.size());
 		Assert.assertTrue(targets.contains(7));
 		Assert.assertTrue(targets.contains(15));
 		Assert.assertTrue(targets.contains(13));
 		Assert.assertTrue(targets.contains(2));
 		Assert.assertTrue(targets.contains(5));
+		Assert.assertTrue(targets.contains(0));
+		Assert.assertTrue(targets.contains(10));
 	}
 	
 	// Tests pathing from the inside cases of lengths 2 and 3
