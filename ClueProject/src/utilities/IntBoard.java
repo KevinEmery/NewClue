@@ -1,16 +1,16 @@
 package utilities;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
+import java.util.HashSet;
 
 public class IntBoard {
 	
 	// Constants to declare the board size
-	private final int NUMBER_OF_ROWS = 4;
-	private final int NUMBER_OF_COLUMNS = 4;
+	private final int NUMBER_OF_ROWS;
+	private final int NUMBER_OF_COLUMNS;
 	
 	// Map to store the adjacency list
 	private Map<Integer, LinkedList<Integer>> adjList;
@@ -18,28 +18,43 @@ public class IntBoard {
 	// Set to store the targets for travel
 	private Set<Integer> targets;
 
-	// Initiates a new adjacency list and initalizes a spot for each cell and a new linked list with it
+	// Default constructor, to be called when no arguments are given. Defaults to a 4x4 board
 	public IntBoard() {
+		this(4, 4);
+	}
+
+	// Creates a "board" with dimensions rows x cols. Initiates a new adjacency list and initalizes a spot for each cell and a new linked list with it
+	public IntBoard(int rows, int cols) {
+		NUMBER_OF_ROWS = rows;
+		NUMBER_OF_COLUMNS = cols;
 		adjList = new HashMap<Integer, LinkedList<Integer>>();
 		for (int i = 0; i < NUMBER_OF_ROWS * NUMBER_OF_COLUMNS; i++) {
 			adjList.put(i, new LinkedList<Integer>());
 		}
 	}
 	
-	// Determines what cells each cell is adjacent to.
+	// Determines the neighbors of every cell on the board
 	public void calcAdjacencies() {
+		// Iterates through every row and column, checking the validity of the cells on all four sides of a given cell. 
+		// If it is valid, it adds it to the adjList
 		for (int i = 0; i < NUMBER_OF_ROWS; i++) {
 			for (int j = 0; j < NUMBER_OF_COLUMNS; j++) {
-				if (i + 1 >= 0 && i + 1 < NUMBER_OF_ROWS) {
+				if (isValidCell(i + 1, j))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i + 1, j));
-				} if (i - 1 >= 0 && i - 1 < NUMBER_OF_ROWS)
+				if (isValidCell(i - 1, j))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i - 1, j));
-				if (j + 1 >= 0 && j + 1 < NUMBER_OF_COLUMNS)
+				if (isValidCell(i, j + 1))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i, j + 1));
-				if (j - 1 >= 0 && j - 1 < NUMBER_OF_COLUMNS)
+				if (isValidCell(i, j - 1))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i, j - 1));
 			}
 		}
+	}
+	
+	// Determines if a given cell is valid on the game board
+	private boolean isValidCell(int row, int column) {
+		return row >= 0 && row < NUMBER_OF_ROWS && column >= 0 && column < NUMBER_OF_COLUMNS;
+		
 	}
 
 	// Initalies the visted array, targets as empty, and then calls the recursive function to calculate targets
@@ -52,6 +67,8 @@ public class IntBoard {
 	
 	// Calculates the spaces we can get to from a certain cell
 	private void calcTargets(int location, int numSteps, boolean[] visited) {
+		
+		// Initialized a new LinkedList list of adjacents cells for this location
 		LinkedList<Integer> adjacentCells = new LinkedList<Integer>();
 		
 		// Adds unvisited cells to a new adjacency list

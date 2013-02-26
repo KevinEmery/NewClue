@@ -3,9 +3,9 @@ package testing;
 // All of the imports required to test.
 import java.util.LinkedList;
 import java.util.Set;
-import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import junit.framework.Assert;
 
 import utilities.IntBoard;
 
@@ -151,7 +151,7 @@ public class PathingTest {
 		Assert.assertTrue(targets.contains(10));
 		Assert.assertTrue(targets.contains(2));
 	}
-	//stupid change!
+	
 	@Test
 	public void testTargets8_4() {
 		myBoard.startTargets(8, 4);
