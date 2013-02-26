@@ -17,6 +17,7 @@ public class IntBoardTest {
 	{
 		IntBoard board=new IntBoard(4,4);
 		HashSet<Integer> testList = board.getAdjList(0);
+		System.out.println(testList);
 		Assert.assertTrue(testList.contains(4));
 		Assert.assertTrue(testList.contains(1));
 		Assert.assertEquals(2, testList.size());
