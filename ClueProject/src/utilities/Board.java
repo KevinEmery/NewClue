@@ -11,15 +11,14 @@ public class Board {
 	private int numColumns;
 	
 	public Board() {
-		this.cells = new ArrayList<BoardCell>();
-		this.rooms = new HashMap<Character, String>();
-		this.rooms.put('A', "Test");
-		this.numRows = 0;
-		this.numColumns = 0;
+		this ("Board.csv", "Legend.csv");
 	}
 	
 	public Board(String string, String string2) {
-		
+		this.cells = new ArrayList<BoardCell>();
+		this.rooms = new HashMap<Character, String>();
+		this.numRows = 0;
+		this.numColumns = 0;
 	}
 	
 	public void loadConfigFiles() {
