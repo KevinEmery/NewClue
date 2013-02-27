@@ -35,5 +35,8 @@ public class IntBoardTest {
 		Assert.assertTrue(targets.contains(3));
 		Assert.assertTrue(targets.contains(4));
 	}
-
+	public void testRooms(){
+		Board board = new Board();
+		Assert.assertEquals(10, board.getNumRooms());
+	}
 }

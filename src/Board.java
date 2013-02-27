@@ -45,6 +45,9 @@ public class Board {
 	public int getNumColumns() {
 		return numColumns;
 	}
+	public int getNumRooms(){
+		return rooms.size();
+	}
 	public void setNumColumns(int numColumns) {
 		this.numColumns = numColumns;
 	}
