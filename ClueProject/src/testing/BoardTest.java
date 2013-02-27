@@ -18,9 +18,10 @@ import utilities.RoomCell;
 
 public class BoardTest {
 	private Board testBoard;
+	//set up by initializing the board with a default constructor and telling it to load some files.
 	@Before
 	public void setup() {
-		testBoard = new Board();
+		testBoard = new Board("Board.csv", "Legend.csv");
 		testBoard.loadConfigFiles();
 	}
 	@Test
