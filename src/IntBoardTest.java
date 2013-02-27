@@ -56,10 +56,10 @@ public class IntBoardTest {
 			}
 			i++;
 			s.next();
+			Assert.assertEquals(i, intBoard.calcIndex(cellArray[0], cellArray[1]));
 		}
 		s.close();
 		Assert.assertEquals(board.getNumRows(), boardSize[1]);
 		Assert.assertEquals(board.getNumColumns(), boardSize[1]);
-		
 	}
 }
