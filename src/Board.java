@@ -18,9 +18,9 @@ public class Board {
 	
 	
 	public RoomCell GetRoomCellAt(int row, int column){
-		return null;
-		//return cells.contains(BoardCell(row,column)); was unable to return a RoomCell
-	}
+		
+		return new RoomCell(row,column); 
+		}
 	
 	
 	
