@@ -1,7 +1,11 @@
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Scanner;
 import java.util.Set;
 
 import junit.framework.Assert;
@@ -35,8 +39,17 @@ public class IntBoardTest {
 		Assert.assertTrue(targets.contains(3));
 		Assert.assertTrue(targets.contains(4));
 	}
-	public void testRooms(){
+	@Test
+	public void testRooms() throws FileNotFoundException{
 		Board board = new Board();
-		Assert.assertEquals(10, board.getNumRooms());
+		//Assert.assertEquals(10, board.getNumRooms());
+		Scanner s=new Scanner(new BufferedReader(new FileReader("etc/Clue_map.csv")));
+		s.useDelimiter(",");
+		System.out.println("Loop");
+		while(s.hasNext()){
+			System.out.println(s.toString());
+			s.next();
+		}
+		s.close();
 	}
 }
