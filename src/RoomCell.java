@@ -21,7 +21,21 @@ public class RoomCell extends BoardCell{
 	public char getRoom() {
 		return room;
 	}
-
+	public String getDoorDirection(){
+		switch(this.doorDirection){
+			case UP:
+				return "u";
+			case DOWN:
+				return "d";
+			case LEFT:
+				return "l";
+			case RIGHT:
+				return "r";
+			default:
+				return "";
+		}
+				
+	}
 	public void setRoom(char room) {
 		this.room = room;
 	}

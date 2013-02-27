@@ -58,7 +58,11 @@ public class IntBoard {
 		//adjlist.add(i);
 		return calcAdjacencies(i,1,adjlist);
 	}
-	private int calcIndex(int row, int column){	// turns a 2d board into a 1d list
+	public int calcIndex(int row, int column){	// turns a 2d board into a 1d list
 		return column+row*boardDim[0];
+	}
+	public int[] calcRowCol(int cellIndex){
+		int [] cellArray = {cellIndex/boardDim[0],cellIndex%boardDim[0]};
+		return cellArray;
 	}
 }

@@ -7,7 +7,10 @@ public class Board {
 	private Map<Character,String> rooms= new HashMap<Character, String>();
 	private int numRows;
 	private int numColumns;
-	
+	Board(int rows,int cols){
+//		this.numRows=rows;
+//		this.numColumns=cols;
+	}
 	public void loadConfigFiles(){
 
 	}
@@ -17,7 +20,7 @@ public class Board {
 	
 	
 	
-	public RoomCell GetRoomCellAt(int row, int column){
+	public RoomCell getRoomCellAt(int row, int column){
 		
 		return new RoomCell(row,column); 
 		}

@@ -41,15 +41,25 @@ public class IntBoardTest {
 	}
 	@Test
 	public void testRooms() throws FileNotFoundException{
-		Board board = new Board();
-		//Assert.assertEquals(10, board.getNumRooms());
+		int [] boardSize = {23,23};
+		Board board = new Board(boardSize[0],boardSize[1]);
+		IntBoard intBoard= new IntBoard();
+		Assert.assertEquals(10, board.getNumRooms());
 		Scanner s=new Scanner(new BufferedReader(new FileReader("etc/Clue_map.csv")));
-		s.useDelimiter(",");
-		System.out.println("Loop");
+		s.useDelimiter("[,\\n]");
+		int i=0;
 		while(s.hasNext()){
-			System.out.println(s.toString());
+			int[] cellArray = intBoard.calcRowCol(i);
+			Assert.assertEquals(board.getRoomCellAt(cellArray[0],cellArray[1]).getRoom(), s.next().toString());
+			if(s.next().toString().length()==2){
+				Assert.assertEquals(board.getRoomCellAt(cellArray[0],cellArray[1]).getDoorDirection(), s.next().toString().substring(1, 1));
+			}
+			i++;
 			s.next();
 		}
 		s.close();
+		Assert.assertEquals(board.getNumRows(), boardSize[1]);
+		Assert.assertEquals(board.getNumColumns(), boardSize[1]);
+		
 	}
 }
