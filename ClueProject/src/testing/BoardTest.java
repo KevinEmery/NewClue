@@ -18,7 +18,7 @@ public class BoardTest {
 	//load the proper config files
 	@Before
 	public void setup() {
-		testBoard = new Board();
+		testBoard = new Board("Board.csv", "Legend.csv");
 		testBoard.loadConfigFiles();
 		testBoard.calcAdjacencies();
 	}
