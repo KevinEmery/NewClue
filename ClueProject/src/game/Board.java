@@ -77,7 +77,7 @@ public class Board {
 	}
 	
 	public void calcTargets(int row, int column, int steps) {
-		
+		startTargets(calcIndex(row, column), steps);
 	}
 	
 	// Calculates the spaces we can get to from a certain cell
