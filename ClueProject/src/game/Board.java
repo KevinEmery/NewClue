@@ -202,8 +202,12 @@ public class Board {
 		numRows = rowCounter;
 	}
 
-	public BoardCell getCellAt(int calcIndex) {
-		return cells.get(calcIndex);
+	public BoardCell getCellAt(int row, int column) {
+		return getCellAt(calcIndex(row, column));
+	}
+	
+	public BoardCell getCellAt(int index) {
+		return cells.get(index);
 	}
 	
 }

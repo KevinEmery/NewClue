@@ -62,15 +62,15 @@ public class BoardTest {
 	@Test
 	public void testDoors() {
 		// Tests one door in each direction to ensure that direction was read in correctly
-		Assert.assertEquals(RoomCell.DoorDirection.DOWN, testBoard.getRoomCellAt(6, 3));
-		Assert.assertEquals(RoomCell.DoorDirection.UP, testBoard.getRoomCellAt(20,18));
-		Assert.assertEquals(RoomCell.DoorDirection.RIGHT, testBoard.getRoomCellAt(19, 4));
-		Assert.assertEquals(RoomCell.DoorDirection.LEFT, testBoard.getRoomCellAt(11, 19));
+		Assert.assertEquals(RoomCell.DoorDirection.DOWN, testBoard.getRoomCellAt(6, 3).getDoorDirection());
+		Assert.assertEquals(RoomCell.DoorDirection.UP, testBoard.getRoomCellAt(20,18).getDoorDirection());
+		Assert.assertEquals(RoomCell.DoorDirection.RIGHT, testBoard.getRoomCellAt(19, 4).getDoorDirection());
+		Assert.assertEquals(RoomCell.DoorDirection.LEFT, testBoard.getRoomCellAt(11, 19).getDoorDirection());
 
-		//also make sure that things that aren't supposed to be doors aren't
-		Assert.assertEquals(false, testBoard.getRoomCellAt(0, 0).isDoorway());
+		// Tests a room cell to ensure that it knows it is not a doorway
+		Assert.assertEquals(false, testBoard.getCellAt(0, 0).isDoorway());
 		// Tests a walkway cell to ensure that it knows it is not a doorway
-		Assert.assertEquals(false, testBoard.getRoomCellAt(8, 6).isDoorway());
+		Assert.assertEquals(false, testBoard.getCellAt(8, 6).isDoorway());
 
 		// Counts all of the doors on the board, and makes sure we have the right count
 		int counter=0;
@@ -105,20 +105,23 @@ public class BoardTest {
 	@Test (expected = FileNotFoundException.class)
 	public void testFileNotFoundException() throws BadConfigFormatException, FileNotFoundException {
 		Board b = new Board("Board.csv", "LegendNotThere.csv");
-		b.loadConfigFiles();
+		b.loadRoomConfig();
+		b.loadBoardConfig();
 	}
 	
 	// Bad config - incorrect legend format
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadConfigLegndExceptions() throws BadConfigFormatException, FileNotFoundException {
 		Board b = new Board("Board.csv", "BadLegend.csv");
-		b.loadConfigFiles();
+		b.loadRoomConfig();
+		b.loadBoardConfig();
 	}
 	
 	// Bad config - incorrect board format
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadConfigBoardException() throws BadConfigFormatException, FileNotFoundException {
 		Board b = new Board("BadBoard.csv", "Legend.csv");
-		b.loadConfigFiles();
+		b.loadRoomConfig();
+		b.loadBoardConfig();
 	}
 }
