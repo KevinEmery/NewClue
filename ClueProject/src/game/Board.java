@@ -130,7 +130,7 @@ public class Board {
 	}
 	
 	public RoomCell getRoomCellAt(int row, int column) {
-		return new RoomCell();
+		return (RoomCell) cells.get(calcIndex(row, column));
 	}
 	public ArrayList<BoardCell> getCells() {
 		return cells;
@@ -162,10 +162,6 @@ public class Board {
 				throw new BadConfigFormatException(roomConfigFilename, "Key was not a valid letter.");
 			rooms.put(key, nextLine.substring((nextLine.indexOf(",")+1)).trim());
 		}
-		Set<Character> keys = rooms.keySet();
-		for(Character key_i: keys) {
-			System.out.println(key_i + ": " + rooms.get(key_i));
-		}
 	}
 
 	public void loadBoardConfig() throws BadConfigFormatException, FileNotFoundException {
@@ -173,6 +169,7 @@ public class Board {
 		Scanner fileScanner = new Scanner(boardConfigFile);
 		String[] cellInitials;
 		int noColumns=0;
+		int rowCounter=0;
 		boolean firstIteration = true;
 		String tmp;
 		while(fileScanner.hasNext()) {
@@ -189,11 +186,14 @@ public class Board {
 			//go through the tokenized string and add new cells based on the character. 
 			for(String i : cellInitials) 
 				cells.add((i.equals("W") ? new WalkwayCell() : new RoomCell(tmp)));
+			++rowCounter;
 		}
+		numColumns = noColumns;
+		numRows = rowCounter;
 	}
 
 	public BoardCell getCellAt(int calcIndex) {
-		return new RoomCell();
+		return cells.get(calcIndex);
 	}
 	
 }
