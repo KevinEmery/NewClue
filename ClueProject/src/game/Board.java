@@ -1,11 +1,14 @@
 package game;
 
 //Board class, contains the legend (cells) and the actual rooms.
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 public class Board {	
@@ -16,22 +19,25 @@ public class Board {
 	// Set to store the targets for travel
 	private Set<BoardCell> targets;
 
-	
+	private String roomConfigFilename;
+	private String boardConfigFilename;
 	private ArrayList<BoardCell> cells;
 	private Map<Character, String> rooms;
 	private int numRows;
 	private int numColumns;
 
 	//default = empty lists/sets + no columns and rows.
-	public Board() {
-		this ("Board.csv", "Legend.csv");
-	}
+//	public Board() {
+	//	this ("Board.csv", "fuck.csv");
+	//}
 	
-	public Board(String string, String string2) {
+	public Board(String boardConfigFilename, String roomConfigFilename) {
 		this.cells = new ArrayList<BoardCell>();
 		this.rooms = new HashMap<Character, String>();
 		this.numRows = 0;
 		this.numColumns = 0;
+		this.boardConfigFilename = boardConfigFilename;
+		this.roomConfigFilename = roomConfigFilename;
 	}
 	// Determines the neighbors of every cell on the board
 	public void calcAdjacencies() {
@@ -64,7 +70,9 @@ public class Board {
 		visited[location] = true;
 		calcTargets(location, numSteps, visited);
 	}
-	
+	public void calcTargets(int row, int column, int steps) {
+		
+	}
 	// Calculates the spaces we can get to from a certain cell
 	private void calcTargets(int location, int numSteps, boolean[] visited) {
 		
@@ -100,7 +108,14 @@ public class Board {
 	}
 	
 	public void loadConfigFiles() {
-		
+		try {
+			loadRoomConfig();
+			loadBoardConfig();
+		} catch(BadConfigFormatException e) {
+			System.err.println(e.getMessage());
+		} catch(FileNotFoundException e) {
+			System.err.println(e.getMessage());
+		}
 	}
 	
 	public int calcIndex(int row, int column) {
@@ -126,8 +141,20 @@ public class Board {
 		return numColumns;
 	}
 
-	public void loadRoomConfig() {
-		
+	public void loadRoomConfig() throws  BadConfigFormatException, FileNotFoundException{
+		FileReader roomConfigFile = new FileReader(roomConfigFilename);
+		Scanner fileScanner = new Scanner(roomConfigFile);
+		String nextLine;
+		Character key;
+		while(fileScanner.hasNext()) {
+			nextLine = fileScanner.nextLine();
+			if(!nextLine.contains(","))
+				throw new BadConfigFormatException(roomConfigFilename, "No comma seperator between key and room type.");
+			key = nextLine.charAt(0);
+			if(!(Character.isLetter(key))) 
+				throw new BadConfigFormatException(roomConfigFilename, "Key was not a valid letter.");
+			rooms.put(key, nextLine.substring((nextLine.indexOf(",")+1)));
+		}
 	}
 
 	public void loadBoardConfig() {
