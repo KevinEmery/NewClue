@@ -32,7 +32,6 @@ public class BoardInitTests {
 	public void testRooms() {
 		Map<Character, String> rooms = board.getRooms();
 		// Ensure we read the correct number of rooms
-		System.out.println(rooms.size());
 		assertEquals(NUM_ROOMS, rooms.size());
 		// Test retrieving a few from the hash, including the first
 		// and last in the file and a few others
@@ -46,6 +45,7 @@ public class BoardInitTests {
 	@Test
 	public void testBoardDimensions() {
 		// Ensure we have the proper number of rows and columns
+		
 		assertEquals(NUM_ROWS, board.getNumRows());
 		assertEquals(NUM_COLUMNS, board.getNumColumns());		
 	}
@@ -82,7 +82,7 @@ public class BoardInitTests {
 	public void testNumberOfDoorways() 
 	{
 		int numDoors = 0;
-		int totalCells = board.getNumColumns() * board.getNumRows();
+		int totalCells = board.getNumColumns() * board.getNumColumns();
 		Assert.assertEquals(506, totalCells);
 		for (int i=0; i<totalCells; i++)
 		{
