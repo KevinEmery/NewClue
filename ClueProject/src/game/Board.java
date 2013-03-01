@@ -160,7 +160,11 @@ public class Board {
 			key = nextLine.charAt(0);
 			if(!(Character.isLetter(key))) 
 				throw new BadConfigFormatException(roomConfigFilename, "Key was not a valid letter.");
-			rooms.put(key, nextLine.substring((nextLine.indexOf(",")+1)));
+			rooms.put(key, nextLine.substring((nextLine.indexOf(",")+1)).trim());
+		}
+		Set<Character> keys = rooms.keySet();
+		for(Character key_i: keys) {
+			System.out.println(key_i + ": " + rooms.get(key_i));
 		}
 	}
 
