@@ -5,7 +5,6 @@ import game.BadConfigFormatException;
 import game.Board;
 import game.BoardCell;
 import game.RoomCell;
-
 import java.io.FileNotFoundException;
 import junit.framework.Assert;
 import org.junit.Before;
@@ -62,15 +61,15 @@ public class BoardTest {
 	@Test
 	public void testDoors() {
 		// Tests one door in each direction to ensure that direction was read in correctly
-		Assert.assertEquals(RoomCell.DoorDirection.DOWN, testBoard.getRoomCellAt(6, 3).getDoorDirection());
-		Assert.assertEquals(RoomCell.DoorDirection.UP, testBoard.getRoomCellAt(20,18).getDoorDirection());
-		Assert.assertEquals(RoomCell.DoorDirection.RIGHT, testBoard.getRoomCellAt(19, 4).getDoorDirection());
-		Assert.assertEquals(RoomCell.DoorDirection.LEFT, testBoard.getRoomCellAt(11, 19).getDoorDirection());
+		Assert.assertEquals(RoomCell.DoorDirection.DOWN, testBoard.getRoomCellAt(testBoard.calcIndex(6, 3)).getDoorDirection());
+		Assert.assertEquals(RoomCell.DoorDirection.UP, testBoard.getRoomCellAt(testBoard.calcIndex(20,18)).getDoorDirection());
+		Assert.assertEquals(RoomCell.DoorDirection.RIGHT, testBoard.getRoomCellAt(testBoard.calcIndex(19, 4)).getDoorDirection());
+		Assert.assertEquals(RoomCell.DoorDirection.LEFT, testBoard.getRoomCellAt(testBoard.calcIndex(11, 19)).getDoorDirection());
 
 		// Tests a room cell to ensure that it knows it is not a doorway
-		Assert.assertEquals(false, testBoard.getCellAt(0, 0).isDoorway());
+		Assert.assertEquals(false, testBoard.getCellAt(testBoard.calcIndex(0, 0)).isDoorway());
 		// Tests a walkway cell to ensure that it knows it is not a doorway
-		Assert.assertEquals(false, testBoard.getCellAt(8, 6).isDoorway());
+		Assert.assertEquals(false, testBoard.getCellAt(testBoard.calcIndex(8, 6)).isDoorway());
 
 		// Counts all of the doors on the board, and makes sure we have the right count
 		int counter=0;
@@ -85,10 +84,10 @@ public class BoardTest {
 	// Tests a few rooms on the board to ensure that they have the correct character associated with them.
 	@Test
 	public void testRooms() {
-		Assert.assertEquals('S', testBoard.getRoomCellAt(0, 0).getInitial());
-		Assert.assertEquals('K', testBoard.getRoomCellAt(24, 24).getInitial());
-		Assert.assertEquals('H', testBoard.getRoomCellAt(13, 5).getInitial());
-		Assert.assertEquals('D', testBoard.getRoomCellAt(12, 22).getInitial());
+		Assert.assertEquals('S', testBoard.getRoomCellAt(testBoard.calcIndex(0, 0)).getInitial());
+		Assert.assertEquals('K', testBoard.getRoomCellAt(testBoard.calcIndex(24, 24)).getInitial());
+		Assert.assertEquals('H', testBoard.getRoomCellAt(testBoard.calcIndex(13, 5)).getInitial());
+		Assert.assertEquals('D', testBoard.getRoomCellAt(testBoard.calcIndex(12, 22)).getInitial());
 		
 	}
 

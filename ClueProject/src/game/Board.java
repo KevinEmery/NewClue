@@ -19,18 +19,27 @@ public class Board {
 	// Set to store the targets for travel
 	private Set<BoardCell> targets;
 
-	private String roomConfigFilename;
-	private String boardConfigFilename;
+	// Stores the entire board
 	private ArrayList<BoardCell> cells;
+	
+	// Stores the mapping from a character to the name of a room
 	private Map<Character, String> rooms;
+	
+	// Contains the dimensions of the board
 	private int numRows;
 	private int numColumns;
+	
+	private String roomConfigFilename;
+	private String boardConfigFilename;
 
-	//default = empty lists/sets + no columns and rows.
+
+	// Default = empty lists/sets + no columns and rows.
+	// Loads the files required to pass the CR test suite
 	public Board() {
 		this ("ClueLayout.csv", "ClueLegend.txt");
 	}
 	
+	// Sets the empty lists/sets and the names of the config files
 	public Board(String boardConfigFilename, String roomConfigFilename) {
 		this.cells = new ArrayList <BoardCell>();
 		this.rooms = new HashMap <Character, String>();
@@ -43,9 +52,11 @@ public class Board {
 	
 	// Determines the neighbors of every cell on the board
 	public void calcAdjacencies() {
+		// Initializes an empty adjacency list for each cell on the board
 		for (int i = 0; i < numRows * numColumns ; i++) {
 			this.adjList.put(i, new LinkedList<Integer>());
 		}
+		
 		// Iterates through every row and column, checking the validity of the cells on all four sides of a given cell. 
 		// If it is valid, it adds it to the adjList
 		for (int i = 0; i < numRows; i++) {
@@ -64,8 +75,7 @@ public class Board {
 	
 	// Determines if a given cell is valid on the game board
 	private boolean isValidCell(int row, int column) {
-		return row >= 0 && row < numRows && column >= 0 && column < numColumns;
-		
+		return row >= 0 && row < numRows && column >= 0 && column < numColumns;	
 	}
 
 	// Initalies the visted array, targets as empty, and then calls the recursive function to calculate targets
@@ -74,10 +84,6 @@ public class Board {
 		targets = new HashSet<BoardCell>();
 		visited[location] = true;
 		calcTargets(location, numSteps, visited);
-	}
-	
-	public void calcTargets(int row, int column, int steps) {
-		startTargets(calcIndex(row, column), steps);
 	}
 	
 	// Calculates the spaces we can get to from a certain cell
@@ -114,30 +120,41 @@ public class Board {
 		return adjList.get(location);
 	}
 	
+	// Loads the appropriate config files, and handles any errors associated with that process
+	// Writes any errors out to the file log.txt
 	public void loadConfigFiles() {
 		try {
 			loadRoomConfig();
 			loadBoardConfig();
 		} catch(BadConfigFormatException e) {
-			System.err.println(e.getMessage());
+			System.err.println(e.getMessage());	
 			
 		} catch(FileNotFoundException e) {
 			System.err.println("While trying to load config files, encountered a file not found: " + e.getMessage());
-			e.printStackTrace();
 		}
 	}
 	
+	// Calculates the index of a cell given the row and column
 	public int calcIndex(int row, int column) {
 		return numColumns * row + column;
 	}
 	
-	public RoomCell getRoomCellAt(int row, int column) {
-		return  (RoomCell) cells.get(calcIndex(row, column));
+	// Returns the RoomCell at a given row and column
+	public RoomCell getRoomCellAt(int index) {
+		return  (RoomCell) cells.get(index);
 	}
+
+	// Returns a room cell at a given index
+	public BoardCell getCellAt(int index) {
+		return cells.get(index);
+	}
+	
+	// Returns the ArrayList containing all of the cells on the board
 	public ArrayList<BoardCell> getCells() {
 		return cells;
 	}
 	
+	// Returns the rooms map
 	public Map<Character, String> getRooms() {
 		return rooms;
 	}
@@ -150,64 +167,96 @@ public class Board {
 		return numColumns;
 	}
 
-	public void loadRoomConfig() throws  BadConfigFormatException, FileNotFoundException{
+	// Load the room configs from the provided legend file
+	public void loadRoomConfig() throws  BadConfigFormatException, FileNotFoundException {
+		// Creates a FileReader and then wraps it in a scanner to read the file
 		FileReader roomConfigFile = new FileReader(roomConfigFilename);
 		Scanner fileScanner = new Scanner(roomConfigFile);
+		
 		String nextLine;
 		Character key;
+		
+		// While there is still something in the file, process it
 		while(fileScanner.hasNext()) {
+			// Read in the next line
 			nextLine = fileScanner.nextLine();
+			
+			// If there is either no comma or more than one comma, throw an exception
 			if(!nextLine.contains(",") || (nextLine.indexOf(',') != nextLine.lastIndexOf(',')))
 				throw new BadConfigFormatException(roomConfigFilename, "Incorrect number of comma seperators - less than one or more than one.");
 			key = nextLine.charAt(0);
+			
+			// If the first character is not a letter, throw an exception
 			if(!(Character.isLetter(key))) 
 				throw new BadConfigFormatException(roomConfigFilename, "Key was not a valid letter.");
+			
+			// If it's passed the exception checks, write this to the room map
 			rooms.put(key, nextLine.substring((nextLine.indexOf(",")+1)).trim());
 		}
 	}
 
+	// Load the board config from the provided board file
 	public void loadBoardConfig() throws BadConfigFormatException, FileNotFoundException {
+		// Create a file reader and wrap it in a scanner to read the file
 		FileReader boardConfigFile = new FileReader(boardConfigFilename);
 		Scanner fileScanner = new Scanner(boardConfigFile);
+		
+		// Initialize variables
 		String[] cellInitials;
 		int noColumns=0;
 		int rowCounter=0;
 		int currentColumn=0;
 		boolean firstIteration = true;
 		String tmp;
+		
+		// While there is something in the file, process it.
 		while(fileScanner.hasNext()) {
 			currentColumn=0;
 			tmp = fileScanner.nextLine();
-			//split up the line, greedily splitting around whitespace and commas..
+			
+			// Split up the line, greedily splitting around whitespace and commas, and place it into an array
 			cellInitials = tmp.split("[\\,\\s]+");
-			//if the first iteration, initialize noColumns.
+			
+			// If this is the first iteration, initialize noColumns.
 			if(firstIteration) {
 				noColumns = cellInitials.length;
 				firstIteration = false;
+				
+				// Otherwise, check to make sure that each row has the same number of columns as the first
 			}  else if(noColumns != cellInitials.length) { 
 				throw new BadConfigFormatException(boardConfigFilename, "The number of columns is not consistent across rows.");
 			}
-			//go through the tokenized string and add new cells based on the character.
 			
+			
+			// Go through the tokenized string and add new cells based on the character.
 			for(String i : cellInitials)  {
+				
+				// Check to make sure that the room exists
 				if(!rooms.containsKey(i.charAt(0))) {
 					throw new BadConfigFormatException(boardConfigFilename, "The configuration file contains invalid room types.");
 				}
+				
+				// Add the cell onto the board in sequential order as either a walkway or a room.
 				cells.add((i.equals("W") ? new WalkwayCell() : new RoomCell(i, rowCounter, currentColumn)));
 				++currentColumn;
 			}
 			++rowCounter;
 		}
+		
+		// Set the board dimensions
 		numColumns = noColumns;
 		numRows = rowCounter;
 	}
 
-	public BoardCell getCellAt(int row, int column) {
-		return getCellAt(calcIndex(row, column));
+	// The functions below were written for the purpose of matching function calls made in the CR test suite
+	// Translates this call of calcTargets into a call to startTargets
+	public void calcTargets(int row, int column, int steps) {
+		startTargets(calcIndex(row, column), steps);
 	}
 	
-	public BoardCell getCellAt(int index) {
-		return cells.get(index);
+	// Translates this into our call of getRoomCellAt
+	public RoomCell getRoomCellAt(int row, int column) {
+		return  getRoomCellAt(calcIndex(row, column));
 	}
 	
 }
