@@ -159,8 +159,28 @@ public class Board {
 		}
 	}
 
-	public void loadBoardConfig() {
-		
+	public void loadBoardConfig() throws BadConfigFormatException, FileNotFoundException {
+		FileReader boardConfigFile = new FileReader(boardConfigFilename);
+		Scanner fileScanner = new Scanner(boardConfigFile);
+		String[] cellInitials;
+		int noColumns=0;
+		boolean firstIteration = true;
+		String tmp;
+		while(fileScanner.hasNext()) {
+			tmp = fileScanner.nextLine();
+			//split up the line, greedily splitting around whitespace and commas..
+			cellInitials = tmp.split("[\\,\\s]+");
+			//if the first iteration, initialize noColumns.
+			if(firstIteration) {
+				noColumns = cellInitials.length;
+				firstIteration = false;
+			}  else if(noColumns != cellInitials.length) { 
+				throw new BadConfigFormatException(boardConfigFilename, "The number of columns is not consistent across rows.");
+			}
+			//go through the tokenized string and add new cells based on the character. 
+			for(String i : cellInitials) 
+				cells.add((i.equals("W") ? new WalkwayCell() : new RoomCell(tmp)));
+		}
 	}
 
 	public BoardCell getCellAt(int calcIndex) {
