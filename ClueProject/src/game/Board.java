@@ -126,7 +126,7 @@ public class Board {
 	}
 	
 	public int calcIndex(int row, int column) {
-		return 0;
+		return numColumns * row + column;
 	}
 	
 	public RoomCell getRoomCellAt(int row, int column) {
