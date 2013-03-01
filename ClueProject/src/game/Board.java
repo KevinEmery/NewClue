@@ -27,9 +27,9 @@ public class Board {
 	private int numColumns;
 
 	//default = empty lists/sets + no columns and rows.
-//	public Board() {
-	//	this ("Board.csv", "fuck.csv");
-	//}
+	public Board() {
+		this ("ClueLayout.csv", "ClueLegend.txt");
+	}
 	
 	public Board(String boardConfigFilename, String roomConfigFilename) {
 		this.cells = new ArrayList<BoardCell>();
@@ -113,8 +113,10 @@ public class Board {
 			loadBoardConfig();
 		} catch(BadConfigFormatException e) {
 			System.err.println(e.getMessage());
+			
 		} catch(FileNotFoundException e) {
-			System.err.println(e.getMessage());
+			System.err.println("While trying to load config files, encountered a file not found: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	
