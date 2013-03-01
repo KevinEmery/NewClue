@@ -82,7 +82,7 @@ public class BoardInitTests {
 	public void testNumberOfDoorways() 
 	{
 		int numDoors = 0;
-		int totalCells = board.getNumColumns() * board.getNumColumns();
+		int totalCells = board.getNumColumns() * board.getNumRows();
 		Assert.assertEquals(506, totalCells);
 		for (int i=0; i<totalCells; i++)
 		{
@@ -121,7 +121,7 @@ public class BoardInitTests {
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadColumns() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file names
-		Board b = new Board("ClueLayoutBadColumns.csv", "ClueLegend.txt");
+		Board b = new Board("etc/ClueLayoutBadColumns.csv", "etc/ClueLegend.txt");
 		// You may change these calls if needed to match your function names
 		// My loadConfigFiles has a try/catch, so I can't call it directly to
 		// see test throwing the BadConfigFormatException
@@ -132,7 +132,7 @@ public class BoardInitTests {
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoom() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file name
-		Board b = new Board("ClueLayoutBadRoom.csv", "ClueLegend.txt");
+		Board b = new Board("etc/ClueLayoutBadRoom.csv", "etc/ClueLegend.txt");
 		b.loadRoomConfig();
 		b.loadBoardConfig();
 	}
@@ -140,7 +140,7 @@ public class BoardInitTests {
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoomFormat() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file name
-		Board b = new Board("ClueLayout.csv", "ClueLegendBadFormat.txt");
+		Board b = new Board("etc/ClueLayout.csv", "etc/ClueLegendBadFormat.txt");
 		b.loadRoomConfig();
 		b.loadBoardConfig();
 	}
