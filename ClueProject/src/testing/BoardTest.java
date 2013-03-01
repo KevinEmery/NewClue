@@ -1,13 +1,15 @@
 package testing;
 
+
+import game.BadConfigFormatException;
+import game.Board;
+import game.BoardCell;
+import game.RoomCell;
+
 import java.io.FileNotFoundException;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import utilities.BadConfigFormatException;
-import utilities.Board;
-import utilities.BoardCell;
-import utilities.RoomCell;
 
 public class BoardTest {
 	private Board testBoard;

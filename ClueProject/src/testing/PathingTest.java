@@ -1,13 +1,14 @@
 package testing;
 
 // All of the imports required to test.
+import game.IntBoard;
+
 import java.util.LinkedList;
 import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 import junit.framework.Assert;
 
-import utilities.IntBoard;
 
 
 public class PathingTest {
