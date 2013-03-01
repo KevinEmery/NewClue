@@ -32,15 +32,20 @@ public class Board {
 	}
 	
 	public Board(String boardConfigFilename, String roomConfigFilename) {
-		this.cells = new ArrayList<BoardCell>();
-		this.rooms = new HashMap<Character, String>();
+		this.cells = new ArrayList <BoardCell>();
+		this.rooms = new HashMap <Character, String>();
+		this.adjList = new HashMap <Integer, LinkedList<Integer>>();
 		this.numRows = 0;
 		this.numColumns = 0;
 		this.boardConfigFilename = boardConfigFilename;
 		this.roomConfigFilename = roomConfigFilename;
 	}
+	
 	// Determines the neighbors of every cell on the board
 	public void calcAdjacencies() {
+		for (int i = 0; i < numRows * numColumns ; i++) {
+			this.adjList.put(i, new LinkedList<Integer>());
+		}
 		// Iterates through every row and column, checking the validity of the cells on all four sides of a given cell. 
 		// If it is valid, it adds it to the adjList
 		for (int i = 0; i < numRows; i++) {
