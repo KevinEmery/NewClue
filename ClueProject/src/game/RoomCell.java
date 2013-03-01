@@ -27,6 +27,7 @@ public class RoomCell extends BoardCell {
 	};
 	
 	// Used to store the direction of a door
+	
 	private DoorDirection doorDirection;
 	
 	public DoorDirection getDoorDirection() {
@@ -39,17 +40,18 @@ public class RoomCell extends BoardCell {
 		this.roomInitial = 'Z';
 		this.doorDirection = DoorDirection.NONE;
 	}
-	public RoomCell(String roomInitial) {
+	public RoomCell(String roomInitial, int row, int column) {
+		super(row, column);
 		this.roomInitial = roomInitial.charAt(0);
 		if(roomInitial.length() > 1) {
-			this.doorDirection = DoorDirection.makeFromChar(roomInitial.charAt(1));
+				this.doorDirection = DoorDirection.makeFromChar(roomInitial.charAt(1));
 		} else {
-			this.doorDirection = DoorDirection.NONE;
+				this.doorDirection = DoorDirection.NONE;
 		}
 	}
 	@Override
 	public boolean isDoorway() {
-		return (this.doorDirection == DoorDirection.NONE ? true : false);
+		return (this.doorDirection == DoorDirection.NONE ? false : true);
 	}
 	@Override
 	public boolean isRoom() {

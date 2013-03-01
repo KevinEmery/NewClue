@@ -130,7 +130,7 @@ public class Board {
 	}
 	
 	public RoomCell getRoomCellAt(int row, int column) {
-		return (RoomCell) cells.get(calcIndex(row, column));
+		return  (RoomCell) cells.get(calcIndex(row, column));
 	}
 	public ArrayList<BoardCell> getCells() {
 		return cells;
@@ -155,8 +155,8 @@ public class Board {
 		Character key;
 		while(fileScanner.hasNext()) {
 			nextLine = fileScanner.nextLine();
-			if(!nextLine.contains(","))
-				throw new BadConfigFormatException(roomConfigFilename, "No comma seperator between key and room type.");
+			if(!nextLine.contains(",") || (nextLine.indexOf(',') != nextLine.lastIndexOf(',')))
+				throw new BadConfigFormatException(roomConfigFilename, "Incorrect number of comma seperators - less than one or more than one.");
 			key = nextLine.charAt(0);
 			if(!(Character.isLetter(key))) 
 				throw new BadConfigFormatException(roomConfigFilename, "Key was not a valid letter.");
@@ -170,9 +170,11 @@ public class Board {
 		String[] cellInitials;
 		int noColumns=0;
 		int rowCounter=0;
+		int currentColumn=0;
 		boolean firstIteration = true;
 		String tmp;
 		while(fileScanner.hasNext()) {
+			currentColumn=0;
 			tmp = fileScanner.nextLine();
 			//split up the line, greedily splitting around whitespace and commas..
 			cellInitials = tmp.split("[\\,\\s]+");
@@ -183,9 +185,15 @@ public class Board {
 			}  else if(noColumns != cellInitials.length) { 
 				throw new BadConfigFormatException(boardConfigFilename, "The number of columns is not consistent across rows.");
 			}
-			//go through the tokenized string and add new cells based on the character. 
-			for(String i : cellInitials) 
-				cells.add((i.equals("W") ? new WalkwayCell() : new RoomCell(tmp)));
+			//go through the tokenized string and add new cells based on the character.
+			
+			for(String i : cellInitials)  {
+				if(!rooms.containsKey(i.charAt(0))) {
+					throw new BadConfigFormatException(boardConfigFilename, "The configuration file contains invalid room types.");
+				}
+				cells.add((i.equals("W") ? new WalkwayCell() : new RoomCell(i, rowCounter, currentColumn)));
+				++currentColumn;
+			}
 			++rowCounter;
 		}
 		numColumns = noColumns;
