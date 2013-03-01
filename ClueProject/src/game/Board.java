@@ -75,9 +75,11 @@ public class Board {
 		visited[location] = true;
 		calcTargets(location, numSteps, visited);
 	}
+	
 	public void calcTargets(int row, int column, int steps) {
 		
 	}
+	
 	// Calculates the spaces we can get to from a certain cell
 	private void calcTargets(int location, int numSteps, boolean[] visited) {
 		
