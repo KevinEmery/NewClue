@@ -14,6 +14,10 @@ public class RoomCell extends BoardCell {
 	// Used to store the direction of a door
 	private DoorDirection doorDirection;
 	
+	public DoorDirection getDoorDirection() {
+		return doorDirection;
+	}
+
 	// Used to restore the character that maps to a room.
 	private char roomInitial;
 	
@@ -29,8 +33,7 @@ public class RoomCell extends BoardCell {
 
 	}
 	
-	// Getter for the roomInitial variable
-	public char getRoomInitial() {
+	public char getInitial() {
 		return roomInitial;
 	}
 

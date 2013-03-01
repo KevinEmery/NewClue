@@ -84,10 +84,10 @@ public class BoardTest {
 	// Tests a few rooms on the board to ensure that they have the correct character associated with them.
 	@Test
 	public void testRooms() {
-		Assert.assertEquals('S', testBoard.getRoomCellAt(0, 0).getRoomInitial());
-		Assert.assertEquals('K', testBoard.getRoomCellAt(24, 24).getRoomInitial());
-		Assert.assertEquals('H', testBoard.getRoomCellAt(13, 5).getRoomInitial());
-		Assert.assertEquals('D', testBoard.getRoomCellAt(12, 22).getRoomInitial());
+		Assert.assertEquals('S', testBoard.getRoomCellAt(0, 0).getInitial());
+		Assert.assertEquals('K', testBoard.getRoomCellAt(24, 24).getInitial());
+		Assert.assertEquals('H', testBoard.getRoomCellAt(13, 5).getInitial());
+		Assert.assertEquals('D', testBoard.getRoomCellAt(12, 22).getInitial());
 		
 	}
 

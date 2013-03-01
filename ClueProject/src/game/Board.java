@@ -3,15 +3,25 @@ package game;
 //Board class, contains the legend (cells) and the actual rooms.
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 public class Board {	
+	
+	// Map to store the adjacency list
+	private Map<Integer, LinkedList<Integer>> adjList;
+	
+	// Set to store the targets for travel
+	private Set<BoardCell> targets;
+
 	
 	private ArrayList<BoardCell> cells;
 	private Map<Character, String> rooms;
 	private int numRows;
 	private int numColumns;
-	
+
 	//default = empty lists/sets + no columns and rows.
 	public Board() {
 		this ("Board.csv", "Legend.csv");
@@ -23,6 +33,72 @@ public class Board {
 		this.numRows = 0;
 		this.numColumns = 0;
 	}
+	// Determines the neighbors of every cell on the board
+	public void calcAdjacencies() {
+		// Iterates through every row and column, checking the validity of the cells on all four sides of a given cell. 
+		// If it is valid, it adds it to the adjList
+		for (int i = 0; i < numRows; i++) {
+			for (int j = 0; j < numColumns; j++) {
+				if (isValidCell(i + 1, j))
+					adjList.get(calcIndex(i,j)).add(calcIndex(i + 1, j));
+				if (isValidCell(i - 1, j))
+					adjList.get(calcIndex(i,j)).add(calcIndex(i - 1, j));
+				if (isValidCell(i, j + 1))
+					adjList.get(calcIndex(i,j)).add(calcIndex(i, j + 1));
+				if (isValidCell(i, j - 1))
+					adjList.get(calcIndex(i,j)).add(calcIndex(i, j - 1));
+			}
+		}
+	}
+	
+	// Determines if a given cell is valid on the game board
+	private boolean isValidCell(int row, int column) {
+		return row >= 0 && row < numRows && column >= 0 && column < numColumns;
+		
+	}
+
+	// Initalies the visted array, targets as empty, and then calls the recursive function to calculate targets
+	public void startTargets(int location, int numSteps) {
+		boolean[] visited = new boolean[numRows * numColumns];
+		targets = new HashSet<BoardCell>();
+		visited[location] = true;
+		calcTargets(location, numSteps, visited);
+	}
+	
+	// Calculates the spaces we can get to from a certain cell
+	private void calcTargets(int location, int numSteps, boolean[] visited) {
+		
+		// Initialized a new LinkedList list of adjacents cells for this location
+		LinkedList<Integer> adjacentCells = new LinkedList<Integer>();
+		
+		// Adds unvisited cells to a new adjacency list
+		for (Integer i : getAdjList(location)) {
+			if (visited[i] == false)
+					adjacentCells.add(i);
+		}
+		
+		// Recursively finds the targets
+		for (Integer i : adjacentCells) {
+			visited[i] = true;
+			if (numSteps == 1) 
+				targets.add(cells.get(i));
+			else {
+				calcTargets(i, numSteps - 1, visited);
+			}
+			visited[i] = false;	
+		}
+	}
+	
+	// Returns the set of targets
+	public Set<BoardCell> getTargets() {
+		return targets;
+	}
+	
+	// Returns the adjacency list of a certain cell
+	public LinkedList<Integer> getAdjList(int location) {
+		return adjList.get(location);
+	}
+	
 	public void loadConfigFiles() {
 		
 	}
@@ -34,7 +110,6 @@ public class Board {
 	public RoomCell getRoomCellAt(int row, int column) {
 		return new RoomCell();
 	}
-	
 	public ArrayList<BoardCell> getCells() {
 		return cells;
 	}
@@ -49,6 +124,18 @@ public class Board {
 	
 	public int getNumColumns() {
 		return numColumns;
+	}
+
+	public void loadRoomConfig() {
+		
+	}
+
+	public void loadBoardConfig() {
+		
+	}
+
+	public BoardCell getCellAt(int calcIndex) {
+		return new RoomCell();
 	}
 	
 }
