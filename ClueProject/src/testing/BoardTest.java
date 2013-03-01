@@ -20,6 +20,7 @@ public class BoardTest {
 	public void setup() {
 		testBoard = new Board();
 		testBoard.loadConfigFiles();
+		testBoard.calcAdjacencies();
 	}
 
 	//Test to make sure that we have the right legend, 
