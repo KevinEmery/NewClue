@@ -25,6 +25,16 @@ public class RoomCell extends BoardCell{
 	public void setRoom(char room) {
 		this.room = room;
 	}
+
+	public Object getDoorDirection() {
+		
+		return doorDirection;
+	}
+
+	public Object getInitial() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }

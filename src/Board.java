@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 public class Board {
 	private ArrayList<BoardCell> cells = new ArrayList<BoardCell>();
@@ -8,6 +10,12 @@ public class Board {
 	private int numRows;
 	private int numColumns;
 	
+	public Board(String string, String string2) {
+		// TODO Auto-generated constructor stub
+	}
+	public Board() {
+		// TODO Auto-generated constructor stub
+	}
 	public void loadConfigFiles(){
 
 	}
@@ -50,6 +58,34 @@ public class Board {
 	}
 	public void setNumColumns(int numColumns) {
 		this.numColumns = numColumns;
+	}
+	public BoardCell getCellAt(int calcIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public void loadRoomConfig() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void calcAdjacencies() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void loadBoardConfig() {
+		// TODO Auto-generated method stub
+		
+	}
+	public LinkedList<Integer> getAdjList(int calcIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public void calcTargets(int i, int j, int k) {
+		// TODO Auto-generated method stub
+		
+	}
+	public Set<BoardCell> getTargets() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
