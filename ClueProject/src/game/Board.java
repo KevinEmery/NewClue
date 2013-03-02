@@ -133,7 +133,9 @@ public class Board {
 	public LinkedList<Integer> getAdjList(int location) {
 		return adjList.get(location);
 	}
-	
+	public LinkedList<Integer> getAdjList(int row, int column) {
+		return getAdjList(calcIndex(row, column));
+	}
 	// Loads the appropriate config files, and handles any errors associated with that process
 	// Writes any errors out to the file log.txt
 	public void loadConfigFiles() {
@@ -161,6 +163,10 @@ public class Board {
 	// Returns a room cell at a given index
 	public BoardCell getCellAt(int index) {
 		return cells.get(index);
+	}
+	//Overload getCellAt for 2D
+	public BoardCell getCellAt(int row, int column) {
+		return cells.get(calcIndex(row, column));
 	}
 	
 	// Returns the ArrayList containing all of the cells on the board
