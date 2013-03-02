@@ -1,4 +1,6 @@
 
+
+
 public abstract class BoardCell {
 private int row;
 private int column;
@@ -16,4 +18,9 @@ public boolean isDoorway(){
 	return false;
 }
 abstract void draw();
+public RoomCell getRooms() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
 }

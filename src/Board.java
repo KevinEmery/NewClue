@@ -24,24 +24,44 @@ public class Board {
 		String line = null;
 		boardDim[0]=boardDim[1] = 0;
 		int linelength=-1;
+		int yaxis=0;
 		try {
 			Scanner input=new Scanner(new BufferedReader(new FileReader(string)));
 			while(  input.hasNext()){
+				int xaxis=0;			
 				line = input.next();
 				line.split(",\\n");
+
+				for(int i=0; i<line.length();i++){
+					if(line.charAt(i)!=','){
+						BoardCell e=null;
+						if(line.charAt(i)=='W'){ e=new WalkwayCell(yaxis,xaxis );}
+						else {e=new RoomCell(yaxis,xaxis);
+							((RoomCell) e).setRoom(line.charAt(i));
+							if(line.charAt(i+1)!=','){
+								((RoomCell) e).setRoomDirection(line.charAt(i+1));
+							}else{((RoomCell) e).setRoomDirection('n');}
+						}
+						if (e!=null){cells.add(e);} 
+						xaxis++;
+					}
+				}
+				
 				if (linelength==-1){linelength=line.length();}
 				if(linelength!=line.length()){throw new BadConfigFormatException();}
 				list.add(line);
-				list.get(0);
 				boardDim[0]++;// just read a row
+
+
 			}
+			System.out.println(list);
 			for (int i=0; i < line.length(); i++){
 				if (line.charAt(i) == ',')//counts the commas that are in between the data
 				{boardDim[1]++;}				
 			}
 			boardDim[1]++;//adds one more so it is a count of the things on either side of the commas
-			
-			
+
+
 
 		} catch (IOException e) {
 			System.out.println("File could not be read");
@@ -50,46 +70,47 @@ public class Board {
 
 
 
-	
+
 	}
 	public Board()	 {
-	
+
 		boardDim=new int[2];
 		String line = null;
 		boardDim[0]=boardDim[1] = 0;
-		
+
 		try {
 			Scanner input=new Scanner(new BufferedReader(new FileReader("etc/ClueLayout.csv")));
-			
+
 			while(  input.hasNext()){
 				line = input.next();
 				line.split(",");
 				boardDim[0]++;// just read a row
 			}
-			
+
 			for (int i=0; i < line.length(); i++){
 				if (line.charAt(i) == ',')//counts the commas that are in between the data
 				{boardDim[1]++;}				
 			}
 			boardDim[1]++;//adds one more so it is a count of the things on either side of the commas
-			
-			
+
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 
 
 	}
 	public void loadConfigFiles(){
-		
+
 	}
 	public int calcIndex(int row, int column){	// turns a 2d board into a 1d list
 		return column+row*boardDim[1];
 	}
 	public RoomCell GetRoomCellAt(int row, int column){
-			//return cells.get(calcIndex(row,column)); 
-		return null;
+		System.out.println(((RoomCell)cells.get(calcIndex(row,column)).getRooms()));
+		return ((RoomCell)cells.get(calcIndex(row,column))) ; 
+
 	}
 	public ArrayList<BoardCell> getCells() {
 		return cells;
@@ -103,18 +124,12 @@ public class Board {
 			while(  input.hasNext()){
 				String cha= input.next();
 				char c=cha.charAt(0);
-				
 				String r=input.next();
-				
 				rooms.put(c, r);
 			}
-			for (Character name: rooms.keySet()){	
-	            String key =rooms.toString();
-	            String value = rooms.get(name).toString();  
-	            System.out.println(key + " " + value);  
-	            System.out.println(rooms.size());
-	} 
-		}catch (FileNotFoundException e){System.out.println("Could not open Key");}
+		}catch (FileNotFoundException e){
+			System.out.println("Could not open Key");
+			System.exit(0);}
 		return rooms;
 	}
 	public void setRooms(Map<Character, String> rooms) {

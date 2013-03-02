@@ -7,6 +7,14 @@ public class RoomCell extends BoardCell{
 	private char room;
 	public enum DoorDirection {UP,DOWN,LEFT,RIGHT,NONE};
 	public DoorDirection doorDirection;
+	
+	public void setRoomDirection(char d){
+		if(d=='U'){this.doorDirection=DoorDirection.UP;}
+		else if(d=='R'){this.doorDirection=DoorDirection.RIGHT;}
+		else if(d=='L'){this.doorDirection=DoorDirection.LEFT;}
+		else if(d=='D'){this.doorDirection=DoorDirection.DOWN;}
+		else{this.doorDirection=DoorDirection.NONE;}
+	}
 	@Override
 	public boolean isRoom(){
 		return true;
