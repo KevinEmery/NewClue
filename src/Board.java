@@ -18,6 +18,7 @@ public class Board {
 	private ArrayList<String> list=new ArrayList<String>();
 	private Map<Character,String> rooms= new HashMap<Character, String>();
 	int[] boardDim;
+	int doorways=0;
 	HashSet<Integer> targetList=new HashSet<Integer>();
 	public Board(String string, String string2) throws BadConfigFormatException {
 		boardDim=new int[2];
@@ -41,6 +42,7 @@ public class Board {
 						if(i<line.length()-1){
 							if(line.charAt(i+1)!=','){
 								((RoomCell) e).setRoomDirection(line.charAt(i+1));
+								doorways++;
 							}else{((RoomCell) e).setRoomDirection('n');}
 						}
 						}
@@ -80,7 +82,7 @@ public class Board {
 			boardDim=new int[2];
 			String line = null;
 			boardDim[0]=boardDim[1] = 0;
-
+			
 			try {
 				Scanner input=new Scanner(new BufferedReader(new FileReader("etc/ClueLayout.csv")));
 				int yaxis=0;
@@ -97,6 +99,11 @@ public class Board {
 							if(i<line.length()-1){
 								if(line.charAt(i+1)!=','){
 									((RoomCell) e).setRoomDirection(line.charAt(i+1));
+											if(line.charAt(i+1)=='D'||
+													line.charAt(i+1)=='U'||
+													line.charAt(i+1)=='L'||
+													line.charAt(i+1)=='R'){doorways++;}
+									
 								}else{((RoomCell) e).setRoomDirection('n');}
 							}
 							}
@@ -137,6 +144,9 @@ public class Board {
 			return ((RoomCell)cells.get(calcIndex(row,column))) ; 
 
 		}
+		public int getDoorways(){
+			return doorways;
+		}
 		public ArrayList<BoardCell> getCells() {
 			return cells;
 		}
@@ -163,7 +173,7 @@ public class Board {
 
 		public BoardCell getCellAt(int calcIndex) {
 			
-			return null;
+			return cells.get(calcIndex);
 		}
 		public void loadRoomConfig() {
 			// TODO Auto-generated method stub
