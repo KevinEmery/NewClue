@@ -81,8 +81,8 @@ public class Board {
 	}
 	
 	private boolean isAdjacent(int row, int column, RoomCell.DoorDirection direction) {
-		
-		/*if (cells.get(calcIndex(row, column)).isWalkway()) {
+		/*
+		if (cells.get(calcIndex(row, column)).isWalkway()) {
 			return true;
 		} else if ( ((RoomCell) cells.get(calcIndex(row, column))).getDoorDirection() == direction) {
 			return true;
@@ -98,6 +98,10 @@ public class Board {
 		targets = new HashSet<BoardCell>();
 		visited[location] = true;
 		calcTargets(location, numSteps, visited);
+	}
+	
+	public void startTargets(int row, int column, int numSteps) {
+		startTargets(calcIndex(row, column), numSteps);
 	}
 	
 	// Calculates the spaces we can get to from a certain cell
@@ -133,6 +137,7 @@ public class Board {
 	public LinkedList<Integer> getAdjList(int location) {
 		return adjList.get(location);
 	}
+	
 	public LinkedList<Integer> getAdjList(int row, int column) {
 		return getAdjList(calcIndex(row, column));
 	}
