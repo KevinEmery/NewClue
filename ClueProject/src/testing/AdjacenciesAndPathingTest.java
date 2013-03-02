@@ -1,6 +1,7 @@
 package testing;
 
 import static org.junit.Assert.*;
+import game.Board;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class AdjacenciesAndPathingTest {
  */ 
 	@Before
 	public void setup() {
-		
+		Board board = new Board("Board.csv", "Legend.txt");
 	}
 	@Test
 	public void testWalkwayAdj() {
