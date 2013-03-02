@@ -1,7 +1,13 @@
 package testing;
 
 import static org.junit.Assert.*;
+
+import java.util.LinkedList;
+
+import junit.framework.Assert;
+
 import game.Board;
+import game.BoardCell;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,15 +47,30 @@ public class AdjacenciesAndPathingTest {
  *   2 13 length 6: (136 187 163)   
  */ 
 	private Board board;
-	
+
 	@Before
 	public void setup() {
 		board = new Board("Board.csv", "Legend.txt");
 		board.calcAdjacencies();
+
+	}
+	public boolean contentsEqual(int[] expected, LinkedList<Integer> actual) {
+		
+		for(int i: expected) {
+			if(!actual.contains(i))
+				return false;
+		}
+		return true;
 	}
 	
 	@Test
-	public void testTargetsAlongWalkways() {
+	public void testWalkwayAdj() {
+		//16, 17 (adj - 392 416, 418, 442)
+		int[] adjacencies = new int[] {392, 416, 418, 442};
+		LinkedList<Integer> walkCellAdjs = board.getAdjList(16, 17);
+		for(int i: adjacencies) {
+			Assert.assertTrue(walkCellAdjs.contains(i));
+		}
 		
 	}
 
