@@ -1,6 +1,8 @@
 package game;
 
 //Board class, contains the legend (cells) and the actual rooms.
+import game.RoomCell.DoorDirection;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -61,13 +63,13 @@ public class Board {
 		// If it is valid, it adds it to the adjList
 		for (int i = 0; i < numRows; i++) {
 			for (int j = 0; j < numColumns; j++) {
-				if (isValidCell(i + 1, j))
+				if (isValidCell(i + 1, j) && isAdjacent(i + 1, j, DoorDirection.UP))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i + 1, j));
-				if (isValidCell(i - 1, j))
+				if (isValidCell(i - 1, j) && isAdjacent(i - 1, j, DoorDirection.DOWN))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i - 1, j));
-				if (isValidCell(i, j + 1))
+				if (isValidCell(i, j + 1) && isAdjacent(i, j + 1, DoorDirection.LEFT))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i, j + 1));
-				if (isValidCell(i, j - 1))
+				if (isValidCell(i, j - 1) && isAdjacent(i, j - 1, DoorDirection.RIGHT))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i, j - 1));
 			}
 		}
@@ -77,6 +79,18 @@ public class Board {
 	private boolean isValidCell(int row, int column) {
 		return row >= 0 && row < numRows && column >= 0 && column < numColumns;	
 	}
+	
+	private boolean isAdjacent(int row, int column, RoomCell.DoorDirection direction) {
+		/*
+		if (cells.get(calcIndex(row, column)).isWalkway()) {
+			return true;
+		} else if ( ((RoomCell) cells.get(calcIndex(row, column))).getDoorDirection() == direction) {
+			return true;
+		}*/
+		
+		return false;
+	}
+	
 
 	// Initalies the visted array, targets as empty, and then calls the recursive function to calculate targets
 	public void startTargets(int location, int numSteps) {
