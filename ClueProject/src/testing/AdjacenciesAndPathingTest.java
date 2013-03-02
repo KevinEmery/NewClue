@@ -13,7 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class AdjacenciesAndPathingTest {
-/* Testing verticies:
+/* Description of all our tests, and their desired results.
+ * Testing verticies:
  * walkway: 
  * 	16, 17 (adj - 392 416, 418, 442)
  * Edge of board:
@@ -52,6 +53,9 @@ public class AdjacenciesAndPathingTest {
 		board = new Board("Board.csv", "Legend.csv");
 		board.calcAdjacencies();
 	}
+	//little contenstEqual function. Java has an assertEquals that takes these as
+	//arguments but we want to ensure we compare the size and ensure all the elements
+	//in the set are contained in the array, but don't care about order.
 	public boolean contentsEqual(int[] expected, LinkedList<Integer> actual) {
 		if(actual.size() != expected.length) return false; 
 		for(int i: expected) {
@@ -60,6 +64,7 @@ public class AdjacenciesAndPathingTest {
 		}
 		return true;
 	}
+	//test adjacency lists for just a walkway.
 	@Test
 	public void testWalkwayAdj() {
 		//16, 17 (adj - 392 416, 418, 442)
@@ -68,6 +73,7 @@ public class AdjacenciesAndPathingTest {
 		Assert.assertEquals(true, contentsEqual(adjacencies, walkCellAdjs));
 			
 	}
+	//test adjacencies for on the edge of the map.
 	@Test
 	public void testEdgeAdj() {
 		//24 7
@@ -90,6 +96,8 @@ public class AdjacenciesAndPathingTest {
 		Assert.assertTrue(contentsEqual(adjacencies3, walkCellAdjs3));
 		
 	}
+	//test adjacencies for right by the room cells - i.e. make sure
+	//that we don't include room cells in our adjacencies.
 	@Test
 	public void testByRoomCell() {
 		//22, 17 ( 542 556 592)
@@ -102,6 +110,7 @@ public class AdjacenciesAndPathingTest {
 		LinkedList<Integer> walkCellAdjs1 = board.getAdjList(9, 3);
 		Assert.assertTrue(contentsEqual(adjacencies1, walkCellAdjs1));
 	}
+	//test by a doorway, making sure we can get into a door.
 	@Test
 	public void testByDoorway() {
 		//12 18 ( 293 319 317 343)
@@ -121,6 +130,8 @@ public class AdjacenciesAndPathingTest {
 		
 		
 	}
+	//test to make sure we can't get into doors that we are right by, but face
+	//the wrong direction for us to get into.
 	@Test
 	public void testByWrongDirectionDoor() {
 		//  17 20 (444 420 446)
@@ -128,6 +139,7 @@ public class AdjacenciesAndPathingTest {
 		LinkedList<Integer> walkCellAdjs0 = board.getAdjList(17, 20);
 		Assert.assertEquals(true, contentsEqual(adjacencies0, walkCellAdjs0));
 	}
+	//test adjacencies for when we are sitting in a door and venturing out.
 	@Test
 	public void testDoors() {
 		// 17 12 (412)
