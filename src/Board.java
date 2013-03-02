@@ -15,9 +15,8 @@ import java.util.Set;
 
 public class Board {
 	private ArrayList<BoardCell> cells = new ArrayList<BoardCell>();
+	private ArrayList<String> list=new ArrayList<String>();
 	private Map<Character,String> rooms= new HashMap<Character, String>();
-
-	static final int dim=10;
 	int[] boardDim;
 	HashSet<Integer> targetList=new HashSet<Integer>();
 	public Board(String string, String string2) {
@@ -28,9 +27,13 @@ public class Board {
 			Scanner input=new Scanner(new BufferedReader(new FileReader(string)));
 			while(  input.hasNext()){
 				line = input.next();
-				line.split(",");
+				line.split(",\\n");
+				list.add(line);
+				for(String s:list) {
+		            System.out.println(s);
+		           
+		        }
 				boardDim[0]++;// just read a row
-				System.out.println(boardDim[1]+" "+line);
 			}
 			for (int i=0; i < line.length(); i++){
 				if (line.charAt(i) == ',')//counts the commas that are in between the data
@@ -38,10 +41,11 @@ public class Board {
 			}
 			boardDim[1]++;//adds one more so it is a count of the things on either side of the commas
 			
-			//if (boardDim[0]!= row&& boardDim[1]!= column){throw BadConfigFormatException;} Trying to make sure board is consistant, still thinking.
+			
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("File could not be read");
+			System.exit(0);
 		}
 
 
@@ -49,6 +53,7 @@ public class Board {
 	
 	}
 	public Board()	 {
+	
 		boardDim=new int[2];
 		String line = null;
 		boardDim[0]=boardDim[1] = 0;
@@ -77,6 +82,7 @@ public class Board {
 	}
 
 
+	
 	public void loadConfigFiles(){
 
 	}
@@ -94,6 +100,14 @@ public class Board {
 		this.cells = cells;
 	}
 	public Map<Character, String> getRooms() {
+		try{
+			Scanner input=new Scanner(new BufferedReader(new FileReader("ClueLegend.txt")));
+			while(  input.hasNext()){
+				String c=input.next();
+				String r=input.next();
+				rooms.put( null, c);
+			}
+		}catch (FileNotFoundException e){System.out.println("Could not open Key");}
 		return rooms;
 	}
 	public void setRooms(Map<Character, String> rooms) {
