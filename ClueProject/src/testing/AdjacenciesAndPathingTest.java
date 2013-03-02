@@ -15,7 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class AdjacenciesAndPathingTest {
-/* Testing verticies:
+/* Description of all our tests, and their desired results.
+ * Testing verticies:
  * walkway: 
  * 	16, 17 (adj - 392 416, 418, 442)
  * Edge of board:
@@ -56,7 +57,10 @@ public class AdjacenciesAndPathingTest {
 		board.loadConfigFiles();
 		board.calcAdjacencies();
 	}
-	
+
+	// Little contenstEqual function. Java has an assertEquals that takes these as
+	// arguments but we want to ensure we compare the size and ensure all the elements
+	// in the set are contained in the array, but don't care about order.
 	public boolean contentsEqual(int[] expected, LinkedList<Integer> actual) {
 		if(actual.size() != expected.length) return false; 
 		for(int i: expected) {
@@ -65,7 +69,8 @@ public class AdjacenciesAndPathingTest {
 		}
 		return true;
 	}
-	
+
+	// Same function as above, just compares the BoardCell
 	public boolean contentsEqual(int[] expected, Set<BoardCell> actual) {
 		if(actual.size() != expected.length) return false; 
 		for(int i: expected) {
@@ -75,6 +80,8 @@ public class AdjacenciesAndPathingTest {
 		return true;
 	}
 	
+
+	// Test adjacency lists for just a walkway.
 	@Test
 	public void testWalkwayAdj() {
 		//16, 17 (adj - 392 416, 418, 442)
@@ -86,19 +93,91 @@ public class AdjacenciesAndPathingTest {
 		Assert.assertEquals(true, contentsEqual(adjacencies, walkCellAdjs));
 			
 	}
+	
+	// Test adjacencies for on the edge of the map.
 	@Test
 	public void testEdgeAdj() {
 		//24 7
 		int[] adjacencies0 = new int[] {606, 608, 582};
-		LinkedList<Integer> walkCellAdjs = board.getAdjList(24, 7);
-		Assert.assertEquals(true, contentsEqual(adjacencies0, walkCellAdjs));
+		LinkedList<Integer> walkCellAdjs0 = board.getAdjList(24, 7);
+		Assert.assertEquals(true, contentsEqual(adjacencies0, walkCellAdjs0));
 		//17 0
 		int[] adjacencies1 = new int[] {400, 450, 426};
-		LinkedList<Integer> walkCellAdjs1 = board.getAdjList(24, 7);
+		LinkedList<Integer> walkCellAdjs1 = board.getAdjList(17, 0);
 		Assert.assertEquals(true, contentsEqual(adjacencies1, walkCellAdjs1));
-
+		
+		//  0 5 (4 6 30)
+		int[] adjacencies2 = new int[] {4, 6, 30};
+		LinkedList<Integer> walkCellAdjs2 = board.getAdjList(0, 5);
+		Assert.assertTrue(contentsEqual(adjacencies2, walkCellAdjs2));
+		
+		//7 24 (198 174 224)
+		int[] adjacencies3 = new int[] {198, 174, 224};
+		LinkedList<Integer> walkCellAdjs3 = board.getAdjList(7, 24);
+		Assert.assertTrue(contentsEqual(adjacencies3, walkCellAdjs3));
+		
+	}
+	
+	// Test adjacencies for right by the room cells - i.e. make sure
+	// that we don't include room cells in our adjacencies.
+	@Test
+	public void testByRoomCell() {
+		//22, 17 ( 542 556 592)
+		int[] adjacencies0 = new int[] {542, 566, 592};
+		LinkedList<Integer> walkCellAdjs0 = board.getAdjList(22, 17);
+		Assert.assertTrue(contentsEqual(adjacencies0, walkCellAdjs0));
+		
+		//9 3 ( 227 229 203)
+		int[] adjacencies1 = new int[] {227, 229, 203};
+		LinkedList<Integer> walkCellAdjs1 = board.getAdjList(9, 3);
+		Assert.assertTrue(contentsEqual(adjacencies1, walkCellAdjs1));
+	}
+	
+	// Test by a doorway, making sure we can get into a door.
+	@Test
+	public void testByDoorway() {
+		//12 18 ( 293 319 317 343)
+		int[] adjacencies0 = new int[] {293, 319, 317, 343 };
+		LinkedList<Integer> walkCellAdjs0 = board.getAdjList(12, 18);
+		Assert.assertEquals(true, contentsEqual(adjacencies0, walkCellAdjs0));
+		
+		//7 8 (182 158 184 208)
+		int[] adjacencies1 = new int[] {182, 158, 184, 208};
+		LinkedList<Integer> walkCellAdjs1 = board.getAdjList(7, 8);
+		Assert.assertEquals(true, contentsEqual(adjacencies1, walkCellAdjs1));
+		
+		// 19 18 ( 468 492 518)
+		int[] adjacencies2 = new int[] {468, 492, 518};
+		LinkedList<Integer> walkCellAdjs2 = board.getAdjList(19, 18);
+		Assert.assertEquals(true, contentsEqual(adjacencies2, walkCellAdjs2));
+		
+		
+	}
+	
+	// Test to make sure we can't get into doors that we are right by, but face
+	// the wrong direction for us to get into.
+	@Test
+	public void testByWrongDirectionDoor() {
+		//  17 20 (444 420 446)
+		int[] adjacencies0 = new int[] {444, 420, 446};
+		LinkedList<Integer> walkCellAdjs0 = board.getAdjList(17, 20);
+		Assert.assertEquals(true, contentsEqual(adjacencies0, walkCellAdjs0));
+	}
+	
+	// Test adjacencies for when we are sitting in a door and venturing out.
+	@Test
+	public void testDoors() {
+		// 17 12 (412)
+		int[] adjacencies0 = new int[] {412};
+		LinkedList<Integer> walkCellAdjs0 = board.getAdjList(17, 12);
+		Assert.assertEquals(true, contentsEqual(adjacencies0, walkCellAdjs0));
+		//6 3 (178)
+		int[] adjacencies1 = new int[] {178};
+		LinkedList<Integer> walkCellAdjs1 = board.getAdjList(6, 3);
+		Assert.assertEquals(true, contentsEqual(adjacencies1, walkCellAdjs1));
 	}
 
+	// Tests targeting along a walkway where no doors are reached.
 	@Test
 	public void testTargetsAlongWalkways() {
 		// Initialize lists of where everything should be.
@@ -107,7 +186,6 @@ public class AdjacenciesAndPathingTest {
 		int[] targets2 = new int[] {204, 180, 156, 182, 208, 232, 256, 230};
 		int[] targets1 = new int[] {317, 341, 343, 367};
 		
-		// Compare the actual
 		board.startTargets(16, 7, 4);
 		Set<BoardCell> actual4 = board.getTargets();
 		Assert.assertTrue(contentsEqual(targets4, actual4));
@@ -125,6 +203,7 @@ public class AdjacenciesAndPathingTest {
 		Assert.assertTrue(contentsEqual(targets1, actual1));
 	}
 	
+	// Test targeting into rooms
 	@Test
 	public void testTargetsIntoRoom() {
 		int[] targets1 = new int[] {470, 444, 418, 442, 466, 492, 518};
@@ -139,7 +218,7 @@ public class AdjacenciesAndPathingTest {
 		Assert.assertTrue(contentsEqual(targets2, actual2));		
 	}
 	
-	
+	// Test targeting leaving rooms.
 	@Test
 	public void testTargetsLeavingRoom() {
 		int[] targets1 = new int[] {455, 481, 507, 531, 479};
@@ -153,5 +232,6 @@ public class AdjacenciesAndPathingTest {
 		Set<BoardCell> actual2 = board.getTargets();
 		Assert.assertTrue(contentsEqual(targets2, actual2));
 	}
+		
 	
 }
