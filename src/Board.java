@@ -98,11 +98,23 @@ public class Board {
 							((RoomCell) e).setRoom(line.charAt(i));
 							if(i<line.length()-1){
 								if(line.charAt(i+1)!=','){
-									((RoomCell) e).setRoomDirection(line.charAt(i+1));
-											if(line.charAt(i+1)=='D'||
-													line.charAt(i+1)=='U'||
-													line.charAt(i+1)=='L'||
-													line.charAt(i+1)=='R'){doorways++;}
+									if(line.charAt(i+1)=='D'){
+									((RoomCell) e).setRoomDirection('D');
+									doorways++;
+									}else if(line.charAt(i+1)=='U'){
+										((RoomCell) e).setRoomDirection('U');
+										doorways++;
+										
+									}else if(line.charAt(i+1)=='L'){
+										((RoomCell) e).setRoomDirection('L');
+										doorways++;
+									}else if(line.charAt(i+1)=='R'){
+										((RoomCell) e).setRoomDirection('R');
+										doorways++;
+									}
+									i++;		
+													
+										
 									
 								}else{((RoomCell) e).setRoomDirection('n');}
 							}
