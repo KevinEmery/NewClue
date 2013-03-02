@@ -40,12 +40,16 @@ public class AdjacenciesAndPathingTest {
  *   20 4 length 3: (455 481 507 531 479)
  *   2 13 length 6: (136 187 163)   
  */ 
+	private Board board;
+	
 	@Before
 	public void setup() {
-		Board board = new Board("Board.csv", "Legend.txt");
+		board = new Board("Board.csv", "Legend.txt");
+		board.calcAdjacencies();
 	}
+	
 	@Test
-	public void testWalkwayAdj() {
+	public void testTargetsAlongWalkways() {
 		
 	}
 

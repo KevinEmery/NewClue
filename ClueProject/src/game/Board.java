@@ -81,8 +81,8 @@ public class Board {
 	}
 	
 	private boolean isAdjacent(int row, int column, RoomCell.DoorDirection direction) {
-		/*
-		if (cells.get(calcIndex(row, column)).isWalkway()) {
+		
+		/*if (cells.get(calcIndex(row, column)).isWalkway()) {
 			return true;
 		} else if ( ((RoomCell) cells.get(calcIndex(row, column))).getDoorDirection() == direction) {
 			return true;
@@ -115,7 +115,7 @@ public class Board {
 		// Recursively finds the targets
 		for (Integer i : adjacentCells) {
 			visited[i] = true;
-			if (numSteps == 1) 
+			if (numSteps == 1 /*|| cells.get(i).isDoorway()*/) 
 				targets.add(cells.get(i));
 			else {
 				calcTargets(i, numSteps - 1, visited);
