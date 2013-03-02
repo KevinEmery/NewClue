@@ -49,7 +49,7 @@ public class AdjacenciesAndPathingTest {
 	private Board board;
 	@Before
 	public void setup() {
-		board = new Board("Board.csv", "Legend.txt");
+		board = new Board("Board.csv", "Legend.csv");
 		board.calcAdjacencies();
 	}
 	public boolean contentsEqual(int[] expected, LinkedList<Integer> actual) {
@@ -72,12 +72,72 @@ public class AdjacenciesAndPathingTest {
 	public void testEdgeAdj() {
 		//24 7
 		int[] adjacencies0 = new int[] {606, 608, 582};
-		LinkedList<Integer> walkCellAdjs = board.getAdjList(24, 7);
-		Assert.assertEquals(true, contentsEqual(adjacencies0, walkCellAdjs));
+		LinkedList<Integer> walkCellAdjs0 = board.getAdjList(24, 7);
+		Assert.assertEquals(true, contentsEqual(adjacencies0, walkCellAdjs0));
 		//17 0
 		int[] adjacencies1 = new int[] {400, 450, 426};
-		LinkedList<Integer> walkCellAdjs = board.getAdjList(24, 7);
-		Assert.assertEquals(true, contentsEqual(adjacencies, walkCellAdjs));
+		LinkedList<Integer> walkCellAdjs1 = board.getAdjList(17, 0);
+		Assert.assertEquals(true, contentsEqual(adjacencies1, walkCellAdjs1));
+		
+		//  0 5 (4 6 30)
+		int[] adjacencies2 = new int[] {4, 6, 30};
+		LinkedList<Integer> walkCellAdjs2 = board.getAdjList(0, 5);
+		Assert.assertTrue(contentsEqual(adjacencies2, walkCellAdjs2));
+		
+		//7 24 (198 174 224)
+		int[] adjacencies3 = new int[] {198, 174, 224};
+		LinkedList<Integer> walkCellAdjs3 = board.getAdjList(7, 24);
+		Assert.assertTrue(contentsEqual(adjacencies3, walkCellAdjs3));
+		
 	}
-
+	@Test
+	public void testByRoomCell() {
+		//22, 17 ( 542 556 592)
+		int[] adjacencies0 = new int[] {542, 556, 592};
+		LinkedList<Integer> walkCellAdjs0 = board.getAdjList(22, 17);
+		Assert.assertTrue(contentsEqual(adjacencies0, walkCellAdjs0));
+		
+		//9 3 ( 227 229 203)
+		int[] adjacencies1 = new int[] {227, 229, 203};
+		LinkedList<Integer> walkCellAdjs1 = board.getAdjList(9, 3);
+		Assert.assertTrue(contentsEqual(adjacencies1, walkCellAdjs1));
+	}
+	@Test
+	public void testByDoorway() {
+		//12 18 ( 293 319 317 343)
+		int[] adjacencies0 = new int[] {293, 319, 317, 343 };
+		LinkedList<Integer> walkCellAdjs0 = board.getAdjList(12, 18);
+		Assert.assertEquals(true, contentsEqual(adjacencies0, walkCellAdjs0));
+		
+		//7 8 (182 158 184 208)
+		int[] adjacencies1 = new int[] {182, 158, 184, 208};
+		LinkedList<Integer> walkCellAdjs1 = board.getAdjList(7, 8);
+		Assert.assertEquals(true, contentsEqual(adjacencies1, walkCellAdjs1));
+		
+		// 19 18 ( 468 492 518)
+		int[] adjacencies2 = new int[] {468, 492, 518};
+		LinkedList<Integer> walkCellAdjs2 = board.getAdjList(19, 18);
+		Assert.assertEquals(true, contentsEqual(adjacencies2, walkCellAdjs2));
+		
+		
+	}
+	@Test
+	public void testByWrongDirectionDoor() {
+		//  17 20 (444 420 446)
+		int[] adjacencies0 = new int[] {444, 420, 446};
+		LinkedList<Integer> walkCellAdjs0 = board.getAdjList(17, 20);
+		Assert.assertEquals(true, contentsEqual(adjacencies0, walkCellAdjs0));
+	}
+	@Test
+	public void testDoors() {
+		// 17 12 (412)
+		int[] adjacencies0 = new int[] {412};
+		LinkedList<Integer> walkCellAdjs0 = board.getAdjList(17, 12);
+		Assert.assertEquals(true, contentsEqual(adjacencies0, walkCellAdjs0));
+		//6 3 (178)
+		int[] adjacencies1 = new int[] {178};
+		LinkedList<Integer> walkCellAdjs1 = board.getAdjList(6, 3);
+		Assert.assertEquals(true, contentsEqual(adjacencies1, walkCellAdjs1));
+	}
+	
 }
