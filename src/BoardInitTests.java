@@ -25,7 +25,12 @@ public class BoardInitTests {
 	
 	@BeforeClass
 	public static void setUp() {
-		board = new Board();
+		try {
+			board = new Board();
+		} catch (BadConfigFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		board.loadConfigFiles();
 	}
 	@Test
@@ -87,6 +92,7 @@ public class BoardInitTests {
 		for (int i=0; i<totalCells; i++)
 		{
 			BoardCell cell = board.getCellAt(i);
+			System.out.println();
 			if (cell.isDoorway())
 				numDoors++;
 		}

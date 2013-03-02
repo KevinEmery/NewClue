@@ -18,9 +18,5 @@ public boolean isDoorway(){
 	return false;
 }
 abstract void draw();
-public RoomCell getRooms() {
-	// TODO Auto-generated method stub
-	return null;
-}
 
 }
