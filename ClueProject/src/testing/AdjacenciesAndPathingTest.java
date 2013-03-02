@@ -74,4 +74,12 @@ public class AdjacenciesAndPathingTest {
 		
 	}
 
+	@Test
+	public void testTargetsAlongWalkways() {
+		int[] targets4 = new int[] {411, 385, 383, 433, 333, 307, 331, 381, 403, 429, 431, 455, 481, 507, 483};
+		int[] targets3 = new int[] {190, 216, 242, 268, 196, 220, 170, 144, 118, 192, 168, 194, 218};
+		int[] targets2 = new int[] {204, 180, 156, 182, 208, 232, 256, 230};
+	}
+	
+	
 }
