@@ -6,7 +6,7 @@ public class RoomCell extends BoardCell{
 	}
 	private char room;
 	public enum DoorDirection {UP,DOWN,LEFT,RIGHT,NONE};
-	public DoorDirection doorDirection;
+	public DoorDirection doorDirection=DoorDirection.NONE;
 	
 	public void setRoomDirection(char d){
 		if(d=='U'){this.doorDirection=DoorDirection.UP;}

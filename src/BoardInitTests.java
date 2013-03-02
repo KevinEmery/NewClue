@@ -25,12 +25,7 @@ public class BoardInitTests {
 	
 	@BeforeClass
 	public static void setUp() {
-		try {
-			board = new Board();
-		} catch (BadConfigFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		board = new Board();
 		board.loadConfigFiles();
 	}
 	@Test
@@ -61,23 +56,24 @@ public class BoardInitTests {
 	@Test
 	public void FourDoorDirections() {
 		// Test one each RIGHT/LEFT/UP/DOWN
-		RoomCell room = board.GetRoomCellAt(4, 3);
+		RoomCell room = board.GetRoomCellAt(3, 4);
+		System.out.println(room.isDoorway()+" "+room.isWalkway()+" "+room.isRoom()+" "+room.getDoorDirection()+" "+room.getRoom());
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.RIGHT, room.getDoorDirection());
-		room = board.GetRoomCellAt(4, 8);
+		room = board.GetRoomCellAt(8, 4);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.DOWN, room.getDoorDirection());
-		room = board.GetRoomCellAt(15, 18);
+		room = board.GetRoomCellAt(18, 15);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.LEFT, room.getDoorDirection());
-		room = board.GetRoomCellAt(14, 11);
+		room = board.GetRoomCellAt(11, 14);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.UP, room.getDoorDirection());
 		// Test that room pieces that aren't doors know it
 		room = board.GetRoomCellAt(14, 14);
 		assertFalse(room.isDoorway());	
 		// Test that walkways are not doors
-		BoardCell cell = board.getCellAt(board.calcIndex(0, 6));
+		BoardCell cell = board.getCellAt(board.calcIndex(6, 0));
 		assertFalse(cell.isDoorway());		
 
 	}
@@ -92,7 +88,7 @@ public class BoardInitTests {
 		for (int i=0; i<totalCells; i++)
 		{
 			BoardCell cell = board.getCellAt(i);
-			System.out.println();
+			
 			if (cell.isDoorway())
 				numDoors++;
 		}
@@ -117,10 +113,10 @@ public class BoardInitTests {
 	@Test
 	public void testRoomInitials() {
 		assertEquals('C', board.GetRoomCellAt(0, 0).getRoom());
-		assertEquals('R', board.GetRoomCellAt(4, 8).getRoom());
-		assertEquals('B', board.GetRoomCellAt(9, 0).getRoom());
-		assertEquals('O', board.GetRoomCellAt(21, 22).getRoom());
-		assertEquals('K', board.GetRoomCellAt(21, 0).getRoom());
+		assertEquals('R', board.GetRoomCellAt(0, 8).getRoom());
+		assertEquals('B', board.GetRoomCellAt(13, 0).getRoom());
+		assertEquals('O', board.GetRoomCellAt(21, 0).getRoom());
+		assertEquals('K', board.GetRoomCellAt(17, 0).getRoom());
 	}
 	
 	// Test that an exception is thrown for a bad config file
