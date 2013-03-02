@@ -53,7 +53,7 @@ public class AdjacenciesAndPathingTest {
 		board.calcAdjacencies();
 	}
 	public boolean contentsEqual(int[] expected, LinkedList<Integer> actual) {
-		
+		if(actual.size() != expected.length) return false; 
 		for(int i: expected) {
 			if(!actual.contains(i))
 				return false;
@@ -65,16 +65,19 @@ public class AdjacenciesAndPathingTest {
 		//16, 17 (adj - 392 416, 418, 442)
 		int[] adjacencies = new int[] {392, 416, 418, 442};
 		LinkedList<Integer> walkCellAdjs = board.getAdjList(16, 17);
-		for(int i: adjacencies) {
-			Assert.assertTrue(walkCellAdjs.contains(i));
-		}
+		Assert.assertEquals(true, contentsEqual(adjacencies, walkCellAdjs));
 			
 	}
 	@Test
 	public void testEdgeAdj() {
 		//24 7
 		int[] adjacencies0 = new int[] {606, 608, 582};
-		
+		LinkedList<Integer> walkCellAdjs = board.getAdjList(24, 7);
+		Assert.assertEquals(true, contentsEqual(adjacencies0, walkCellAdjs));
+		//17 0
+		int[] adjacencies1 = new int[] {400, 450, 426};
+		LinkedList<Integer> walkCellAdjs = board.getAdjList(24, 7);
+		Assert.assertEquals(true, contentsEqual(adjacencies, walkCellAdjs));
 	}
 
 }
