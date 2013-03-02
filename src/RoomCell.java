@@ -31,10 +31,6 @@ public class RoomCell extends BoardCell{
 		return doorDirection;
 	}
 
-	public Object getInitial() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	
 }

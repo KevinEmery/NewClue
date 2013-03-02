@@ -47,7 +47,7 @@ public class IntBoardTest {
 		s.useDelimiter(",");
 		System.out.println("Loop");
 		while(s.hasNext()){
-			System.out.println(s.toString());
+			//System.out.println(s.toString());
 			s.next();
 		}
 		s.close();

@@ -37,8 +37,8 @@ public class BoardInitTests {
 		// and last in the file and a few others
 		assertEquals("Conservatory", rooms.get('C'));
 		assertEquals("Ballroom", rooms.get('B'));
-		assertEquals("Billiard room", rooms.get('R'));
-		assertEquals("Dining room", rooms.get('D'));
+		assertEquals("Billiard", rooms.get('R'));
+		assertEquals("Dining", rooms.get('D'));
 		assertEquals("Walkway", rooms.get('W'));
 	}
 	
@@ -110,11 +110,11 @@ public class BoardInitTests {
 	// correct.
 	@Test
 	public void testRoomInitials() {
-		assertEquals('C', board.GetRoomCellAt(0, 0).getInitial());
-		assertEquals('R', board.GetRoomCellAt(4, 8).getInitial());
-		assertEquals('B', board.GetRoomCellAt(9, 0).getInitial());
-		assertEquals('O', board.GetRoomCellAt(21, 22).getInitial());
-		assertEquals('K', board.GetRoomCellAt(21, 0).getInitial());
+		assertEquals('C', board.GetRoomCellAt(0, 0).getRoom());
+		assertEquals('R', board.GetRoomCellAt(4, 8).getRoom());
+		assertEquals('B', board.GetRoomCellAt(9, 0).getRoom());
+		assertEquals('O', board.GetRoomCellAt(21, 22).getRoom());
+		assertEquals('K', board.GetRoomCellAt(21, 0).getRoom());
 	}
 	
 	// Test that an exception is thrown for a bad config file

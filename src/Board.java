@@ -19,20 +19,20 @@ public class Board {
 	private Map<Character,String> rooms= new HashMap<Character, String>();
 	int[] boardDim;
 	HashSet<Integer> targetList=new HashSet<Integer>();
-	public Board(String string, String string2) {
+	public Board(String string, String string2) throws BadConfigFormatException {
 		boardDim=new int[2];
 		String line = null;
 		boardDim[0]=boardDim[1] = 0;
+		int linelength=-1;
 		try {
 			Scanner input=new Scanner(new BufferedReader(new FileReader(string)));
 			while(  input.hasNext()){
 				line = input.next();
 				line.split(",\\n");
+				if (linelength==-1){linelength=line.length();}
+				if(linelength!=line.length()){throw new BadConfigFormatException();}
 				list.add(line);
-				for(String s:list) {
-		            System.out.println(s);
-		           
-		        }
+				list.get(0);
 				boardDim[0]++;// just read a row
 			}
 			for (int i=0; i < line.length(); i++){
@@ -57,41 +57,39 @@ public class Board {
 		boardDim=new int[2];
 		String line = null;
 		boardDim[0]=boardDim[1] = 0;
+		
 		try {
 			Scanner input=new Scanner(new BufferedReader(new FileReader("etc/ClueLayout.csv")));
+			
 			while(  input.hasNext()){
 				line = input.next();
 				line.split(",");
 				boardDim[0]++;// just read a row
-				
 			}
+			
 			for (int i=0; i < line.length(); i++){
 				if (line.charAt(i) == ',')//counts the commas that are in between the data
 				{boardDim[1]++;}				
 			}
 			boardDim[1]++;//adds one more so it is a count of the things on either side of the commas
 			
-			//if (boardDim[0]!= row&& boardDim[1]!= column){throw BadConfigFormatException;} Trying to make sure board is consistant, still thinking.
-
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 
 
 	}
-
-
-	
 	public void loadConfigFiles(){
-
+		
 	}
 	public int calcIndex(int row, int column){	// turns a 2d board into a 1d list
 		return column+row*boardDim[1];
 	}
 	public RoomCell GetRoomCellAt(int row, int column){
-
-		return null; 
+			//return cells.get(calcIndex(row,column)); 
+		return null;
 	}
 	public ArrayList<BoardCell> getCells() {
 		return cells;
@@ -101,12 +99,21 @@ public class Board {
 	}
 	public Map<Character, String> getRooms() {
 		try{
-			Scanner input=new Scanner(new BufferedReader(new FileReader("ClueLegend.txt")));
+			Scanner input=new Scanner(new BufferedReader(new FileReader("etc/ClueLegend.txt")));
 			while(  input.hasNext()){
-				String c=input.next();
+				String cha= input.next();
+				char c=cha.charAt(0);
+				
 				String r=input.next();
-				rooms.put( null, c);
+				
+				rooms.put(c, r);
 			}
+			for (Character name: rooms.keySet()){	
+	            String key =rooms.toString();
+	            String value = rooms.get(name).toString();  
+	            System.out.println(key + " " + value);  
+	            System.out.println(rooms.size());
+	} 
 		}catch (FileNotFoundException e){System.out.println("Could not open Key");}
 		return rooms;
 	}
