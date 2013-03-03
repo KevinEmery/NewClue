@@ -84,7 +84,7 @@ public class Board {
 			boardDim[0]=boardDim[1] = 0;
 			
 			try {
-				Scanner input=new Scanner(new BufferedReader(new FileReader("etc/ClueLayout.csv")));
+				Scanner input=new Scanner(new BufferedReader(new FileReader("etc/Clue_map.csv")));
 				int yaxis=0;
 				while(  input.hasNext()){
 					int xaxis=0;
@@ -98,17 +98,17 @@ public class Board {
 							((RoomCell) e).setRoom(line.charAt(i));
 							if(i<line.length()-1){
 								if(line.charAt(i+1)!=','){
-									if(line.charAt(i+1)=='D'){
+									if(line.charAt(i+1)=='d'){
 									((RoomCell) e).setRoomDirection('D');
 									doorways++;
-									}else if(line.charAt(i+1)=='U'){
+									}else if(line.charAt(i+1)=='u'){
 										((RoomCell) e).setRoomDirection('U');
 										doorways++;
 										
-									}else if(line.charAt(i+1)=='L'){
+									}else if(line.charAt(i+1)=='l'){
 										((RoomCell) e).setRoomDirection('L');
 										doorways++;
-									}else if(line.charAt(i+1)=='R'){
+									}else if(line.charAt(i+1)=='r'){
 										((RoomCell) e).setRoomDirection('R');
 										doorways++;
 									}

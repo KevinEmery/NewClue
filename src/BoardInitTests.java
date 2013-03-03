@@ -21,13 +21,13 @@ public class BoardInitTests {
 	// time (using @BeforeClass), no need to do setup before each test
 	private static Board board;
 	public static final int NUM_ROOMS = 11;
-	public static final int NUM_ROWS = 22;
-	public static final int NUM_COLUMNS = 23;
+	public static final int NUM_ROWS = 23;
+	public static final int NUM_COLUMNS = 24;
 
 	@BeforeClass
 	public static void setUp() {
 		board = new Board();
-		board.loadConfigFiles();
+	
 	}
 	@Test
 	public void testRooms() {
@@ -46,7 +46,6 @@ public class BoardInitTests {
 	@Test
 	public void testBoardDimensions() {
 		// Ensure we have the proper number of rows and columns
-
 		assertEquals(NUM_ROWS, board.getNumRows());
 		assertEquals(NUM_COLUMNS, board.getNumColumns());		
 	}
@@ -58,21 +57,21 @@ public class BoardInitTests {
 	public void FourDoorDirections() {
 		
 		// Test one each RIGHT/LEFT/UP/DOWN
-		RoomCell room =board.GetRoomCellAt(4,3);
+		RoomCell room =board.GetRoomCellAt(4,0);
+		
 		assertTrue(room.isDoorway());	
 		assertEquals(RoomCell.DoorDirection.RIGHT, room.getDoorDirection());	
-		room = board.GetRoomCellAt(4,8 );	
+		room = board.GetRoomCellAt(4,4 );	
 		assertTrue(room.isDoorway());	//good
 		assertEquals(RoomCell.DoorDirection.DOWN, room.getDoorDirection());//good
-		
-		
-		room = board.GetRoomCellAt(9, 17);
-		
+		room = board.GetRoomCellAt(3, 16);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.LEFT, room.getDoorDirection());
 		
-		room = board.GetRoomCellAt(7,20);
+		room = board.GetRoomCellAt(14,20);
 		System.out.println(room.getRoom());
+
+		
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.UP, room.getDoorDirection());
 		
@@ -90,17 +89,8 @@ public class BoardInitTests {
 	@Test
 	public void testNumberOfDoorways() 
 	{
-		int numDoors = 0;
-		int totalCells = board.getNumColumns() * board.getNumRows();
-		Assert.assertEquals(506, totalCells);
-		for (int i=0; i<totalCells; i++)
-		{
-			ArrayList<BoardCell> cell = board.getCells();
-			for(BoardCell b:cell){
-				if (b.isDoorway()){numDoors++;}
-			}
-		}
-		Assert.assertEquals(16, board.getDoorways());
+				
+		Assert.assertEquals(17, board.getDoorways());
 	}
 
 
@@ -109,24 +99,25 @@ public class BoardInitTests {
 		// Test each corner of the board
 		assertEquals(0, board.calcIndex(0, 0));
 		assertEquals(NUM_COLUMNS-1, board.calcIndex(0, NUM_COLUMNS-1));
-		assertEquals(483, board.calcIndex(NUM_ROWS-1, 0));
-		assertEquals(505, board.calcIndex(NUM_ROWS-1, NUM_COLUMNS-1));
+		
+		assertEquals(528, board.calcIndex(NUM_ROWS-1, 0));
+		assertEquals(551, board.calcIndex(NUM_ROWS-1, NUM_COLUMNS-1));
 		// Test a couple others
-		assertEquals(24, board.calcIndex(1, 1));
-		assertEquals(66, board.calcIndex(2, 20));		
+		assertEquals(25, board.calcIndex(1, 1));
+		assertEquals(68, board.calcIndex(2, 20));		
 	}
 
 	// Test a few room cells to ensure the room initial is
 	// correct.
 	@Test
 	public void testRoomInitials() {
-		assertEquals('C', board.GetRoomCellAt(0, 0).getRoom());
-		assertEquals('R', board.GetRoomCellAt(0, 8).getRoom());
+		assertEquals('c', board.GetRoomCellAt(0, 0).getRoom());
+		assertEquals('r', board.GetRoomCellAt(0, 8).getRoom());
 		
-		assertEquals('B', board.GetRoomCellAt(10, 0).getRoom());
+		assertEquals('x', board.GetRoomCellAt(10, 0).getRoom());
 		
-		assertEquals('O', board.GetRoomCellAt(21, 21).getRoom());
-		assertEquals('K', board.GetRoomCellAt(21, 0).getRoom());
+		assertEquals('o', board.GetRoomCellAt(21, 21).getRoom());
+		assertEquals('d', board.GetRoomCellAt(21, 10).getRoom());
 	}
 
 	// Test that an exception is thrown for a bad config file
@@ -137,23 +128,20 @@ public class BoardInitTests {
 		// You may change these calls if needed to match your function names
 		// My loadConfigFiles has a try/catch, so I can't call it directly to
 		// see test throwing the BadConfigFormatException
-		b.loadRoomConfig();
-		b.loadBoardConfig();
+		
 	}
 	// Test that an exception is thrown for a bad config file
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoom() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file name
 		Board b = new Board("etc/ClueLayoutBadRoom.csv", "etc/ClueLegend.txt");
-		b.loadRoomConfig();
-		b.loadBoardConfig();
+		
 	}
 	// Test that an exception is thrown for a bad config file
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoomFormat() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file name
 		Board b = new Board("etc/ClueLayout.csv", "etc/ClueLegendBadFormat.txt");
-		b.loadRoomConfig();
-		b.loadBoardConfig();
+	
 	}
 }
