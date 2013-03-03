@@ -38,7 +38,7 @@ public class AdjacenciesAndPathingTest {
  *  6 3 (178)
  *  ----Target tests----
  * Targets along walkways, at various distances (1, 2, 3, and 4)
- *   16 7 length 4: (411 385 383 433 333 307 331 381 403 429 431 455 481 507 483)
+ *   16 7 length 4: (307 331 333 357 381 383 405 403 429 431 455 481 457 507 483 433 409 385 411)
  *   7 18 length 3: (190 216 242 268 196 220 170 144 118 192 168 194 218)
  *   8 6 length 2: (204 180 156 182 208 232 256 230)
  *   13 17 length 1: (317 341 343 367)
@@ -69,17 +69,6 @@ public class AdjacenciesAndPathingTest {
 		}
 		return true;
 	}
-
-	// Same function as above, just compares the BoardCell
-	public boolean contentsEqual(int[] expected, Set<BoardCell> actual) {
-		if(actual.size() != expected.length) return false; 
-		for(int i: expected) {
-			if(!actual.contains(i))
-				return false;
-		}
-		return true;
-	}
-	
 
 	// Test adjacency lists for just a walkway.
 	@Test
@@ -181,26 +170,40 @@ public class AdjacenciesAndPathingTest {
 	@Test
 	public void testTargetsAlongWalkways() {
 		// Initialize lists of where everything should be.
-		int[] targets4 = new int[] {411, 385, 383, 433, 333, 307, 331, 381, 403, 429, 431, 455, 481, 507, 483};
+		int[] targets4 = new int[] {307, 331, 333, 357, 381, 383, 405, 403, 429, 431, 455, 481, 457, 507, 483, 433, 409, 385, 411};
 		int[] targets3 = new int[] {190, 216, 242, 268, 196, 220, 170, 144, 118, 192, 168, 194, 218};
 		int[] targets2 = new int[] {204, 180, 156, 182, 208, 232, 256, 230};
 		int[] targets1 = new int[] {317, 341, 343, 367};
 		
+		board.startTargets(13, 17, 1);
+		Set<BoardCell> actual1 = board.getTargets();
+		Assert.assertTrue(actual1.size() == targets1.length);
+		for(int i: targets1) {
+			Assert.assertTrue(actual1.contains(board.getCellAt(i)));
+		}
+		
 		board.startTargets(16, 7, 4);
 		Set<BoardCell> actual4 = board.getTargets();
-		Assert.assertTrue(contentsEqual(targets4, actual4));
+		Assert.assertTrue(actual4.size() == targets4.length);
+		for(int i: targets4) {
+			Assert.assertTrue(actual4.contains(board.getCellAt(i)));
+		}
 		
 		board.startTargets(7, 18, 3);
 		Set<BoardCell>actual3 = board.getTargets();
-		Assert.assertTrue(contentsEqual(targets3, actual3));
+		Assert.assertTrue(actual3.size() == targets3.length);
+		for(int i: targets3) {
+			Assert.assertTrue(actual3.contains(board.getCellAt(i)));
+		}
 		
 		board.startTargets(8, 6, 2);
 		Set<BoardCell> actual2 = board.getTargets();
-		Assert.assertTrue(contentsEqual(targets2, actual2));
+		Assert.assertTrue(actual2.size() == targets2.length);
+		for(int i: targets2) {
+			Assert.assertTrue(actual2.contains(board.getCellAt(i)));
+		}
 		
-		board.startTargets(13,  17, 1);
-		Set<BoardCell> actual1 = board.getTargets();
-		Assert.assertTrue(contentsEqual(targets1, actual1));
+	
 	}
 	
 	// Test targeting into rooms
@@ -211,26 +214,38 @@ public class AdjacenciesAndPathingTest {
 		
 		board.startTargets(18, 18, 2);
 		Set<BoardCell> actual1 = board.getTargets();
-		Assert.assertTrue(contentsEqual(targets1, actual1));	
+		Assert.assertTrue(actual1.size() == targets1.length);
+		for(int i: targets1) {
+			Assert.assertTrue(actual1.contains(board.getCellAt(i)));
+		}
 		
 		board.startTargets(3, 12, 3);
 		Set<BoardCell> actual2 = board.getTargets();
-		Assert.assertTrue(contentsEqual(targets2, actual2));		
+		Assert.assertTrue(actual2.size() == targets2.length);
+		for(int i: targets2) {
+			Assert.assertTrue(actual2.contains(board.getCellAt(i)));
+		}		
 	}
 	
 	// Test targeting leaving rooms.
 	@Test
 	public void testTargetsLeavingRoom() {
 		int[] targets1 = new int[] {455, 481, 507, 531, 479};
-		int[] targets2 = new int[] {138, 187, 163};
+		int[] targets2 = new int[] {136, 187, 163};
 		
 		board.startTargets(20, 4, 3);
 		Set<BoardCell> actual1 = board.getTargets();
-		Assert.assertTrue(contentsEqual(targets1, actual1));	
+		Assert.assertTrue(actual1.size() == targets1.length);
+		for(int i: targets1) {
+			Assert.assertTrue(actual1.contains(board.getCellAt(i)));
+		}
 		
 		board.startTargets(2,  13, 6);
 		Set<BoardCell> actual2 = board.getTargets();
-		Assert.assertTrue(contentsEqual(targets2, actual2));
+		Assert.assertTrue(actual2.size() == targets2.length);
+		for(int i: targets2) {
+			Assert.assertTrue(actual2.contains(board.getCellAt(i)));
+		}
 	}
 		
 	
