@@ -2,7 +2,6 @@ package game;
 
 //Board class, contains the legend (cells) and the actual rooms.
 import game.RoomCell.DoorDirection;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -63,13 +62,13 @@ public class Board {
 		// If it is valid, it adds it to the adjList
 		for (int i = 0; i < numRows; i++) {
 			for (int j = 0; j < numColumns; j++) {
-				if (isValidCell(i + 1, j) && isAdjacent(i + 1, j, DoorDirection.UP))
+				if (isValidCell(i + 1, j) && isAdjacent(calcIndex(i, j), calcIndex(i + 1, j), DoorDirection.DOWN, DoorDirection.UP))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i + 1, j));
-				if (isValidCell(i - 1, j) && isAdjacent(i - 1, j, DoorDirection.DOWN))
+				if (isValidCell(i - 1, j) && isAdjacent(calcIndex(i, j), calcIndex(i - 1, j), DoorDirection.UP, DoorDirection.DOWN))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i - 1, j));
-				if (isValidCell(i, j + 1) && isAdjacent(i, j + 1, DoorDirection.LEFT))
+				if (isValidCell(i, j + 1) && isAdjacent(calcIndex(i, j), calcIndex(i, j + 1), DoorDirection.RIGHT, DoorDirection.LEFT))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i, j + 1));
-				if (isValidCell(i, j - 1) && isAdjacent(i, j - 1, DoorDirection.RIGHT))
+				if (isValidCell(i, j - 1) && isAdjacent(calcIndex(i, j), calcIndex(i, j - 1), DoorDirection.LEFT, DoorDirection.RIGHT))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i, j - 1));
 			}
 		}
@@ -80,17 +79,29 @@ public class Board {
 		return row >= 0 && row < numRows && column >= 0 && column < numColumns;	
 	}
 	
-	private boolean isAdjacent(int row, int column, RoomCell.DoorDirection direction) {
-		
-		if (cells.get(calcIndex(row, column)).isWalkway()) {
+	// Determines if a cell is adjacent based on if it's a door or room or next to one.
+	private boolean isAdjacent(int currentIndex, int newIndex, RoomCell.DoorDirection directionOut, RoomCell.DoorDirection directionIn) {
+
+		// If your new cell is a walkway and you're not in a room, return true
+		if (cells.get(newIndex).isWalkway() && !cells.get(currentIndex).isRoom())
 			return true;
-		} else if ( ((RoomCell) cells.get(calcIndex(row, column))).getDoorDirection() == direction) {
-			return true;
-		}
 		
+		// If the current cell is a room, and not a doorway, then there are no adjacencies
+		else if (cells.get(currentIndex).isRoom() && !cells.get(currentIndex).isDoorway())
+			return false;
+		
+		// If you're in a doorway, and the door is facing the direction required to get out as specified by the call, it's adjacent.
+		else if (cells.get(currentIndex).isDoorway() && ((RoomCell) cells.get(currentIndex)).getDoorDirection() == directionOut)
+			return true;
+		
+		// If you're on a walkway and trying to get into a door, and it's facing the correct way to go in, it's adjacent
+		else if (!cells.get(currentIndex).isDoorway() && ((RoomCell) cells.get(newIndex)).getDoorDirection() == directionIn)
+			return true;
+		
+		// Otherwise, it's not adjacent.
 		return false;
+			
 	}
-	
 
 	// Initalies the visted array, targets as empty, and then calls the recursive function to calculate targets
 	public void startTargets(int location, int numSteps) {
@@ -100,6 +111,7 @@ public class Board {
 		calcTargets(location, numSteps, visited);
 	}
 	
+	// Overloaded form of startTargets
 	public void startTargets(int row, int column, int numSteps) {
 		startTargets(calcIndex(row, column), numSteps);
 	}
@@ -141,6 +153,7 @@ public class Board {
 	public LinkedList<Integer> getAdjList(int row, int column) {
 		return getAdjList(calcIndex(row, column));
 	}
+	
 	// Loads the appropriate config files, and handles any errors associated with that process
 	// Writes any errors out to the file log.txt
 	public void loadConfigFiles() {
@@ -169,6 +182,7 @@ public class Board {
 	public BoardCell getCellAt(int index) {
 		return cells.get(index);
 	}
+	
 	//Overload getCellAt for 2D
 	public BoardCell getCellAt(int row, int column) {
 		return cells.get(calcIndex(row, column));
