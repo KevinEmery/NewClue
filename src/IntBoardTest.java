@@ -49,12 +49,16 @@ public class IntBoardTest {
 		s.useDelimiter("[,\\n]");
 		int i=0;
 		while(s.hasNext()){
+<<<<<<< HEAD
 			int[] cellArray = intBoard.calcRowCol(i);
 			Assert.assertEquals(board.getRoomCellAt(cellArray[0],cellArray[1]).getRoom(), s.next().toString());
 			if(s.next().toString().length()==2){
 				Assert.assertEquals(board.getRoomCellAt(cellArray[0],cellArray[1]).getDoorDirection(), s.next().toString().substring(1, 1));
 			}
 			i++;
+=======
+			//System.out.println(s.toString());
+>>>>>>> a57bd2188f85473cde9285532d4ae5e0703479f4
 			s.next();
 			Assert.assertEquals(i, intBoard.calcIndex(cellArray[0], cellArray[1]));
 		}
