@@ -187,11 +187,7 @@ public class Board {
 			
 			return cells.get(calcIndex);
 		}
-		public void loadRoomConfig() {
-			// TODO Auto-generated method stub
-
-		}
-
+	
 		public HashSet<Integer> calcAdjacencies(int loc,int steps,HashSet<Integer> adjlist){
 			//This function needs to do a recursive loop that counts down the steps to check if the space to the right, left, top and bottom
 			//are valid places, if so it adds to adjlist, we need not worry about copies since this is a hashset.
@@ -223,10 +219,7 @@ public class Board {
 			}
 		}
 
-		public void loadBoardConfig() {
-			// TODO Auto-generated method stub
-
-		}
+	
 		public HashSet<Integer> getAdjList(int calcIndex) {
 			HashSet<Integer> adjlist = new HashSet<Integer>();
 			//adjlist.add(i);
