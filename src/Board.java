@@ -17,6 +17,57 @@ public class Board {
 	private ArrayList<BoardCell> cells = new ArrayList<BoardCell>();
 	private ArrayList<String> list=new ArrayList<String>();
 	private Map<Character,String> rooms= new HashMap<Character, String>();
+<<<<<<< HEAD
+	private int numRows;
+	private int numColumns;
+	Board(int rows,int cols){
+//		this.numRows=rows;
+//		this.numColumns=cols;
+	}
+	public void loadConfigFiles(){
+
+	}
+	public int calcIndex(int row, int column){
+		return 0;
+	}
+	
+	
+	
+	public RoomCell getRoomCellAt(int row, int column){
+		
+		return new RoomCell(row,column); 
+		}
+	
+	
+	
+	public ArrayList<BoardCell> getCells() {
+		return cells;
+	}
+	public void setCells(ArrayList<BoardCell> cells) {
+		this.cells = cells;
+	}
+	public Map<Character, String> getRooms() {
+		return rooms;
+	}
+	public void setRooms(Map<Character, String> rooms) {
+		this.rooms = rooms;
+	}
+	public int getNumRows() {
+		return numRows;
+	}
+	public void setNumRows(int numRows) {
+		this.numRows = numRows;
+	}
+	public int getNumColumns() {
+		return numColumns;
+	}
+	public int getNumRooms(){
+		return rooms.size();
+	}
+	public void setNumColumns(int numColumns) {
+		this.numColumns = numColumns;
+	}
+=======
 	int[] boardDim;
 	int doorways=0;
 	HashSet<Integer> targetList=new HashSet<Integer>();
@@ -224,6 +275,7 @@ public class Board {
 			HashSet<Integer> adjlist = new HashSet<Integer>();
 			//adjlist.add(i);
 			return calcAdjacencies(calcIndex,1,adjlist);
+>>>>>>> a57bd2188f85473cde9285532d4ae5e0703479f4
 
 		}
 		public void calcTargets(int i, int j, int k) {
