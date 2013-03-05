@@ -17,7 +17,7 @@ public class CRBoardAdjTargetTest {
 	public static void setUp() {
 		board = new Board();
 		board.loadConfigFiles();
-		board.calcAdjacencies(0, 0, null);
+		board.calcAdjacencies(0, 0, new HashSet<Integer>());
 
 	}
 
