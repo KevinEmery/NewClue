@@ -27,9 +27,28 @@ public class Board {
 		int yAxis=0;
 		Scanner input=new Scanner(new BufferedReader(new FileReader(string)));
 		input.useDelimiter(",");
+		String iter=new String();
+		String doorString = "udlr"; //fastest way to search
 		while(input.hasNext()){
-			//System.out.print(input.next());
-			input.next();
+			iter=input.next();
+			boardDim[0]+=iter.contains("\n")?1:0;
+			boardDim[1]=(!iter.contains("\n"))?boardDim[1]+1:0;
+			//System.out.println(boardDim[0]+","+boardDim[1]);
+			BoardCell e=null;
+			iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
+			if(iter.equals('w')){
+				e=new WalkwayCell(boardDim[0],boardDim[1]);
+			} else {
+				e=new RoomCell(boardDim[0],boardDim[1],iter.charAt(0));
+				if(iter.length()>1){
+//					System.out.print(iter.charAt(1));
+					if(doorString.contains(String.valueOf(iter.charAt(1)))){ //see if the key character for the door is in the string "udlr"
+						//Creates the door using that character
+						((RoomCell) e).setRoomDirection(iter.charAt(1));
+					}
+				}
+			}
+			cells.add(e);
 		}
 	}
 
