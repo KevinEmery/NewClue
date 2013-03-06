@@ -41,13 +41,13 @@ public class RoomCell extends BoardCell{
 	public String getDoorDirection(){
 		switch(this.doorDirection){
 		case UP:
-			return "u";
+			return "U";
 		case DOWN:
-			return "d";
+			return "D";
 		case LEFT:
-			return "l";
+			return "L";
 		case RIGHT:
-			return "r";
+			return "R";
 		default:
 			return "";
 		}
