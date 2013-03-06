@@ -1,7 +1,7 @@
 import java.util.HashSet;
 import java.util.LinkedList;
 public class IntBoard {
-	static final int dim=10;
+	static final int dim=23;
 	int[] boardDim;
 	HashSet<Integer> targetList=new HashSet<Integer>();
 	//HashSet<Integer> adjlist=new HashSet<Integer>();	// using a hashset so we don not have to worry about duplicates so we
@@ -58,7 +58,7 @@ public class IntBoard {
 		return calcAdjacencies(i,1,adjlist);
 	}
 	public int calcIndex(int row, int column){	// turns a 2d board into a 1d list
-		return column+row*boardDim[0];
+		return column+row*boardDim[1];
 	}
 	public int[] calcRowCol(int cellIndex){
 		int [] cellArray = {cellIndex/boardDim[0],cellIndex%boardDim[0]};

@@ -46,7 +46,13 @@ public class IntBoardTest {
 		IntBoard intBoard= new IntBoard();						//creating a new IntBoard
 		Assert.assertEquals(11, board.getRooms().size());				//tell the number of rooms. walkway is a room
 		//Jon got rid of the monster buggy test that was here. Writing a new one.
-		System.out.println(board.getRoomCellAt(4, 4).getRoom());
+		/*for(int i=0;i<boardSize[0];i++){
+			for(int j=0;j<boardSize[1];j++){
+				System.out.print(board.getRoomCellAt(i,j).getRoom());
+			}
+			System.out.print("\n");
+		}*/
+		System.out.println(board.getRoomCellAt(0, 23).getRoom());
 		Assert.assertEquals('c', board.getRoomCellAt(3, 0).getRoom());
 		Assert.assertEquals('c', board.getRoomCellAt(4, 4).getRoom());
 		Assert.assertEquals('r', board.getRoomCellAt(4, 8).getRoom());

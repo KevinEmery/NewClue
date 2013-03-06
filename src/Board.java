@@ -31,8 +31,8 @@ public class Board {
 		String doorString = "udlr"; //fastest way to search
 		while(input.hasNext()){
 			iter=input.next();
-			boardDim[0]+=iter.contains("\n")?1:0;
-			boardDim[1]=(!iter.contains("\n"))?boardDim[1]+1:0;
+			boardDim[0]=iter.contains("\n")?boardDim[1]+1:0;
+			boardDim[1]+=(boardDim[0]!=0)?1:0;
 			//System.out.println(boardDim[0]+","+boardDim[1]);
 			BoardCell e=null;
 			iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
@@ -67,15 +67,17 @@ public class Board {
 			String doorString = "udlr"; //fastest way to search
 			while(input.hasNext()){
 				iter=input.next();
-				boardDim[0]+=iter.contains("\n")?1:0;
+				boardDim[0]+=(iter.contains("\n"))?1:0;
 				boardDim[1]=(!iter.contains("\n"))?boardDim[1]+1:0;
-				//System.out.println(boardDim[0]+","+boardDim[1]);
+				System.out.println(boardDim[0]+","+boardDim[1]);
+				if(iter.contains("\n")){
+				}
 				BoardCell e=null;
 				iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
 				if(iter.equals('w')){
-					e=new WalkwayCell(boardDim[0],boardDim[1]);
+					e=new WalkwayCell(boardDim[1],boardDim[0]);
 				} else {
-					e=new RoomCell(boardDim[0],boardDim[1],iter.charAt(0));
+					e=new RoomCell(boardDim[1],boardDim[0],iter.charAt(0));
 					if(iter.length()>1){
 //						System.out.print(iter.charAt(1));
 						if(doorString.contains(String.valueOf(iter.charAt(1)))){ //see if the key character for the door is in the string "udlr"
@@ -94,7 +96,7 @@ public class Board {
 
 	}
 	public int calcIndex(int row, int column){	// turns a 2d board into a 1d list
-		return column+row*boardDim[1];
+		return column+row*(boardDim[1]+1);
 	}
 	public void AddRoomCell(BoardCell b){
 		cells.add(b);
