@@ -24,67 +24,29 @@ public class Board {
 	public Board(String string, String string2) throws BadConfigFormatException, FileNotFoundException {
 		boardDim=new int[2];
 		boardDim[0]=0;
-		boardDim[1]=1;
+		boardDim[1]=0;
 		int yAxis=0;
-		Scanner input=new Scanner(new BufferedReader(new FileReader(string)));
-		input.useDelimiter(",");
+		Scanner lines=new Scanner(new BufferedReader(new FileReader(string)));
+		lines.useDelimiter("[\\n]");
 		String iter=new String();
-		String doorString = "udlr"; //fastest way to search
-		while(input.hasNext()){
-			iter=input.next().toLowerCase();
-			boardDim[0]=iter.contains("\n")?boardDim[1]+1:0;
-			boardDim[1]+=(boardDim[0]!=0)?1:0;
+		String doorString = "UDLR"; //fastest way to search
+		boardDim[0]=-1;
+		while(lines.hasNext()){
+			String line=lines.next();
+			boardDim[0]+=1;
 			//System.out.println(boardDim[0]+","+boardDim[1]);
-			BoardCell e=null;
-			iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
-			if(iter.equals("W")){
-				//System.out.println("Walkway at "+boardDim[0]+" ,"+boardDim[1]);
-				e=new WalkwayCell(boardDim[0],boardDim[1]);
-			} else {
-				e=new RoomCell(boardDim[0],boardDim[1],iter.charAt(0));
-				if(iter.length()>1){
-					//					System.out.print(iter.charAt(1));
-					if(doorString.contains(String.valueOf(iter.charAt(1)))){ //see if the key character for the door is in the string "udlr"
-						//Creates the door using that character
-						((RoomCell) e).setRoomDirection(iter.charAt(1));
-					}
-				}
-			}
-			cells.add(e);
-		}
-		boardDim[0]++;
-		boardDim[1]++;
-	}
-
-
-
-
-	//}
-	public Board()	 {
-		boardDim=new int[2];
-		boardDim[0]=0;
-		boardDim[1]=-1; //Initial condition fix.
-		try {
-			Scanner input=new Scanner(new BufferedReader(new FileReader("etc/ClueLayout.csv")));
-			input.useDelimiter(",");
-			String iter=new String();
-			String doorString = "udlr"; //fastest way to search
-			while(input.hasNext()){
-				iter=input.next();
-				boardDim[0]+=(iter.contains("\n"))?1:0;
-				boardDim[1]=(!iter.contains("\n"))?boardDim[1]+1:0;
-				//System.out.println(boardDim[0]+","+boardDim[1]);
-				if(iter.contains("\n")){
-					System.out.print("\n");
-				}
+			//System.out.print("\n");
+			Scanner cell = new Scanner(line).useDelimiter(",");
+			while(cell.hasNext()){
+				iter=cell.next();
 				BoardCell e=null;
-				iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
-				System.out.print(iter.charAt(0)/*+" at "+ boardDim[1]+" ,"+boardDim[0]+"\n"*/);
+				//iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
+				//System.out.print(iter.charAt(0)/*+" at "+ boardDim[1]+" ,"+boardDim[0]+"\n"*/);
 				if(iter.equals("W")){
-					//System.out.println(iter+ " is a walkway at "+ boardDim[1]+" ,"+boardDim[0]);
-					e=new WalkwayCell(boardDim[1],boardDim[0]);
+					System.out.println(iter+ " is a walkway at "+ boardDim[0]+" ,"+boardDim[1]);
+					e=new WalkwayCell(boardDim[0],boardDim[1]);
 				} else {
-					e=new RoomCell(boardDim[1],boardDim[0],iter.charAt(0));
+					e=new RoomCell(boardDim[0],boardDim[1],iter.charAt(0));
 					if(iter.length()>1){
 						//System.out.print(iter.charAt(1));
 						if(doorString.contains(String.valueOf(iter.charAt(1)))){ //see if the key character for the door is in the string "udlr"
@@ -93,13 +55,58 @@ public class Board {
 						}
 					}
 				}
+				//System.out.println(e.row+" ,"+e.column);
 				cells.add(e);
+				boardDim[1]+=1;
+			}
+		}
+		boardDim[0]++;
+	}
+	//}
+	public Board()	 {
+		boardDim=new int[2];
+		boardDim[0]=0;
+		boardDim[1]=0; //Initial condition fix.
+		try {
+			Scanner lines=new Scanner(new BufferedReader(new FileReader("etc/ClueLayout.csv")));
+			lines.useDelimiter("[\\n]");
+			String iter=new String();
+			String doorString = "UDLR"; //fastest way to search
+			boardDim[0]=0;
+			while(lines.hasNext()){
+				String line=lines.next();
+				boardDim[1]=0;
+				//System.out.println(boardDim[0]+","+boardDim[1]);
+				//System.out.print("\n");
+				Scanner cell = new Scanner(line).useDelimiter(",");
+				while(cell.hasNext()){
+					iter=cell.next();
+					BoardCell e=null;
+					//iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
+					//System.out.println(iter.charAt(0)+" at "+ boardDim[0]+" ,"+boardDim[1]+"\n");
+					if(iter.equals("W")){
+						//System.out.println(iter+ " is a walkway at "+ boardDim[1]+" ,"+boardDim[0]);
+						e=new WalkwayCell(boardDim[0],boardDim[1]);
+					} else {
+						e=new RoomCell(boardDim[0],boardDim[1],iter.charAt(0));
+						if(iter.length()>1){
+							//System.out.print(iter.charAt(1));
+							if(doorString.contains(String.valueOf(iter.charAt(1)))){ //see if the key character for the door is in the string "udlr"
+								//Creates the door using that character
+								((RoomCell) e).setRoomDirection(iter.charAt(1));
+							}
+						}
+					}
+					//System.out.println(e.row+" ,"+e.column);
+					cells.add(e);
+					boardDim[1]+=1;
+				}
+				boardDim[0]+=1;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		boardDim[0]++;
-		boardDim[1]++;
 		System.out.print("\n\n");
 	}
 	public void loadConfigFiles(){
@@ -146,22 +153,43 @@ public class Board {
 	public HashSet<Integer> calcAdjacencies(int loc,int steps,HashSet<Integer> adjlist){
 		//This function needs to do a recursive loop that counts down the steps to check if the space to the right, left, top and bottom
 		//are valid places, if so it adds to adjlist, we need not worry about copies since this is a hashset.
+		//		System.out.println(steps+" "+loc+ " "+(getCellAt(loc).isDoorway()+" "+getCellAt(loc).isWalkway()));
+		//System.out.println(adjlist.size());
 		if(steps!=0 && (getCellAt(loc).isDoorway()||getCellAt(loc).isWalkway())){
-			if((loc-boardDim[0])>=0){
-				//Go up?
-				adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist));
-			}
-			if(loc+boardDim[0]<(boardDim[0]*boardDim[1])){
-				//Go down?
-				adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist));
-			}
-			if((loc)%boardDim[0]!=0 && (loc-1)>=0){
-				//Go left?
-				adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist));
-			}
-			if((loc+1)%boardDim[0]!=0 && (loc+1)<=(boardDim[0]*boardDim[1])){
-				//Go right?
-				adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist));
+			if(getCellAt(loc).isDoorway()){
+				if((loc-boardDim[0])>=0 && getCellAt(loc-boardDim[0]).isWalkway()){
+					//Go up?
+					adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist));
+				}
+				if(loc+boardDim[0]<(boardDim[0]*boardDim[1]) && getCellAt(loc+boardDim[0]).isWalkway()){
+					//Go down?
+					adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist));
+				}
+				if((loc)%boardDim[0]!=0 && (loc-1)>=0 && getCellAt(loc-1).isWalkway()){
+					//Go left?
+					adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist));
+				}
+				if((loc+1)%boardDim[0]!=0 && (loc+1)<=(boardDim[0]*boardDim[1]) && getCellAt(loc+1).isWalkway()){
+					//Go right?
+					adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist));
+				}
+			} else {
+				if((loc-boardDim[0])>=0 && (getCellAt(loc-boardDim[0]).isDoorway()||getCellAt(loc-boardDim[0]).isWalkway())){
+					//Go up?
+					adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist));
+				}
+				if(loc+boardDim[0]<(boardDim[0]*boardDim[1]) && (getCellAt(loc+boardDim[0]).isDoorway()||getCellAt(loc+boardDim[0]).isWalkway())){
+					//Go down?
+					adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist));
+				}
+				if((loc)%boardDim[0]!=0 && (loc-1)>=0 && (getCellAt(loc-1).isDoorway()||getCellAt(loc-1).isWalkway())){
+					//Go left?
+					adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist));
+				}
+				if((loc+1)%boardDim[0]!=0 && (loc+1)<=(boardDim[0]*boardDim[1]) && (getCellAt(loc+1).isDoorway()||getCellAt(loc-1).isWalkway())){
+					//Go right?
+					adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist));
+				}
 			}
 			return adjlist;
 		} else if(steps==0 && (getCellAt(loc).isDoorway()||getCellAt(loc).isWalkway())){
@@ -177,7 +205,6 @@ public class Board {
 
 	public HashSet<Integer> getAdjList(int calcIndex) {
 		HashSet<Integer> adjlist = new HashSet<Integer>();
-		//adjlist.add(i);
 		return calcAdjacencies(calcIndex,1,adjlist); 
 
 	}
