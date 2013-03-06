@@ -52,10 +52,7 @@ public class RoomCell extends BoardCell{
 		this.room = room;
 	}
 
-	public Object getDoorDirection() {
-		
-		return doorDirection;
-	}
+	
 
 	
 	

@@ -41,26 +41,31 @@ public class IntBoardTest {
 	}
 	@Test
 	public void testRooms() throws FileNotFoundException{
-		int [] boardSize = {23,23};
-		Board board = new Board(boardSize[0],boardSize[1]);
-		IntBoard intBoard= new IntBoard();
-		Assert.assertEquals(10, board.getNumRooms());
+		int [] boardSize = {23,23};							//setting board dimenstions to be 23x23
+		Board board = new Board();		//creating a board
+		IntBoard intBoard= new IntBoard();						//creating a new IntBoard
+		Assert.assertEquals(11, board.getRooms().size());				//tell the number of rooms. walkway is a room
 		Scanner s=new Scanner(new BufferedReader(new FileReader("etc/Clue_map.csv")));
 		s.useDelimiter("[,\\n]");
 		int i=0;
+		BoardCell b;
+		String holder;
 		while(s.hasNext()){
-<<<<<<< HEAD
-			int[] cellArray = intBoard.calcRowCol(i);
-			Assert.assertEquals(board.getRoomCellAt(cellArray[0],cellArray[1]).getRoom(), s.next().toString());
+			int[] cellArray = intBoard.calcRowCol(i);//turns index into x and y coordinates
+			System.out.println(cellArray[0]+" "+cellArray[1]);
+			holder=s.next().toString();//fanciness to turn the string input into a char
+			char c=holder.charAt(0);//because that is what getRoom returns
+			System.out.println("c "+c);
+			System.out.println(board.GetRoomCellAt(cellArray[0],cellArray[1]).getRoom());
+			Assert.assertEquals(board.GetRoomCellAt(cellArray[0],cellArray[1]).getRoom(), c);
 			if(s.next().toString().length()==2){
-				Assert.assertEquals(board.getRoomCellAt(cellArray[0],cellArray[1]).getDoorDirection(), s.next().toString().substring(1, 1));
+				Assert.assertEquals(board.GetRoomCellAt(cellArray[0],cellArray[1]).getDoorDirection(), s.next().toString().substring(1, 1));
 			}
-			i++;
-=======
-			//System.out.println(s.toString());
->>>>>>> a57bd2188f85473cde9285532d4ae5e0703479f4
+			
+			
 			s.next();
 			Assert.assertEquals(i, intBoard.calcIndex(cellArray[0], cellArray[1]));
+			i++;//moved this
 		}
 		s.close();
 		Assert.assertEquals(board.getNumRows(), boardSize[1]);

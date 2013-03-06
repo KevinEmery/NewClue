@@ -1,10 +1,10 @@
 C, Conservatory
 K, Kitchen
 B, Ballroom
-R, Billiard
+R, Billiard room
 L, Library
 S, Study
-D, Dining
+D, Dining room
 O, Lounge
 H, Hall
 X, Closet

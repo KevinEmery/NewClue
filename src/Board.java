@@ -17,67 +17,24 @@ public class Board {
 	private ArrayList<BoardCell> cells = new ArrayList<BoardCell>();
 	private ArrayList<String> list=new ArrayList<String>();
 	private Map<Character,String> rooms= new HashMap<Character, String>();
-<<<<<<< HEAD
+
 	private int numRows;
 	private int numColumns;
 	Board(int rows,int cols){
-//		this.numRows=rows;
-//		this.numColumns=cols;
-	}
-	public void loadConfigFiles(){
-
-	}
-	public int calcIndex(int row, int column){
-		return 0;
+		this.numRows=rows;
+		this.numColumns=cols;
 	}
 	
-	
-	
-	public RoomCell getRoomCellAt(int row, int column){
-		
-		return new RoomCell(row,column); 
-		}
-	
-	
-	
-	public ArrayList<BoardCell> getCells() {
-		return cells;
-	}
-	public void setCells(ArrayList<BoardCell> cells) {
-		this.cells = cells;
-	}
-	public Map<Character, String> getRooms() {
-		return rooms;
-	}
-	public void setRooms(Map<Character, String> rooms) {
-		this.rooms = rooms;
-	}
-	public int getNumRows() {
-		return numRows;
-	}
-	public void setNumRows(int numRows) {
-		this.numRows = numRows;
-	}
-	public int getNumColumns() {
-		return numColumns;
-	}
-	public int getNumRooms(){
-		return rooms.size();
-	}
-	public void setNumColumns(int numColumns) {
-		this.numColumns = numColumns;
-	}
-=======
 	int[] boardDim;
 	int doorways=0;
 	HashSet<Integer> targetList=new HashSet<Integer>();
-	public Board(String string, String string2) throws BadConfigFormatException {
+	public Board(String string, String string2) throws BadConfigFormatException, FileNotFoundException {
 		boardDim=new int[2];
 		String line = null;
 		boardDim[0]=boardDim[1] = 0;
 		int linelength=-1;
 		int yaxis=0;
-		try {
+		//try {
 			Scanner input=new Scanner(new BufferedReader(new FileReader(string)));
 			while(  input.hasNext()){
 				int xaxis=0;			
@@ -119,15 +76,15 @@ public class Board {
 
 			}
 
-			} catch (IOException e) {
-				System.out.println("File could not be read");
-				System.exit(0);
+			//} catch (IOException e) {
+				//System.out.println("File could not be read");
+				//System.exit(0);
 			}
 
 
 
 
-		}
+		//}
 		public Board()	 {
 
 			boardDim=new int[2];
@@ -202,14 +159,15 @@ public class Board {
 		public int calcIndex(int row, int column){	// turns a 2d board into a 1d list
 			return column+row*boardDim[1];
 		}
+		public void AddRoomCell(BoardCell b){
+			cells.add(b);
+		}
 		public RoomCell GetRoomCellAt(int row, int column){
 
 			return ((RoomCell)cells.get(calcIndex(row,column))) ; 
 
 		}
-		public int getDoorways(){
-			return doorways;
-		}
+	
 		public ArrayList<BoardCell> getCells() {
 			return cells;
 		}
@@ -222,7 +180,7 @@ public class Board {
 				while(  input.hasNext()){
 					String cha= input.next();
 					char c=cha.charAt(0);
-					String r=input.next();
+					String r=input.nextLine();
 					rooms.put(c, r);
 				}
 			}catch (FileNotFoundException e){
@@ -274,8 +232,8 @@ public class Board {
 		public HashSet<Integer> getAdjList(int calcIndex) {
 			HashSet<Integer> adjlist = new HashSet<Integer>();
 			//adjlist.add(i);
-			return calcAdjacencies(calcIndex,1,adjlist);
->>>>>>> a57bd2188f85473cde9285532d4ae5e0703479f4
+			return calcAdjacencies(calcIndex,1,adjlist); 
+//>>>>>>> a57bd2188f85473cde9285532d4ae5e0703479f4
 
 		}
 		public void calcTargets(int i, int j, int k) {
@@ -293,6 +251,14 @@ public class Board {
 		public int getNumRows() {
 
 			return boardDim[0];
+		}
+		public void loadRoomConfig() {
+			// TODO Auto-generated method stub
+			
+		}
+		public void loadBoardConfig() {
+			// TODO Auto-generated method stub
+			
 		}
 
 
