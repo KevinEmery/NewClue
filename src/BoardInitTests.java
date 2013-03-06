@@ -146,7 +146,7 @@ public class BoardInitTests {
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoomFormat() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file name
-		Board b = new Board("ClueLayout.csv", "ClueLegendBadFormat.txt");
+		Board b = new Board("etc/ClueLayout.csv", "etc/ClueLegendBadFormat.txt");
 		//b.loadRoomConfig();
 		//b.loadBoardConfig();
 	}

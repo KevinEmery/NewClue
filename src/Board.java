@@ -28,42 +28,54 @@ public class Board {
 		boardDim=new int[2];
 		boardDim[0]=0;
 		boardDim[1]=0;
-		int yAxis=0;
-		Scanner lines=new Scanner(new BufferedReader(new FileReader(string)));
-		lines.useDelimiter("[\\n]");
-		String iter=new String();
-		String doorString = "UDLR"; //fastest way to search
-		boardDim[0]=-1;
-		while(lines.hasNext()){
-			String line=lines.next();
-			boardDim[0]+=1;
-			//System.out.println(boardDim[0]+","+boardDim[1]);
-			//System.out.print("\n");
-			Scanner cell = new Scanner(line).useDelimiter(",");
-			while(cell.hasNext()){
-				iter=cell.next();
-				BoardCell e=null;
-				//iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
-				//System.out.print(iter.charAt(0)/*+" at "+ boardDim[1]+" ,"+boardDim[0]+"\n"*/);
-				if(iter.equals("W")){
-					System.out.println(iter+ " is a walkway at "+ boardDim[0]+" ,"+boardDim[1]);
-					e=new WalkwayCell(boardDim[0],boardDim[1]);
-				} else {
-					e=new RoomCell(boardDim[0],boardDim[1],iter.charAt(0));
-					if(iter.length()>1){
-						//System.out.print(iter.charAt(1));
-						if(doorString.contains(String.valueOf(iter.charAt(1)))){ //see if the key character for the door is in the string "udlr"
-							//Creates the door using that character
-							((RoomCell) e).setRoomDirection(iter.charAt(1));
+		try {
+			Scanner lines=new Scanner(new BufferedReader(new FileReader("etc/ClueLayout.csv")));
+			lines.useDelimiter("[\\n]");
+			String iter=new String();
+			String doorString = "UDLR"; //fastest way to search
+			boardDim[0]=0;
+			while(lines.hasNext()){
+				String line=lines.next();
+				boardDim[1]=0;
+				Scanner cell = new Scanner(line).useDelimiter(",");
+				while(cell.hasNext()){
+					iter=cell.next();
+					BoardCell e=null;
+					iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
+					//System.out.println(iter.charAt(0)+" at "+ boardDim[0]+" ,"+boardDim[1]+"\n");
+					
+					if(iter.equals("W")){
+						//System.out.println(iter+ " is a walkway at "+ boardDim[1]+" ,"+boardDim[0]);
+						e=new WalkwayCell(boardDim[0],boardDim[1]);
+					} else {
+						e=new RoomCell(boardDim[0],boardDim[1],iter.charAt(0));
+						if(iter.length()>1){
+							//System.out.print(iter.charAt(1));
+							if(doorString.contains(String.valueOf(iter.charAt(1)))){ //see if the key character for the door is in the string "udlr"
+								//Creates the door using that character
+								((RoomCell) e).setRoomDirection(iter.charAt(1));
+
+							iter=cell.next();
+
 						}
 					}
+					//System.out.println(e.row+" ,"+e.column);
+					cells.add(e);
+					boardDim[1]+=1;
 				}
-				//System.out.println(e.row+" ,"+e.column);
-				cells.add(e);
-				boardDim[1]+=1;
+				boardDim[0]+=1;
 			}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		//} catch (BadConfigFormatException e){
+			//System.out.println("BadConfigFormatException");
 		}
 		boardDim[0]++;
+
+		boardDim[1]=boardDim[1]/boardDim[0];
+
+		//System.out.println(boardDim[0]+" "+boardDim[1]);
 	}
 
 	public Board()	{
@@ -81,8 +93,6 @@ public class Board {
 			while(lines.hasNext()){
 				String line=lines.next();
 				boardDim[1]=0;
-				//System.out.println(boardDim[0]+","+boardDim[1]);
-				//System.out.print("\n");
 				Scanner cell = new Scanner(line).useDelimiter(",");
 				while(cell.hasNext()){
 					iter=cell.next();
@@ -100,7 +110,7 @@ public class Board {
 								//Creates the door using that character
 								((RoomCell) e).setRoomDirection(iter.charAt(1));
 
-							//iter=cell.next();
+							iter=cell.next();
 
 						}
 					}

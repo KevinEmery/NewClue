@@ -1,3 +1,7 @@
+import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.FileNotFoundException;
 import java.util.HashSet;
 
@@ -61,8 +65,37 @@ public class IntBoardTest {
 	}
 	@Test
 	public void doorTest(){
-		//assert.assertEquals()
-
+		//tests door Direction
+		RoomCell room = board.getRoomCellAt(4, 3);
+		assertTrue(room.isDoorway());
+		assertEquals(RoomCell.DoorDirection.RIGHT, room.getDoorDirection());
+		room = board.getRoomCellAt(4, 8);
+		assertTrue(room.isDoorway());
+		assertEquals(RoomCell.DoorDirection.DOWN, room.getDoorDirection());
+		room = board.getRoomCellAt(15, 18);
+		assertTrue(room.isDoorway());
+		assertEquals(RoomCell.DoorDirection.LEFT, room.getDoorDirection());
+		room = board.getRoomCellAt(14, 11);
+		assertTrue(room.isDoorway());
+		assertEquals(RoomCell.DoorDirection.UP, room.getDoorDirection());
+		// Test that room pieces that aren't doors know it
+		room = board.getRoomCellAt(14, 14);
+		assertFalse(room.isDoorway());	
+		// Test that walkways are not doors
+		BoardCell cell = board.getCellAt(board.calcIndex(0, 6));
+		assertFalse(cell.isDoorway());	
+		//tests correct number of doors
+		int numDoors = 0;
+		int totalCells = board.getNumColumns() * board.getNumRows();
+		Assert.assertEquals(506, totalCells);
+		for (int i=0; i<totalCells; i++)
+		{
+			BoardCell cell1 = board.getCellAt(i);
+			if (cell1.isDoorway())
+				numDoors++;
+		}
+		Assert.assertEquals(16, numDoors);
+	
 
 	}
 }
