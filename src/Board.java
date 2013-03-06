@@ -101,10 +101,14 @@ public class Board {
 				}
 				boardDim[0]+=1;
 			}
+			
+			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		boardDim[0]++;
+		boardDim[1]=boardDim[1]/boardDim[0];
 		//System.out.println(boardDim[0]+" "+boardDim[1]);
 	}
 	public void loadConfigFiles(){
@@ -234,7 +238,6 @@ public class Board {
 		return targets;
 	}
 	public int getNumColumns() {
-		
 		return boardDim[1];
 	}
 	public int getNumRows() {
