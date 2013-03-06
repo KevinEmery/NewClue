@@ -9,11 +9,15 @@ import org.junit.Test;
 
 public class IntBoardTest {
 
+
 	int [] boardSize = {23,24};	//setting board dimenstions to be 23x24
 	Board board = new Board();	//creating a board
 	IntBoard intBoard= new IntBoard();	//creating a new IntBoard
 
 	//are these next two adjacency tests?
+
+
+
 	@Test
 	public void testAdjacency0()
 	{
@@ -40,14 +44,15 @@ public class IntBoardTest {
 	@Test
 	public void testRooms() throws FileNotFoundException{
 
+
 		Assert.assertEquals(11, board.getRooms().size());	//tell the number of rooms. walkway is a room
 
 		Assert.assertEquals('C', board.getRoomCellAt(3, 0).getRoom());//room initials and CalcIndex
-		Assert.assertEquals('C', board.getRoomCellAt(4, 4).getRoom());
+		Assert.assertEquals('C', board.getRoomCellAt(4, 4).getRoom());//r?
 		Assert.assertEquals('R', board.getRoomCellAt(4, 8).getRoom());
-		Assert.assertEquals('S', board.getRoomCellAt(3, 19).getRoom());
-		Assert.assertEquals(board.getNumRows(), boardSize[0]);//board Dimension
-		Assert.assertEquals(board.getNumColumns(), boardSize[0]);//boardDimesnsion
+		Assert.assertEquals('S', board.getRoomCellAt(3, 19).getRoom()); //c?
+		Assert.assertEquals(board.getNumRows(), boardSize[0]);//board Dimension {507
+		Assert.assertEquals(board.getNumColumns(), boardSize[0]);//boardDimesnsion {0
 		//door direction
 		//room legend-part2
 
@@ -57,6 +62,7 @@ public class IntBoardTest {
 	@Test
 	public void doorTest(){
 		//assert.assertEquals()
+
 
 	}
 }

@@ -11,7 +11,7 @@ public class WalkwayCell extends BoardCell {
 	}
 	@Override
 	public void draw(){
-		
+
 	}
-	
-	}
+
+}
