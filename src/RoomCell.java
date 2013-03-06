@@ -10,7 +10,7 @@ public class RoomCell extends BoardCell{
 		this.room=room;
 	}
 	public void setRoomDirection(char d){
-		//TODO make this a switch
+		
 		d=Character.toUpperCase(d);
 		if(d=='U'){
 			this.doorDirection=DoorDirection.UP;

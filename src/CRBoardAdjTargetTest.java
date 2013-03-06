@@ -40,6 +40,7 @@ public class CRBoardAdjTargetTest {
 		Assert.assertEquals(0, testList.size());
 		// Test one beside a door
 		testList = board.getAdjList(board.calcIndex(14, 12));
+		System.out.println(testList);
 		Assert.assertEquals(0, testList.size());
 		// Test one in a corner of room
 		testList = board.getAdjList(board.calcIndex(5, 20));

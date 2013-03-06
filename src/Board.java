@@ -36,7 +36,8 @@ public class Board {
 			//System.out.println(boardDim[0]+","+boardDim[1]);
 			BoardCell e=null;
 			iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
-			if(iter.equals('w')){
+			if(iter.equals("w")){
+				System.out.println("Walkway at "+boardDim[0]+" ,"+boardDim[1]);
 				e=new WalkwayCell(boardDim[0],boardDim[1]);
 			} else {
 				e=new RoomCell(boardDim[0],boardDim[1],iter.charAt(0));
@@ -76,7 +77,7 @@ public class Board {
 				}
 				BoardCell e=null;
 				iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
-				if(iter.equals('w')){
+				if(iter.equals("w")){
 					e=new WalkwayCell(boardDim[1],boardDim[0]);
 				} else {
 					e=new RoomCell(boardDim[1],boardDim[0],iter.charAt(0));
@@ -141,24 +142,43 @@ public class Board {
 		//This function needs to do a recursive loop that counts down the steps to check if the space to the right, left, top and bottom
 		//are valid places, if so it adds to adjlist, we need not worry about copies since this is a hashset.
 		if(steps!=0){
-			if((loc-boardDim[0])>=0){
-				//Go up?
-				adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist));
-			}
-			if(loc+boardDim[0]<(boardDim[0]*boardDim[1])){
-				//Go down?
-				adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist));
-			}
-			if((loc)%boardDim[0]!=0 && (loc-1)>=0){
-				//Go left?
-				adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist));
-			}
-			if((loc+1)%boardDim[0]!=0 && (loc+1)<=(boardDim[0]*boardDim[1])){
-				//Go right?
-				adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist));
+			if(getCellAt(loc).isWalkway()){
+				if((loc-boardDim[0])>=0){
+					//Go up?
+					adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist));
+				}
+				if(loc+boardDim[0]<(boardDim[0]*boardDim[1])){
+					//Go down?
+					adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist));
+				}
+				if((loc)%boardDim[0]!=0 && (loc-1)>=0){
+					//Go left?
+					adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist));
+				}
+				if((loc+1)%boardDim[0]!=0 && (loc+1)<=(boardDim[0]*boardDim[1])){
+					//Go right?
+					adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist));
+				}
+			} else if(getCellAt(loc).isDoorway()){
+				if((loc-boardDim[0])>=0 && getCellAt(loc-boardDim[0]).isWalkway()){
+					//Go up?
+					adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist));
+				}
+				if(loc+boardDim[0]<(boardDim[0]*boardDim[1]) && getCellAt(loc+boardDim[0]).isWalkway()){
+					//Go down?
+					adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist));
+				}
+				if((loc)%boardDim[0]!=0 && (loc-1)>=0 && getCellAt(loc-1).isWalkway()){
+					//Go left?
+					adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist));
+				}
+				if((loc+1)%boardDim[0]!=0 && (loc+1)<=(boardDim[0]*boardDim[1]) && getCellAt(loc+1).isWalkway()){
+					//Go right?
+					adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist));
+				}
 			}
 			return adjlist;
-		} else if(steps==0 && !getCellAt(loc).isRoom()){
+		} else if(steps==0){
 			if(!adjlist.contains(loc)){
 				adjlist.add(loc);
 			}
@@ -172,7 +192,7 @@ public class Board {
 	public HashSet<Integer> getAdjList(int calcIndex) {
 		HashSet<Integer> adjlist = new HashSet<Integer>();
 		//adjlist.add(i);
-		return calcAdjacencies(calcIndex,0,adjlist); 
+		return calcAdjacencies(calcIndex,1,adjlist); 
 
 	}
 	public void calcTargets(int i, int j, int k) {
