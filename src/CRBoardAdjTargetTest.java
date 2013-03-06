@@ -28,6 +28,7 @@ public class CRBoardAdjTargetTest {
 	{
 		// Test a corner
 		HashSet<Integer> testList = board.getAdjList(board.calcIndex(0, 0));
+		System.out.println(testList);
 		Assert.assertEquals(0, testList.size());
 		// Test one that has walkway underneath
 		testList = board.getAdjList(board.calcIndex(4, 0));

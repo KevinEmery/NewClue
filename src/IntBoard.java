@@ -55,7 +55,6 @@ public class IntBoard {
 	}
 	public HashSet<Integer> getAdjList(int i){	// just used to return the adjlist
 		HashSet<Integer> adjlist = new HashSet<Integer>();
-		//adjlist.add(i);
 		return calcAdjacencies(i,1,adjlist);
 	}
 	public int calcIndex(int row, int column){	// turns a 2d board into a 1d list

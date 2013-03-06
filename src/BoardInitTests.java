@@ -20,12 +20,12 @@ public class BoardInitTests {
 	public static final int NUM_ROOMS = 11;
 	public static final int NUM_ROWS = 22;
 	public static final int NUM_COLUMNS = 23;
-	
+
 	@BeforeClass
-	public static void setUp() {
-		
-			board = new Board("ClueLayout.csv", "ClueLegend.txt");
-			
+	public static void setUp() throws FileNotFoundException, BadConfigFormatException {
+
+		board = new Board("ClueLayout.csv", "ClueLegend.txt");
+
 		board.loadConfigFiles();
 	}
 	@Test
@@ -41,14 +41,14 @@ public class BoardInitTests {
 		assertEquals("Dining room", rooms.get('D'));
 		assertEquals("Walkway", rooms.get('W'));
 	}
-	
+
 	@Test
 	public void testBoardDimensions() {
 		// Ensure we have the proper number of rows and columns
 		assertEquals(NUM_ROWS, board.getNumRows());
 		assertEquals(NUM_COLUMNS, board.getNumColumns());		
 	}
-	
+
 	// Test a doorway in each direction, plus two cells that are not
 	// a doorway.
 	// These cells are white on the planning spreadsheet
@@ -75,7 +75,7 @@ public class BoardInitTests {
 		assertFalse(cell.isDoorway());		
 
 	}
-	
+
 	// Test that we have the correct number of doors
 	@Test
 	public void testNumberOfDoorways() 
@@ -92,7 +92,7 @@ public class BoardInitTests {
 		Assert.assertEquals(16, numDoors);
 	}
 
-	
+
 	@Test
 	public void testCalcIndex() {
 		// Test each corner of the board
@@ -104,7 +104,7 @@ public class BoardInitTests {
 		assertEquals(24, board.calcIndex(1, 1));
 		assertEquals(66, board.calcIndex(2, 20));		
 	}
-	
+
 	// Test a few room cells to ensure the room initial is
 	// correct.
 	@Test
@@ -115,7 +115,7 @@ public class BoardInitTests {
 		assertEquals('O', board.GetRoomCellAt(21, 22).getRoom());
 		assertEquals('K', board.GetRoomCellAt(21, 0).getRoom());
 	}
-	
+
 	// Test that an exception is thrown for a bad config file
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadColumns() throws BadConfigFormatException, FileNotFoundException {
