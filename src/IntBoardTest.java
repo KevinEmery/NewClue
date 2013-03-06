@@ -52,11 +52,10 @@ public class IntBoardTest {
 			}
 			System.out.print("\n");
 		}*/
-		System.out.println(board.getRoomCellAt(0, 23).getRoom());
 		Assert.assertEquals('c', board.getRoomCellAt(3, 0).getRoom());
 		Assert.assertEquals('c', board.getRoomCellAt(4, 4).getRoom());
 		Assert.assertEquals('r', board.getRoomCellAt(4, 8).getRoom());
-		Assert.assertEquals('r', board.getRoomCellAt(3, 19).getRoom());
+		Assert.assertEquals('s', board.getRoomCellAt(3, 19).getRoom());
 		Assert.assertEquals(board.getNumRows(), boardSize[1]);
 		Assert.assertEquals(board.getNumColumns(), boardSize[1]);
 	}

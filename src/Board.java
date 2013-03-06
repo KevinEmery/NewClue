@@ -41,7 +41,7 @@ public class Board {
 			} else {
 				e=new RoomCell(boardDim[0],boardDim[1],iter.charAt(0));
 				if(iter.length()>1){
-//					System.out.print(iter.charAt(1));
+					//					System.out.print(iter.charAt(1));
 					if(doorString.contains(String.valueOf(iter.charAt(1)))){ //see if the key character for the door is in the string "udlr"
 						//Creates the door using that character
 						((RoomCell) e).setRoomDirection(iter.charAt(1));
@@ -50,6 +50,8 @@ public class Board {
 			}
 			cells.add(e);
 		}
+		boardDim[0]++;
+		boardDim[1]++;
 	}
 
 
@@ -69,7 +71,7 @@ public class Board {
 				iter=input.next();
 				boardDim[0]+=(iter.contains("\n"))?1:0;
 				boardDim[1]=(!iter.contains("\n"))?boardDim[1]+1:0;
-				System.out.println(boardDim[0]+","+boardDim[1]);
+				//System.out.println(boardDim[0]+","+boardDim[1]);
 				if(iter.contains("\n")){
 				}
 				BoardCell e=null;
@@ -79,7 +81,7 @@ public class Board {
 				} else {
 					e=new RoomCell(boardDim[1],boardDim[0],iter.charAt(0));
 					if(iter.length()>1){
-//						System.out.print(iter.charAt(1));
+						//System.out.print(iter.charAt(1));
 						if(doorString.contains(String.valueOf(iter.charAt(1)))){ //see if the key character for the door is in the string "udlr"
 							//Creates the door using that character
 							((RoomCell) e).setRoomDirection(iter.charAt(1));
@@ -91,12 +93,14 @@ public class Board {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		boardDim[0]++;
+		boardDim[1]++;
 	}
 	public void loadConfigFiles(){
 
 	}
 	public int calcIndex(int row, int column){	// turns a 2d board into a 1d list
-		return column+row*(boardDim[1]+1);
+		return column+row*(boardDim[1]);
 	}
 	public void AddRoomCell(BoardCell b){
 		cells.add(b);
@@ -183,7 +187,7 @@ public class Board {
 		return boardDim[1];
 	}
 	public int getNumRows() {
-
+		//System.out.println(boardDim[0]);
 		return boardDim[0];
 	}
 	public void loadRoomConfig() {
