@@ -23,21 +23,22 @@ public class Board {
 	HashSet<Integer> targetList=new HashSet<Integer>();
 	public Board(String string, String string2) throws BadConfigFormatException, FileNotFoundException {
 		boardDim=new int[2];
-		boardDim[0]=boardDim[1] = 0;
+		boardDim[0]=0;
+		boardDim[1]=1;
 		int yAxis=0;
 		Scanner input=new Scanner(new BufferedReader(new FileReader(string)));
 		input.useDelimiter(",");
 		String iter=new String();
 		String doorString = "udlr"; //fastest way to search
 		while(input.hasNext()){
-			iter=input.next();
+			iter=input.next().toLowerCase();
 			boardDim[0]=iter.contains("\n")?boardDim[1]+1:0;
 			boardDim[1]+=(boardDim[0]!=0)?1:0;
 			//System.out.println(boardDim[0]+","+boardDim[1]);
 			BoardCell e=null;
 			iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
-			if(iter.equals("w")){
-				System.out.println("Walkway at "+boardDim[0]+" ,"+boardDim[1]);
+			if(iter.equals("W")){
+				//System.out.println("Walkway at "+boardDim[0]+" ,"+boardDim[1]);
 				e=new WalkwayCell(boardDim[0],boardDim[1]);
 			} else {
 				e=new RoomCell(boardDim[0],boardDim[1],iter.charAt(0));
@@ -62,9 +63,9 @@ public class Board {
 	public Board()	 {
 		boardDim=new int[2];
 		boardDim[0]=0;
-		boardDim[1]=0;
+		boardDim[1]=-1; //Initial condition fix.
 		try {
-			Scanner input=new Scanner(new BufferedReader(new FileReader("etc/Clue_map.csv")));
+			Scanner input=new Scanner(new BufferedReader(new FileReader("etc/ClueLayout.csv")));
 			input.useDelimiter(",");
 			String iter=new String();
 			String doorString = "udlr"; //fastest way to search
@@ -74,10 +75,13 @@ public class Board {
 				boardDim[1]=(!iter.contains("\n"))?boardDim[1]+1:0;
 				//System.out.println(boardDim[0]+","+boardDim[1]);
 				if(iter.contains("\n")){
+					System.out.print("\n");
 				}
 				BoardCell e=null;
 				iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
-				if(iter.equals("w")){
+				System.out.print(iter.charAt(0)/*+" at "+ boardDim[1]+" ,"+boardDim[0]+"\n"*/);
+				if(iter.equals("W")){
+					//System.out.println(iter+ " is a walkway at "+ boardDim[1]+" ,"+boardDim[0]);
 					e=new WalkwayCell(boardDim[1],boardDim[0]);
 				} else {
 					e=new RoomCell(boardDim[1],boardDim[0],iter.charAt(0));
@@ -96,6 +100,7 @@ public class Board {
 		}
 		boardDim[0]++;
 		boardDim[1]++;
+		System.out.print("\n\n");
 	}
 	public void loadConfigFiles(){
 
@@ -141,44 +146,25 @@ public class Board {
 	public HashSet<Integer> calcAdjacencies(int loc,int steps,HashSet<Integer> adjlist){
 		//This function needs to do a recursive loop that counts down the steps to check if the space to the right, left, top and bottom
 		//are valid places, if so it adds to adjlist, we need not worry about copies since this is a hashset.
-		if(steps!=0){
-			if(getCellAt(loc).isWalkway()){
-				if((loc-boardDim[0])>=0){
-					//Go up?
-					adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist));
-				}
-				if(loc+boardDim[0]<(boardDim[0]*boardDim[1])){
-					//Go down?
-					adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist));
-				}
-				if((loc)%boardDim[0]!=0 && (loc-1)>=0){
-					//Go left?
-					adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist));
-				}
-				if((loc+1)%boardDim[0]!=0 && (loc+1)<=(boardDim[0]*boardDim[1])){
-					//Go right?
-					adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist));
-				}
-			} else if(getCellAt(loc).isDoorway()){
-				if((loc-boardDim[0])>=0 && getCellAt(loc-boardDim[0]).isWalkway()){
-					//Go up?
-					adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist));
-				}
-				if(loc+boardDim[0]<(boardDim[0]*boardDim[1]) && getCellAt(loc+boardDim[0]).isWalkway()){
-					//Go down?
-					adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist));
-				}
-				if((loc)%boardDim[0]!=0 && (loc-1)>=0 && getCellAt(loc-1).isWalkway()){
-					//Go left?
-					adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist));
-				}
-				if((loc+1)%boardDim[0]!=0 && (loc+1)<=(boardDim[0]*boardDim[1]) && getCellAt(loc+1).isWalkway()){
-					//Go right?
-					adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist));
-				}
+		if(steps!=0 && (getCellAt(loc).isDoorway()||getCellAt(loc).isWalkway())){
+			if((loc-boardDim[0])>=0){
+				//Go up?
+				adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist));
+			}
+			if(loc+boardDim[0]<(boardDim[0]*boardDim[1])){
+				//Go down?
+				adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist));
+			}
+			if((loc)%boardDim[0]!=0 && (loc-1)>=0){
+				//Go left?
+				adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist));
+			}
+			if((loc+1)%boardDim[0]!=0 && (loc+1)<=(boardDim[0]*boardDim[1])){
+				//Go right?
+				adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist));
 			}
 			return adjlist;
-		} else if(steps==0){
+		} else if(steps==0 && (getCellAt(loc).isDoorway()||getCellAt(loc).isWalkway())){
 			if(!adjlist.contains(loc)){
 				adjlist.add(loc);
 			}
