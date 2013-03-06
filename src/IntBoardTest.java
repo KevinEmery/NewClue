@@ -52,18 +52,23 @@ public class IntBoardTest {
 		String holder;
 		while(s.hasNext()){
 			int[] cellArray = intBoard.calcRowCol(i);//turns index into x and y coordinates
-			System.out.println(cellArray[0]+" "+cellArray[1]);
 			holder=s.next().toString();//fanciness to turn the string input into a char
 			char c=holder.charAt(0);//because that is what getRoom returns
-			System.out.println("c "+c);
+			
+			System.out.println("holder "+holder+" "+i);//appears to be doing every other one
 			System.out.println(board.GetRoomCellAt(cellArray[0],cellArray[1]).getRoom());
+			
+			//Seems that s is pulling in every other number:0,2,4 instead of 0,1,2
+			//don't know why, tested thoroughly, 
+			
+			
 			Assert.assertEquals(board.GetRoomCellAt(cellArray[0],cellArray[1]).getRoom(), c);
 			if(s.next().toString().length()==2){
 				Assert.assertEquals(board.GetRoomCellAt(cellArray[0],cellArray[1]).getDoorDirection(), s.next().toString().substring(1, 1));
 			}
 			
 			
-			s.next();
+			//s.next();
 			Assert.assertEquals(i, intBoard.calcIndex(cellArray[0], cellArray[1]));
 			i++;//moved this
 		}

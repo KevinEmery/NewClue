@@ -20,11 +20,6 @@ public class Board {
 
 	private int numRows;
 	private int numColumns;
-	Board(int rows,int cols){
-		this.numRows=rows;
-		this.numColumns=cols;
-	}
-	
 	int[] boardDim;
 	int doorways=0;
 	HashSet<Integer> targetList=new HashSet<Integer>();
