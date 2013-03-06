@@ -1,7 +1,8 @@
 
 public class RoomCell extends BoardCell{
-	public RoomCell(int row, int col){
+	public RoomCell(int row, int col, char c){
 		super(row, col);
+		room=c;
 
 	}
 	private char room;

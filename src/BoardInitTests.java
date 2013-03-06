@@ -24,9 +24,14 @@ public class BoardInitTests {
 	@BeforeClass
 	public static void setUp() {
 		
-			board = new Board("ClueLayout.csv", "ClueLegend.txt");
+			try {
+				board = new Board("etc/ClueLayout.csv", "etc/ClueLegend.txt");
+			} catch (FileNotFoundException | BadConfigFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
-		board.loadConfigFiles();
+		//board.loadConfigFiles();
 	}
 	@Test
 	public void testRooms() {
@@ -55,20 +60,20 @@ public class BoardInitTests {
 	@Test
 	public void FourDoorDirections() {
 		// Test one each RIGHT/LEFT/UP/DOWN
-		RoomCell room = board.GetRoomCellAt(4, 3);
+		RoomCell room = board.getRoomCellAt(4, 3);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.RIGHT, room.getDoorDirection());
-		room = board.GetRoomCellAt(4, 8);
+		room = board.getRoomCellAt(4, 8);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.DOWN, room.getDoorDirection());
-		room = board.GetRoomCellAt(15, 18);
+		room = board.getRoomCellAt(15, 18);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.LEFT, room.getDoorDirection());
-		room = board.GetRoomCellAt(14, 11);
+		room = board.getRoomCellAt(14, 11);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.UP, room.getDoorDirection());
 		// Test that room pieces that aren't doors know it
-		room = board.GetRoomCellAt(14, 14);
+		room = board.getRoomCellAt(14, 14);
 		assertFalse(room.isDoorway());	
 		// Test that walkways are not doors
 		BoardCell cell = board.getCellAt(board.calcIndex(0, 6));
@@ -109,11 +114,11 @@ public class BoardInitTests {
 	// correct.
 	@Test
 	public void testRoomInitials() {
-		assertEquals('C', board.GetRoomCellAt(0, 0).getRoom());
-		assertEquals('R', board.GetRoomCellAt(4, 8).getRoom());
-		assertEquals('B', board.GetRoomCellAt(9, 0).getRoom());
-		assertEquals('O', board.GetRoomCellAt(21, 22).getRoom());
-		assertEquals('K', board.GetRoomCellAt(21, 0).getRoom());
+		assertEquals('C', board.getRoomCellAt(0, 0).getRoom());
+		assertEquals('R', board.getRoomCellAt(4, 8).getRoom());
+		assertEquals('B', board.getRoomCellAt(9, 0).getRoom());
+		assertEquals('O', board.getRoomCellAt(21, 22).getRoom());
+		assertEquals('K', board.getRoomCellAt(21, 0).getRoom());
 	}
 	
 	// Test that an exception is thrown for a bad config file
@@ -124,23 +129,23 @@ public class BoardInitTests {
 		// You may change these calls if needed to match your function names
 		// My loadConfigFiles has a try/catch, so I can't call it directly to
 		// see test throwing the BadConfigFormatException
-		b.loadRoomConfig();
-		b.loadBoardConfig();
+		//b.loadRoomConfig();
+		//b.loadBoardConfig();
 	}
 	// Test that an exception is thrown for a bad config file
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoom() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file name
 		Board b = new Board("ClueLayoutBadRoom.csv", "ClueLegend.txt");
-		b.loadRoomConfig();
-		b.loadBoardConfig();
+		//b.loadRoomConfig();
+		//b.loadBoardConfig();
 	}
 	// Test that an exception is thrown for a bad config file
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoomFormat() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file name
 		Board b = new Board("ClueLayout.csv", "ClueLegendBadFormat.txt");
-		b.loadRoomConfig();
-		b.loadBoardConfig();
+		//b.loadRoomConfig();
+		//b.loadBoardConfig();
 	}
 }

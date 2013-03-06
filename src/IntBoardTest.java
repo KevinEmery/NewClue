@@ -1,21 +1,19 @@
-import static org.junit.Assert.*;
-
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Scanner;
-import java.util.Set;
 
 import junit.framework.Assert;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 
 public class IntBoardTest {
 
-	
+	int [] boardSize = {23,24};	//setting board dimenstions to be 23x24
+	Board board = new Board();	//creating a board
+	IntBoard intBoard= new IntBoard();	//creating a new IntBoard
+
+	//are these next two adjacency tests?
 	@Test
 	public void testAdjacency0()
 	{
@@ -41,42 +39,24 @@ public class IntBoardTest {
 	}
 	@Test
 	public void testRooms() throws FileNotFoundException{
-		int [] boardSize = {24,23};							//setting board dimenstions to be 23x23
-		Board board = new Board();		//creating a board
-		IntBoard intBoard= new IntBoard();						//creating a new IntBoard
-		Assert.assertEquals(11, board.getRooms().size());				//tell the number of rooms. walkway is a room
-		Scanner s=new Scanner(new BufferedReader(new FileReader("etc/Clue_map.csv")));
-		s.useDelimiter("[,|\\n]");
-		int i=0;
-		BoardCell b;
-		String holder;
-		while(s.hasNext()){
-			int[] cellArray = board.calcRowCol(i);//turns index into x and y coordinates
-			holder=s.next().toString();//fanciness to turn the string input into a char
-			char c=holder.charAt(0);//because that is what getRoom returns
-			
-			//System.out.println("What the s.next is "+holder+" "+i);//appears to be doing every other one
-			//System.out.println("what the board is "+board.GetRoomCellAt(cellArray[0],cellArray[1]).getRoom()+" "+cellArray[0]+" "+cellArray[1]);
-			
-			//seems that s is having trouble getting to the next line
-			//don't know why, tested thoroughly, 
-			
-			
-			//Assert.assertEquals(board.GetRoomCellAt(cellArray[0],cellArray[1]).getRoom(), c);
-			//has problem handling new lines.
-			if(holder.length()==2){
-				System.out.println(cellArray[0]+" "+cellArray[1]+" "+board.GetRoomCellAt(cellArray[0],cellArray[1]).getRoom()+
-						" "+board.GetRoomCellAt(cellArray[0],cellArray[1]).getDoorDirection());
-				Assert.assertEquals(board.GetRoomCellAt(cellArray[0],cellArray[1]).getDoorDirection(), holder.toString().substring(1, 1));
-			}
-			
-			
-			
-			Assert.assertEquals(i, board.calcIndex(cellArray[0], cellArray[1]));//good
-			i++;//moved this
-		}
-		s.close();
-		Assert.assertEquals(board.getNumRows(), boardSize[1]);//good
-		Assert.assertEquals(board.getNumColumns(), boardSize[0]);//good
+
+		Assert.assertEquals(11, board.getRooms().size());	//tell the number of rooms. walkway is a room
+
+		Assert.assertEquals('C', board.getRoomCellAt(3, 0).getRoom());//room initials and CalcIndex
+		Assert.assertEquals('C', board.getRoomCellAt(4, 4).getRoom());
+		Assert.assertEquals('R', board.getRoomCellAt(4, 8).getRoom());
+		Assert.assertEquals('S', board.getRoomCellAt(3, 19).getRoom());
+		Assert.assertEquals(board.getNumRows(), boardSize[0]);//board Dimension
+		Assert.assertEquals(board.getNumColumns(), boardSize[0]);//boardDimesnsion
+		//door direction
+		//room legend-part2
+
+		//failing tests-part 2
+
+	}
+	@Test
+	public void doorTest(){
+		//assert.assertEquals()
+
 	}
 }
