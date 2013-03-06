@@ -152,7 +152,7 @@ public class Board {
 
 		}
 		public int calcIndex(int row, int column){	// turns a 2d board into a 1d list
-			return column+row*boardDim[1];
+			return column+row*boardDim[0];
 		}
 		public void AddRoomCell(BoardCell b){
 			cells.add(b);
@@ -254,6 +254,10 @@ public class Board {
 		public void loadBoardConfig() {
 			// TODO Auto-generated method stub
 			
+		}
+		public int[] calcRowCol(int cellIndex){
+			int [] cellArray = {cellIndex/boardDim[0],cellIndex%boardDim[0]};
+			return cellArray;
 		}
 
 
