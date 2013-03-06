@@ -153,7 +153,7 @@ public class Board {
 		//are valid places, if so it adds to adjlist, we need not worry about copies since this is a hashset.
 		//		System.out.println(steps+" "+loc+ " "+(getCellAt(loc).isDoorway()+" "+getCellAt(loc).isWalkway()));
 		//System.out.println(adjlist.size());
-		if(steps!=0 && (getCellAt(loc).isDoorway()||getCellAt(loc).isWalkway())){
+		if(steps>0 && (getCellAt(loc).isDoorway()||getCellAt(loc).isWalkway())){
 			if(getCellAt(loc).isDoorway()){
 				if((loc-boardDim[1])>=0 && getCellAt(loc-boardDim[0]).isWalkway()){
 					//Go up?
@@ -205,7 +205,8 @@ public class Board {
 				}
 			}
 			return adjlist;
-		} else if(steps==0 && (getCellAt(loc).isDoorway()||getCellAt(loc).isWalkway())){
+		}
+		if(steps==0 && (getCellAt(loc).isDoorway()||getCellAt(loc).isWalkway())){
 			if(!adjlist.contains(loc)){
 				adjlist.add(loc);
 			}
@@ -223,6 +224,7 @@ public class Board {
 	}
 	public void calcTargets(int i, int j, int k) {
 		targetList=calcAdjacencies(calcIndex(i,j),k,new HashSet<Integer>());
+		targetList.remove(calcIndex(i,j));
 	}
 	public Set<BoardCell> getTargets() {
 		Set<BoardCell> targets = new HashSet<BoardCell>();

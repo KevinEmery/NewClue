@@ -184,12 +184,6 @@ public class CRBoardAdjTargetTest {
 	public void testTargetsTwoSteps() {
 		board.calcTargets(21, 7, 2);
 		Set<BoardCell> targets= board.getTargets();
-		
-		System.out.println(targets.size());
-		for(BoardCell cell:targets){
-			System.out.println(cell.row+" "+cell.column);
-		}
-
 		Assert.assertEquals(2, targets.size());
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(19, 7))));
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(20, 6))));
@@ -212,10 +206,11 @@ public class CRBoardAdjTargetTest {
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(19, 7))));
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(18, 6))));
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(20, 6))));
-		
+
 		// Includes a path that doesn't have enough length
 		board.calcTargets(14, 0, 4);
 		targets= board.getTargets();
+		System.out.println(board.getCellAt(board.calcIndex(12, 0)).isWalkway());
 		Assert.assertEquals(4, targets.size());
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(14, 4))));
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(15, 3))));	
