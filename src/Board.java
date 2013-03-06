@@ -18,56 +18,18 @@ public class Board {
 	private ArrayList<String> list=new ArrayList<String>();
 	private Map<Character,String> rooms= new HashMap<Character, String>();
 
-	private int numRows;
-	private int numColumns;
 	int[] boardDim;
-	int doorways=0;
+	//int doorways=0;
 	HashSet<Integer> targetList=new HashSet<Integer>();
 	public Board(String string, String string2) throws BadConfigFormatException, FileNotFoundException {
 		boardDim=new int[2];
-		String line = null;
 		boardDim[0]=boardDim[1] = 0;
-		int linelength=-1;
-		int yaxis=0;
+		int yAxis=0;
 		Scanner input=new Scanner(new BufferedReader(new FileReader(string)));
-		while(  input.hasNext()){
-			int xaxis=0;			
-			line = input.next();
-			line.split(",\\n");
-
-			for(int i=0; i<line.length();i++){
-				if(line.charAt(i)!=','){
-					BoardCell e=null;
-					if(line.charAt(i)=='W'){ e=new WalkwayCell(yaxis,xaxis );}
-					else {e=new RoomCell(yaxis,xaxis);
-					((RoomCell) e).setRoom(line.charAt(i));
-					if(i<line.length()-1){
-						if(line.charAt(i+1)!=','){
-							((RoomCell) e).setRoomDirection(line.charAt(i+1));
-							doorways++;
-						}else{((RoomCell) e).setRoomDirection('n');}
-					}
-					}
-					if (e!=null){cells.add(e);} 
-
-					xaxis++;
-
-				}
-
-				if (linelength==-1){linelength=line.length();}
-				if(linelength!=line.length()){throw new BadConfigFormatException();}
-				list.add(line);
-				boardDim[0]++;// just read a row
-
-
-			}
-
-			for (int i=0; i < line.length(); i++){
-				if (line.charAt(i) == ',')//counts the commas that are in between the data
-				{boardDim[1]++;}				
-			}
-			boardDim[1]++;//adds one more so it is a count of the things on either side of the commas
-
+		input.useDelimiter(",");
+		while(input.hasNext()){
+			//System.out.print(input.next());
+			input.next();
 		}
 	}
 
@@ -76,72 +38,38 @@ public class Board {
 
 	//}
 	public Board()	 {
-
 		boardDim=new int[2];
-		String line = null;
-		boardDim[0]=boardDim[1] = 0;
-
+		boardDim[0]=0;
+		boardDim[1]=0;
 		try {
 			Scanner input=new Scanner(new BufferedReader(new FileReader("etc/Clue_map.csv")));
-			int yaxis=0;
-			while(  input.hasNext()){
-				int xaxis=0;
-				line = input.next();
-				line.split(",\\n");
-				for(int i=0; i<line.length();i++){
-					if(line.charAt(i)!=','){
-						BoardCell e=null;
-						if(line.charAt(i)=='W'){ e=new WalkwayCell(yaxis,xaxis );}
-						else {e=new RoomCell(yaxis,xaxis);
-						((RoomCell) e).setRoom(line.charAt(i));
-						if(i<line.length()-1){
-							if(line.charAt(i+1)!=','){
-								if(line.charAt(i+1)=='d'){
-									((RoomCell) e).setRoomDirection('D');
-									doorways++;
-								}else if(line.charAt(i+1)=='u'){
-									((RoomCell) e).setRoomDirection('U');
-									doorways++;
-
-								}else if(line.charAt(i+1)=='l'){
-									((RoomCell) e).setRoomDirection('L');
-									doorways++;
-								}else if(line.charAt(i+1)=='r'){
-									((RoomCell) e).setRoomDirection('R');
-									doorways++;
-								}
-								i++;		
-
-
-
-							}else{((RoomCell) e).setRoomDirection('n');}
+			input.useDelimiter(",");
+			String iter=new String();
+			String doorString = "udlr"; //fastest way to search
+			while(input.hasNext()){
+				iter=input.next();
+				boardDim[0]+=iter.contains("\n")?1:0;
+				boardDim[1]=(!iter.contains("\n"))?boardDim[1]+1:0;
+				//System.out.println(boardDim[0]+","+boardDim[1]);
+				BoardCell e=null;
+				iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
+				if(iter.equals('w')){
+					e=new WalkwayCell(boardDim[0],boardDim[1]);
+				} else {
+					e=new RoomCell(boardDim[0],boardDim[1],iter.charAt(0));
+					if(iter.length()>1){
+//						System.out.print(iter.charAt(1));
+						if(doorString.contains(String.valueOf(iter.charAt(1)))){ //see if the key character for the door is in the string "udlr"
+							//Creates the door using that character
+							((RoomCell) e).setRoomDirection(iter.charAt(1));
 						}
-						}
-						if (e!=null){cells.add(e);} 
-
-						xaxis++;
-
 					}
-
 				}
-
-				boardDim[0]++;// just read a row
-
+				cells.add(e);
 			}
-
-			for (int i=0; i < line.length(); i++){
-				if (line.charAt(i) == ',')//counts the commas that are in between the data
-				{boardDim[1]++;}				
-			}
-			boardDim[1]++;//adds one more so it is a count of the things on either side of the commas
-
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-
-
 	}
 	public void loadConfigFiles(){
 
@@ -152,10 +80,8 @@ public class Board {
 	public void AddRoomCell(BoardCell b){
 		cells.add(b);
 	}
-	public RoomCell GetRoomCellAt(int row, int column){
-
+	public RoomCell getRoomCellAt(int row, int column){
 		return ((RoomCell)cells.get(calcIndex(row,column))) ; 
-
 	}
 
 	public ArrayList<BoardCell> getCells() {

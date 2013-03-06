@@ -15,7 +15,7 @@ import org.junit.Test;
 
 public class IntBoardTest {
 
-	
+
 	@Test
 	public void testAdjacency0()
 	{
@@ -45,34 +45,12 @@ public class IntBoardTest {
 		Board board = new Board();		//creating a board
 		IntBoard intBoard= new IntBoard();						//creating a new IntBoard
 		Assert.assertEquals(11, board.getRooms().size());				//tell the number of rooms. walkway is a room
-		Scanner s=new Scanner(new BufferedReader(new FileReader("etc/Clue_map.csv")));
-		s.useDelimiter("[,\\n]");
-		int i=0;
-		BoardCell b;
-		String holder;
-		while(s.hasNext()){
-			int[] cellArray = intBoard.calcRowCol(i);//turns index into x and y coordinates
-			holder=s.next().toString();//fanciness to turn the string input into a char
-			char c=holder.charAt(0);//because that is what getRoom returns
-			
-			System.out.println("holder "+holder+" "+i);//appears to be doing every other one
-			System.out.println(board.GetRoomCellAt(cellArray[0],cellArray[1]).getRoom());
-			
-			//Seems that s is pulling in every other number:0,2,4 instead of 0,1,2
-			//don't know why, tested thoroughly, 
-			
-			
-			Assert.assertEquals(board.GetRoomCellAt(cellArray[0],cellArray[1]).getRoom(), c);
-			if(s.next().toString().length()==2){
-				Assert.assertEquals(board.GetRoomCellAt(cellArray[0],cellArray[1]).getDoorDirection(), s.next().toString().substring(1, 1));
-			}
-			
-			
-			//s.next();
-			Assert.assertEquals(i, intBoard.calcIndex(cellArray[0], cellArray[1]));
-			i++;//moved this
-		}
-		s.close();
+		//Jon got rid of the monster buggy test that was here. Writing a new one.
+		System.out.println(board.getRoomCellAt(4, 4).getRoom());
+		Assert.assertEquals('c', board.getRoomCellAt(3, 0).getRoom());
+		Assert.assertEquals('c', board.getRoomCellAt(4, 4).getRoom());
+		Assert.assertEquals('r', board.getRoomCellAt(4, 8).getRoom());
+		Assert.assertEquals('r', board.getRoomCellAt(3, 19).getRoom());
 		Assert.assertEquals(board.getNumRows(), boardSize[1]);
 		Assert.assertEquals(board.getNumColumns(), boardSize[1]);
 	}
