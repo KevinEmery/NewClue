@@ -38,6 +38,11 @@ public class RoomCell extends BoardCell{
 	public char getInitial() {
 		return room;
 	}
+	
+	public char getRoom() {
+		return getInitial();
+	}
+	
 	public String getDoorDirection(){
 		switch(this.doorDirection){
 		case UP:
