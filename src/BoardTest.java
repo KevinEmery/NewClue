@@ -29,29 +29,9 @@ public class BoardTest {
 	public void testFiles()throws BadConfigFormatException, FileNotFoundException{//for simplicity sake, I will use the crader fail files
 		Board b = new Board("etc/Clue_map.csv", "etc/ClueLegendBadFormat.txt");
 	}
-	@Test
-	public void testAdjacency0()
-	{
-		IntBoard board=new IntBoard(4,4);
-		HashSet<Integer> testList = board.getAdjList(0);
-		Assert.assertTrue(testList.contains(4));
-		Assert.assertTrue(testList.contains(1));
-		Assert.assertEquals(2, testList.size());
-	}
-	@Test
-	public void testTargets0_3()
-	{
-		IntBoard board=new IntBoard(4,4);
-		board.startTargets(0, 3);
-		HashSet<Integer> targets= board.getTargets();
-		Assert.assertEquals(6, targets.size());
-		Assert.assertTrue(targets.contains(12));
-		Assert.assertTrue(targets.contains(9));
-		Assert.assertTrue(targets.contains(1));
-		Assert.assertTrue(targets.contains(6));
-		Assert.assertTrue(targets.contains(3));
-		Assert.assertTrue(targets.contains(4));
-	}
+	
+	
+	
 	@Test
 	public void testRooms() throws FileNotFoundException{
 		Map<Character, String> rooms = board.getRooms();
@@ -181,9 +161,6 @@ public class BoardTest {
 		Assert.assertTrue(testList.contains(board.calcIndex(13, 10)));
 		Assert.assertTrue(testList.contains(board.calcIndex(13, 12)));
 	}
-
-	// Test a variety of walkway scenarios
-	// These tests are LIGHT PURPLE on the planning spreadsheet
 	@Test
 	public void testAdjacencyWalkways()
 	{
@@ -246,8 +223,7 @@ public class BoardTest {
 	
 	
 
-	// Test getting out of a room
-	// These are LIGHT BLUE on the planning spreadsheet
+	
 	@Test
 	public void testRoomExit()
 	{
