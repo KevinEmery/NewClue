@@ -13,7 +13,7 @@ public class Board {
 	ArrayList<BoardCell> cells = new ArrayList<BoardCell>();
 	private Map<Character,String> rooms= new HashMap<Character, String>();
 	private HashSet<Integer> targetList=new HashSet<Integer>();
-	private HashSet<Integer> visited =new HashSet<Integer>();
+	private HashSet<Integer> visited = new HashSet<Integer>();
 	int[] boardDim;
 	int room;
 	int doorwaynumber;
