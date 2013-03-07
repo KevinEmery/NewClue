@@ -35,7 +35,7 @@ public class RoomCell extends BoardCell{
 
 	}
 
-	public char getRoom() {
+	public char getInitial() {
 		return room;
 	}
 	public String getDoorDirection(){

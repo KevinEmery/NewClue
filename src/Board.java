@@ -13,7 +13,7 @@ public class Board {
 	ArrayList<BoardCell> cells = new ArrayList<BoardCell>();
 	private Map<Character,String> rooms= new HashMap<Character, String>();
 	private HashSet<Integer> targetList=new HashSet<Integer>();
-	private HashSet<Integer> visited  =new HashSet<Integer>();
+	private HashSet<Integer> visited =new HashSet<Integer>();
 	int[] boardDim;
 	int room;
 	int doorwaynumber;
@@ -30,10 +30,10 @@ public class Board {
 		while(lines.hasNext()){
 			String line=lines.next();
 
-			
-			
+
+
 			linelength=line.length();
-			boardDim[0]+=1;
+			boardDim[0]+=line.length();
 
 			Scanner cell = new Scanner(line).useDelimiter(",");
 			while(cell.hasNext()){
@@ -58,13 +58,13 @@ public class Board {
 				cells.add(e);
 				boardDim[1]+=1;
 			}
+			
 			if(linelength==-1){linelength=boardDim[1];}
 			if(linelength!=boardDim[1]){throw new BadConfigFormatException();}
 		}
 		boardDim[0]++;
 	}
-	public Board(){
-		
+	public Board(){//This needs to be hear because some of the tests are funky
 		boardDim=new int[2];
 		boardDim[0]=0;
 		boardDim[1]=0;
@@ -73,7 +73,7 @@ public class Board {
 			lines.useDelimiter("[\\n]");
 			String iter=new String();
 			String doorString = "UDLR"; //fastest way to search
-			boardDim[0]=0;
+			boardDim[0]=1;
 			while(lines.hasNext()){
 				String line=lines.next();
 				boardDim[1]=0;
@@ -106,10 +106,60 @@ public class Board {
 				}
 				boardDim[0]+=1;
 			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		boardDim[0]++;
+	
+		//System.out.println(boardDim[0]+" "+boardDim[1]);
+	}
+	public Board(String s){
+		boardDim=new int[2];
+		boardDim[0]=0;
+		boardDim[1]=0;
+		try {
+			Scanner lines=new Scanner(new BufferedReader(new FileReader(s)));
+			lines.useDelimiter("[\\n]");
+			String iter=new String();
+			String doorString = "UDLR"; //fastest way to search
+			boardDim[0]=1;
+			while(lines.hasNext()){
+				String line=lines.next();
+				boardDim[1]=0;
+				//System.out.println(boardDim[0]+","+boardDim[1]);
+				//System.out.print("\n");
+				Scanner cell = new Scanner(line).useDelimiter(",");
+				while(cell.hasNext()){
+					iter=cell.next();
+					BoardCell e=null;
+					iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
+					//System.out.println(iter.charAt(0)+" at "+ boardDim[0]+" ,"+boardDim[1]+"\n");
+					if(iter.equalsIgnoreCase("W")){
+						//System.out.println(iter+ " is a walkway at "+ boardDim[1]+" ,"+boardDim[0]);
+						e=new WalkwayCell(boardDim[0],boardDim[1]);
+					} else {
+						room++;
+						e=new RoomCell(boardDim[0],boardDim[1],iter.charAt(0));
+						if(iter.length()>1){
+							//System.out.print(iter.charAt(1));
+							if(doorString.contains(String.valueOf(iter.charAt(1)))){ //see if the key character for the door is in the string "udlr"
+								//Creates the door using that character
+								((RoomCell) e).setRoomDirection(iter.charAt(1));
+								doorwaynumber++;
+							}
+						}
+					}
+					//System.out.println(e.row+" ,"+e.column);
+					cells.add(e);
+					boardDim[1]+=1;
+				}
+				boardDim[0]+=1;
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	
 		//System.out.println(boardDim[0]+" "+boardDim[1]);
 	}
 	public void loadConfigFiles(){
@@ -143,6 +193,7 @@ public class Board {
 		}catch (FileNotFoundException e){
 			System.out.println("Could not open Key");
 			System.exit(0);}
+	
 		return rooms;
 	}
 	public void setRooms(Map<Character, String> rooms) {
@@ -158,26 +209,26 @@ public class Board {
 		//are valid places, if so it adds to adjlist, we need not worry about copies since this is a hashset.
 		// System.out.println(steps+" "+loc+ " "+(getCellAt(loc).isDoorway()+" "+getCellAt(loc).isWalkway()));
 		//System.out.println(adjlist.size());
-		
+
 		if(visited.contains(loc)){return adjlist;}
 		visited.add(loc);
 		if(steps>0 && (getCellAt(loc).isDoorway()||getCellAt(loc).isWalkway())){
 			if(getCellAt(loc).isDoorway()){
 				if((loc-boardDim[1])>=0 && getCellAt(loc-boardDim[1]).isWalkway()){
 					//Go up?
-					adjlist.addAll(calcAdjacencies(loc-boardDim[1],steps-1,adjlist,visited   ));
+					adjlist.addAll(calcAdjacencies(loc-boardDim[1],steps-1,adjlist,visited ));
 				}
 				if(loc+boardDim[1]<(cells.size()) && getCellAt(loc+boardDim[1]).isWalkway()){
 					//Go down?
-					adjlist.addAll(calcAdjacencies(loc+boardDim[1],steps-1,adjlist,visited  ));
+					adjlist.addAll(calcAdjacencies(loc+boardDim[1],steps-1,adjlist,visited ));
 				}
 				if((getCellAt(loc).column-1)>=0 && (loc-1)>=0 && getCellAt(loc-1).isWalkway()){
 					//Go left?
-					adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist, visited  ));
+					adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist, visited ));
 				}
 				if((getCellAt(loc).column+1)!=0 && (loc+1)<=(boardDim[0]*boardDim[1]) && getCellAt(loc+1).isWalkway()){
 					//Go right?
-					adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist, visited  ));
+					adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist, visited ));
 				}
 			} else {
 				if((loc-boardDim[1])>=0 && (getCellAt(loc-boardDim[1]).isDoorway()||getCellAt(loc-boardDim[0]).isWalkway())){
@@ -193,9 +244,9 @@ public class Board {
 					//Go down?
 					if(getCellAt(loc+boardDim[0]).isDoorway() && ((RoomCell)getCellAt(loc+boardDim[0])).getDoorDirection().equals("U")){
 						adjlist.add(loc+boardDim[0]);
-						adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist, visited  ));
+						adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist, visited ));
 					} else if(!getCellAt(loc+boardDim[0]).isDoorway()){
-						adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist,visited  ));
+						adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist,visited ));
 					}
 				}
 				if((getCellAt(loc).column-1)>=0 && (loc-1)>=0 && (getCellAt(loc-1).isDoorway()||getCellAt(loc-1).isWalkway())){
@@ -210,24 +261,24 @@ public class Board {
 				if((getCellAt(loc+1).column)!=0 && (loc+1)<=(boardDim[0]*boardDim[1]) && (getCellAt(loc+1).isDoorway()||getCellAt(loc+1).isWalkway())){
 					if(getCellAt(loc+1).isDoorway() && ((RoomCell)getCellAt(loc+1)).getDoorDirection().equals("L")){
 						adjlist.add(loc+1);
-						adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist, visited  ));
+						adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist, visited ));
 					} else if(!getCellAt(loc+1).isDoorway()){
-						adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist, visited  ));
+						adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist, visited ));
 					}
 				}
-				
+
 			}
 			visited.remove(loc);
 			return adjlist;
 		}else if(getCellAt(loc).isDoorway()||getCellAt(loc).isWalkway()){
 			visited.remove(loc);
-				adjlist.add(loc);
-				return adjlist;
+			adjlist.add(loc);
+			return adjlist;
 		} else {
 			visited.remove(loc);
 			return adjlist;
 		}
-		
+
 	}
 
 
@@ -253,16 +304,30 @@ public class Board {
 	}
 	public int getNumRows() {
 		//System.out.println(boardDim[0]);
-		return boardDim[0];
+		return boardDim[0]-1;
 	}
 	public void loadRoomConfig() {
-
+		try{
+			Scanner input=new Scanner(new BufferedReader(new FileReader("etc/ClueLegend.txt")));
+			while( input.hasNext()){
+				String cha= input.next();
+				char c=cha.charAt(0);
+				String r=input.nextLine();
+				rooms.put(c, r);
+			}
+		}catch (FileNotFoundException e){
+			System.out.println("Could not open Key");
+			System.exit(0);}
 	}
 	public int getRoomNum(){
 		return room;
 	}
 	public int getNumDoorway() {
 		return doorwaynumber;
+	}
+	public void loadBoardConfig() {
+		// TODO Auto-generated method stub
+		
 	}
 
 
