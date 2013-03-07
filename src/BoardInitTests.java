@@ -34,17 +34,17 @@ public class BoardInitTests {
 	
 	@Test
 	public void testRooms() {
-		Map<Character, String> rooms = board.getRooms();
-		// Ensure we read the correct number of rooms
-		assertEquals(NUM_ROOMS, rooms.size());
-		// Test retrieving a few from the hash, including the first
-		// and last in the file and a few others
-		assertEquals("Conservatory", rooms.get('C'));
-		assertEquals(" Ballroom", rooms.get('B'));
-		assertEquals("Billiard room", rooms.get('R'));
-		assertEquals("Dining room", rooms.get('D'));
-		assertEquals("Walkway", rooms.get('W'));
-	}
+Map<Character, String> rooms = board.getRooms();
+// Ensure we read the correct number of rooms
+assertEquals(NUM_ROOMS, rooms.size());
+// Test retrieving a few from the hash, including the first
+// and last in the file and a few others
+assertEquals(" Conservatory", rooms.get('C'));
+assertEquals(" Ballroom", rooms.get('B'));
+assertEquals(" Billiard room", rooms.get('R'));
+assertEquals(" Dining room", rooms.get('D'));
+assertEquals(" Walkway", rooms.get('W'));
+}
 
 	@Test
 	public void testBoardDimensions() {
@@ -58,27 +58,33 @@ public class BoardInitTests {
 	// These cells are white on the planning spreadsheet
 	@Test
 	public void FourDoorDirections() {
+
 		// Test one each RIGHT/LEFT/UP/DOWN
-		RoomCell room = board.getRoomCellAt(4, 4);
-		assertTrue(room.isDoorway());
-		//assertEquals(RoomCell.DoorDirection.RIGHT, room.getDoorDirection());
-		room = board.getRoomCellAt(4, 8);
-		assertTrue(room.isDoorway());
-		assertEquals(RoomCell.DoorDirection.DOWN, room.getDoorDirection());
+		RoomCell room =board.getRoomCellAt(4,3);
+		assertTrue(room.isDoorway());	
+		assertEquals(RoomCell.DoorDirection.RIGHT, room.getDoorDirection0());	
+		room = board.getRoomCellAt(4,8 );	
+		assertTrue(room.isDoorway());	//good
+		assertEquals(RoomCell.DoorDirection.DOWN, room.getDoorDirection0());//good
 		room = board.getRoomCellAt(15, 18);
 		assertTrue(room.isDoorway());
-		assertEquals(RoomCell.DoorDirection.LEFT, room.getDoorDirection());
-		room = board.getRoomCellAt(14, 11);
-		assertTrue(room.isDoorway());
-		assertEquals(RoomCell.DoorDirection.UP, room.getDoorDirection());
-		// Test that room pieces that aren't doors know it
-		room = board.getRoomCellAt(14, 14);
-		assertFalse(room.isDoorway());	
-		// Test that walkways are not doors
-		BoardCell cell = board.getCellAt(board.calcIndex(0, 6));
-		assertFalse(cell.isDoorway());		
+		assertEquals(RoomCell.DoorDirection.LEFT, room.getDoorDirection0());
 
-	}
+		room = board.getRoomCellAt(14,11);
+
+
+		assertTrue(room.isDoorway());
+		assertEquals(RoomCell.DoorDirection.UP, room.getDoorDirection0());
+
+
+		// Test that room pieces that aren't doors know it
+		room = board.getRoomCellAt(0, 0); //good
+		assertFalse(room.isDoorway());	//good
+		// Test that walkways are not doors
+		BoardCell cell = board.getCellAt(board.calcIndex(0, 0));//good
+		assertFalse(cell.isDoorway());	
+
+		}
 
 	// Test that we have the correct number of doors
 	@Test
@@ -86,14 +92,16 @@ public class BoardInitTests {
 	{
 		int numDoors = 0;
 		int totalCells = board.getNumColumns() * board.getNumRows();
+		
 		Assert.assertEquals(529, totalCells);
-		for (int i=0; i<totalCells; i++)
+		for (int i=0; i<506; i++)
 		{
+			
 			BoardCell cell = board.getCellAt(i);
 			if (cell.isDoorway())
 				numDoors++;
 		}
-		Assert.assertEquals(17, numDoors);
+		Assert.assertEquals(16, numDoors);
 	}
 
 
@@ -113,11 +121,11 @@ public class BoardInitTests {
 	// correct.
 	@Test
 	public void testRoomInitials() {
-		assertEquals('c', board.getRoomCellAt(0, 0).getRoom());
-		assertEquals('r', board.getRoomCellAt(4, 8).getRoom());
-		assertEquals('b', board.getRoomCellAt(9, 0).getRoom());
-		assertEquals('o', board.getRoomCellAt(21, 22).getRoom());
-		assertEquals('k', board.getRoomCellAt(21, 0).getRoom());
+		assertEquals('C', board.getRoomCellAt(0, 0).getRoom());
+		assertEquals('R', board.getRoomCellAt(4, 8).getRoom());
+		assertEquals('B', board.getRoomCellAt(9, 0).getRoom());
+		assertEquals('O', board.getRoomCellAt(21, 22).getRoom());
+		assertEquals('K', board.getRoomCellAt(21, 0).getRoom());
 	}
 
 	// Test that an exception is thrown for a bad config file
@@ -128,23 +136,23 @@ public class BoardInitTests {
 		// You may change these calls if needed to match your function names
 		// My loadConfigFiles has a try/catch, so I can't call it directly to
 		// see test throwing the BadConfigFormatException
-		//b.loadRoomConfig();
-		//b.loadBoardConfig();
+		b.loadRoomConfig();
+	
 	}
 	// Test that an exception is thrown for a bad config file
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoom() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file name
 		Board b = new Board("etc/ClueLayoutBadRoom.csv", "etc/ClueLegend.txt");
-		//b.loadRoomConfig();
-		//b.loadBoardConfig();
+		b.loadRoomConfig();
+	
 	}
 	// Test that an exception is thrown for a bad config file
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoomFormat() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file name
 		Board b = new Board("etc/ClueLayout.csv", "etc/ClueLegendBadFormat.txt");
-		//b.loadRoomConfig();
-		//b.loadBoardConfig();
+		b.loadRoomConfig();
+		
 	}
 }
