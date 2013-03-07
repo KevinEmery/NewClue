@@ -1,32 +1,26 @@
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
 public class Board {
 	ArrayList<BoardCell> cells = new ArrayList<BoardCell>();
-	private ArrayList<String> list=new ArrayList<String>();
 	private Map<Character,String> rooms= new HashMap<Character, String>();
 	private HashSet<Integer> targetList=new HashSet<Integer>();
+	private HashSet<Integer> visited=new HashSet<Integer>();
 	int[] boardDim;
 	int room;
 	int doorwaynumber;
-	//int doorways=0;
 	public Board(String string, String string2) throws BadConfigFormatException, FileNotFoundException {
 		boardDim=new int[2];
 		boardDim[0]=0;
 		boardDim[1]=0;
-		int yAxis=0;
 		Scanner lines=new Scanner(new BufferedReader(new FileReader(string)));
 		lines.useDelimiter("[\\n]");
 		String iter=new String();
@@ -156,70 +150,73 @@ public class Board {
 		return cells.get(calcIndex);
 	}
 
-	public HashSet<Integer> calcAdjacencies(int loc,int steps,HashSet<Integer> adjlist){
+	public HashSet<Integer> calcAdjacencies(int loc,int steps,HashSet<Integer> adjlist,HashSet<Integer> visisted){
 		//This function needs to do a recursive loop that counts down the steps to check if the space to the right, left, top and bottom
 		//are valid places, if so it adds to adjlist, we need not worry about copies since this is a hashset.
 		// System.out.println(steps+" "+loc+ " "+(getCellAt(loc).isDoorway()+" "+getCellAt(loc).isWalkway()));
 		//System.out.println(adjlist.size());
 		if(steps>0 && (getCellAt(loc).isDoorway()||getCellAt(loc).isWalkway())){
 			if(getCellAt(loc).isDoorway()){
-				if((loc-boardDim[1])>=0 && getCellAt(loc-boardDim[0]).isWalkway()){
+				if((loc-boardDim[1])>=0 && getCellAt(loc-boardDim[0]).isWalkway()&&!visited.contains(loc-boardDim[1])){
 					//Go up?
-					adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist));
+					adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist, visited));
 				}
-				if(loc+boardDim[1]<(cells.size()) && getCellAt(loc+boardDim[0]).isWalkway()){
+				if(loc+boardDim[1]<(cells.size()) && getCellAt(loc+boardDim[0]).isWalkway()&&!visited.contains(loc+boardDim[1])){
 					//Go down?
-					adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist));
+					adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist,visited));
 				}
-				if((getCellAt(loc).column-1)>=0 && (loc-1)>=0 && getCellAt(loc-1).isWalkway()){
+				if((getCellAt(loc).column-1)>=0 && (loc-1)>=0 && getCellAt(loc-1).isWalkway()&&!visited.contains(getCellAt(loc).column-1)){
 					//Go left?
-					adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist));
+					adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist,visited));
 				}
-				if((getCellAt(loc+1).column)!=0 && (loc+1)<=(boardDim[0]*boardDim[1]) && getCellAt(loc+1).isWalkway()){
+				if((getCellAt(loc+1).column)!=0 && (loc+1)<=(boardDim[0]*boardDim[1]) && getCellAt(loc+1).isWalkway()&&!visited.contains(getCellAt(loc).column+1)){
 					//Go right?
-					adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist));
+					adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist,visited));
 				}
 			} else {
 				if((loc-boardDim[1])>=0 && (getCellAt(loc-boardDim[0]).isDoorway()||getCellAt(loc-boardDim[0]).isWalkway())){
 					//Go up?
-					if(getCellAt(loc-boardDim[0]).isDoorway() && ((RoomCell)getCellAt(loc-boardDim[0])).getDoorDirection().equals("D")){
-						adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist));
+					if(getCellAt(loc-boardDim[0]).isDoorway() && ((RoomCell)getCellAt(loc-boardDim[0])).getDoorDirection().equals("D")&&!visited.contains(loc-boardDim[0])){
+						adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist,visited));
 					} else if(!getCellAt(loc-boardDim[0]).isDoorway()){
-						adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist));
+						adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist,visited));
 					}
 				}
 				if((loc+boardDim[1])<(cells.size()) && (getCellAt(loc+boardDim[0]).isDoorway()||getCellAt(loc+boardDim[0]).isWalkway())){
 					//Go down?
-					if(getCellAt(loc+boardDim[0]).isDoorway() && ((RoomCell)getCellAt(loc+boardDim[0])).getDoorDirection().equals("U")){
-						adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist));
+					if(getCellAt(loc+boardDim[0]).isDoorway() && ((RoomCell)getCellAt(loc+boardDim[0])).getDoorDirection().equals("U")&&!visited.contains(loc+boardDim[0])){
+						adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist,visited));
 					} else if(!getCellAt(loc+boardDim[0]).isDoorway()){
-						adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist));
+						adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist,visited));
 					}
 				}
 				if((getCellAt(loc).column-1)>=0 && (loc-1)>=0 && (getCellAt(loc-1).isDoorway()||getCellAt(loc-1).isWalkway())){
 					//Go left?
-					if(getCellAt(loc-1).isDoorway() && ((RoomCell)getCellAt(loc-1)).getDoorDirection().equals("R")){
-						adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist));
+					if(getCellAt(loc-1).isDoorway() && ((RoomCell)getCellAt(loc-1)).getDoorDirection().equals("R")&&!visited.contains(loc-1)){
+						adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist, visisted));
 					} else if(!getCellAt(loc-1).isDoorway()){
-						adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist));
+						adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist, visisted));
 					}
 				}
 				if((getCellAt(loc+1).column)!=0 && (loc+1)<=(boardDim[0]*boardDim[1]) && (getCellAt(loc+1).isDoorway()||getCellAt(loc+1).isWalkway())){
-					if(getCellAt(loc+1).isDoorway() && ((RoomCell)getCellAt(loc+1)).getDoorDirection().equals("L")){
-						adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist));
+					if(getCellAt(loc+1).isDoorway() && ((RoomCell)getCellAt(loc+1)).getDoorDirection().equals("L")&&!visited.contains(loc+boardDim[0])){
+						adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist,visited));
 					} else if(!getCellAt(loc+1).isDoorway()){
-						adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist));
+						adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist,visited));
 					}
 				}
 			}
 			return adjlist;
+		}else if(steps>0 && getCellAt(loc).isRoom()){
 		}
 		if(steps==0 && (getCellAt(loc).isDoorway()||getCellAt(loc).isWalkway())){
 			if(!adjlist.contains(loc)){
 				adjlist.add(loc);
+				//visited.add(loc);
 			}
 			return adjlist;
 		} else {
+			
 			return adjlist;
 		}
 	}
@@ -227,11 +224,11 @@ public class Board {
 
 	public HashSet<Integer> getAdjList(int calcIndex) {
 		HashSet<Integer> adjlist = new HashSet<Integer>();
-		return calcAdjacencies(calcIndex,1,adjlist);
+		return calcAdjacencies(calcIndex,1,adjlist,null);
 
 	}
 	public void calcTargets(int i, int j, int k) {
-		targetList=calcAdjacencies(calcIndex(i,j),k,new HashSet<Integer>());
+		targetList=calcAdjacencies(calcIndex(i,j),k,new HashSet<Integer>(),null);
 		targetList.remove(calcIndex(i,j));
 	}
 	public Set<BoardCell> getTargets() {
@@ -250,14 +247,12 @@ public class Board {
 		return boardDim[0];
 	}
 	public void loadRoomConfig() {
-		// TODO Auto-generated method stub
-
+		
 	}
 	public int getRoomNum(){
 		return room;
 	}
 	public int getNumDoorway() {
-		// TODO Auto-generated method stub
 		return doorwaynumber;
 	}
 
