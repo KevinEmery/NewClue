@@ -34,16 +34,15 @@ Target tests for (note that point value = minimum number of tests):
 
 **/
 public class IntBoardTest {
-	int [] boardSize = {22,23};							//setting board dimenstions to be 23x23
+	int [] boardSize = {23,23};							//setting board dimenstions to be 23x23
 	static Board board = null;
+	
+// Creates a new board and loads the config files
 @BeforeClass
-public static void setup() throws FileNotFoundException{
-	try {
-		board = new Board("etc/Clue_Map.csv","etc/ClueLegend.txt");
-	} catch (BadConfigFormatException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}		//creating a board
+public static void setup() {
+	board = new Board("etc/Clue_Map.csv","etc/ClueLegend.txt");
+	board.loadConfigFiles();
+	
 }
 	@Test
 	public void testAdjacency0()
@@ -102,17 +101,26 @@ public static void setup() throws FileNotFoundException{
 		Assert.assertEquals(board.getNumRows(), boardSize[0]);			//tests dimensions
 		Assert.assertEquals(board.getNumColumns(), boardSize[1]);		//tests dimensions
 	}
+	
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadColumns() throws BadConfigFormatException, FileNotFoundException {
 		Board b = new Board("etc/ClueLayoutBadColumns.csv", "etc/ClueLegend.txt");
+		b.loadRoomConfig();
+		b.loadBoardConfig();
 	}
+	
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoom() throws BadConfigFormatException, FileNotFoundException {
 		Board b = new Board("etc/ClueLayoutBadRoom.csv", "etc/ClueLegend.txt");
+		b.loadRoomConfig();
+		b.loadBoardConfig();
 	}
+	
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoomFormat() throws BadConfigFormatException, FileNotFoundException {
 		Board b = new Board("etc/ClueLayout.csv", "etc/ClueLegendBadFormat.txt");
+		b.loadRoomConfig();
+		b.loadBoardConfig();
 	}
 	@Test
 	public void testAdjacenciesInsideRooms()

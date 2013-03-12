@@ -26,8 +26,8 @@ public class CRBoardInitTests {
 	public static void setUp() {
 		board = new Board();///"ClueLayout.csv", "ClueLegend.txt");
 		board.loadConfigFiles();
-		board.loadRoomConfig();
 	}
+	
 	@Test
 	public void testRooms() {
 		Map<Character, String> rooms = board.getRooms();
@@ -35,11 +35,11 @@ public class CRBoardInitTests {
 		assertEquals(NUM_ROOMS, rooms.size());
 		// Test retrieving a few from the hash, including the first
 		// and last in the file and a few others
-		assertEquals(" Conservatory", rooms.get('C'));
-		assertEquals(" Ballroom", rooms.get('B'));
-		assertEquals(" Billiard room", rooms.get('R'));
-		assertEquals(" Dining room", rooms.get('D'));
-		assertEquals(" Walkway", rooms.get('W'));
+		assertEquals("Conservatory", rooms.get('C'));
+		assertEquals("Ballroom", rooms.get('B'));
+		assertEquals("Billiard room", rooms.get('R'));
+		assertEquals("Dining room", rooms.get('D'));
+		assertEquals("Walkway", rooms.get('W'));
 	}
 	
 	@Test

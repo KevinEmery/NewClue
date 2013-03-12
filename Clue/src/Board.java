@@ -15,92 +15,54 @@ import java.util.Set;
 
 public class Board {
 	private ArrayList<BoardCell> cells = new ArrayList<BoardCell>();
-	private ArrayList<String> list=new ArrayList<String>();
-	private Map<Character,String> rooms= new HashMap<Character, String>();
-	private HashSet<Integer> targetList=new HashSet<Integer>();
-	int[] boardDim;
-	String key;
-	int doorways=0;
+	private Map<Character,String> rooms;
+	private HashSet<Integer> targetList = new HashSet<Integer>();
+	int rowCount;
+	int colCount;
+	int doorways;
+	private String boardConfigFile;
+	private String roomConfigFile;
 	
-	public Board(String string, String string2) throws BadConfigFormatException, FileNotFoundException {
-		key=string2;
-		rooms=getRooms();
-		if(rooms.size()!=11){throw new BadConfigFormatException();}
-		boardDim=new int[2];
-		boardDim[0]=0;
-		boardDim[1]=0;
-		int rowstore=-1;
-		Scanner lines=new Scanner(new BufferedReader(new FileReader(string)));
-		lines.useDelimiter("[\\n]");
-		String iter=new String();
-		String doorString = "UDLR"; //fastest way to search
-		String roomString = "CKBRLSDOHXW";
-		boardDim[0]=-1;
-		while(lines.hasNext()){
-			
-			String line=lines.next();
-			boardDim[0]+=1;
-			boardDim[1]=0;
-			Scanner cell = new Scanner(line).useDelimiter(",");
-			while(cell.hasNext()){
-				iter=cell.next();
-				BoardCell e=null;
-				boardDim[1]+=1;
-				if(iter.equals("W")){
-					e=new WalkwayCell(boardDim[0],boardDim[1]);
-				} else {
-					
-					if(!roomString.contains(String.valueOf(iter.charAt(0)))){throw new BadConfigFormatException();}
-					e=new RoomCell(boardDim[0],boardDim[1],iter.charAt(0));
-					if(iter.length()>1){
-						if(doorString.contains(String.valueOf(iter.charAt(1)))){ //see if the key character for the door is in the string "udlr"
-							((RoomCell) e).setRoomDirection(iter.charAt(1));
-							doorways++;
-						}
-					}
-				}
-				cells.add(e);
-				
-			}
-			if(rowstore==-1){rowstore=boardDim[1];}
-			if(rowstore!=boardDim[1]){throw new BadConfigFormatException();
-		}
+	public Board(String boardConfigFile, String roomConfigFile) {
+		this.boardConfigFile = boardConfigFile;
+		this.roomConfigFile = roomConfigFile;
+		this.rowCount = 0;
+		this.colCount = 0;
 		
-		
-		}
-		boardDim[0]++;
 		
 		
 	}
 	
 	public Board()	 {
-		boardDim=new int[2];
-		boardDim[0]=0;
-		boardDim[1]=0;
-		key="etc/ClueLegend.txt";
+		
+		this("etc/ClueLayout.csv", "etc/ClueLegend.txt");
+		/*boardDim=new int[2];
+		rowCount=0;
+		colCount=0;
+		roomConfigFile="etc/ClueLegend.txt";
 		try {
 			Scanner lines=new Scanner(new BufferedReader(new FileReader("etc/ClueLayout.csv")));
 			lines.useDelimiter("[\\n]");
 			String iter=new String();
 			String doorString = "UDLR"; //fastest way to search
-			boardDim[0]=0;
+			rowCount=0;
 			while(lines.hasNext()){
 				String line=lines.next();
-				boardDim[1]=0;
-				//System.out.println(boardDim[0]+","+boardDim[1]);
+				colCount=0;
+				//System.out.println(rowCount+","+colCount);
 				//System.out.print("\n");
 				Scanner cell = new Scanner(line).useDelimiter(",");
 				while(cell.hasNext()){
 					iter=cell.next();
 					BoardCell e=null;
 					iter=iter.replaceAll("[\\n\\r]", ""); //regex to remove returns and newlines (yes, they're different)
-					//System.out.println(iter.charAt(0)+" at "+ boardDim[0]+" ,"+boardDim[1]+"\n");
+					//System.out.println(iter.charAt(0)+" at "+ rowCount+" ,"+colCount+"\n");
 					if(iter.equals("W")){
-						//System.out.println(iter+ " is a walkway at "+ boardDim[1]+" ,"+boardDim[0]);
-						e=new WalkwayCell(boardDim[0],boardDim[1]);
+						//System.out.println(iter+ " is a walkway at "+ colCount+" ,"+rowCount);
+						e=new WalkwayCell(rowCount,colCount);
 					} else {
 						
-						e=new RoomCell(boardDim[0],boardDim[1],iter.charAt(0));
+						e=new RoomCell(rowCount,colCount,iter.charAt(0));
 						if(iter.length()>1){
 							doorways++;
 							//System.out.print(iter.charAt(1));
@@ -112,31 +74,31 @@ public class Board {
 					}
 					//System.out.println(e.row+" ,"+e.column);
 					cells.add(e);
-					boardDim[1]+=1;
+					colCount+=1;
 				}
-				boardDim[0]+=1;
+				rowCount+=1;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		boardDim[0]++;
-		//System.out.println(boardDim[0]+" "+boardDim[1]);
+		rowCount++;
+		//System.out.println(rowCount+" "+colCount);*/
 	}
 	
-	
+	// Loads the provided configuration files for the board and legend
 	public void loadConfigFiles(){
-	
-		
-		
-		
-		
-		
-		
-		
+		try {
+			this.loadRoomConfig();
+			this.loadBoardConfig();
+		} catch (FileNotFoundException e) {
+			System.err.println(e.getMessage());	
+		} catch (BadConfigFormatException e) {
+			System.err.println("While trying to load config files, encountered a file not found: " + e.getMessage());
+		}		
 	}
 	
 	public int calcIndex(int row, int column){	// turns a 2d board into a 1d list
-		return column+row*(boardDim[1]);
+		return column+row*(colCount);
 	}
 	public void AddRoomCell(BoardCell b){
 		cells.add(b);
@@ -153,25 +115,9 @@ public class Board {
 	}
 	
 	public Map<Character, String> getRooms() {
-		try{
-			Scanner input=new Scanner(new BufferedReader(new FileReader(key)));
-			while(  input.hasNext()){
-				String cha= input.next();
-				char c=cha.charAt(0);
-				String r=input.nextLine();
-				if(r.contains(",")){return rooms;}
-				rooms.put(c, r);
-			}
-		}catch (FileNotFoundException e){
-			System.out.println("Could not open Key");
-			System.exit(0);}
 		return rooms;
 	}
 	
-	public void setRooms(Map<Character, String> rooms) {
-		this.rooms = rooms;
-	}
-
 	public BoardCell getCellAt(int calcIndex) {
 		return cells.get(calcIndex);
 	}
@@ -187,41 +133,41 @@ public class Board {
 		if(steps>0 && (getCellAt(loc).isDoorway()||getCellAt(loc).isWalkway())){
 			
 			if(getCellAt(loc).isDoorway()){
-				if((loc-boardDim[1])>=0  && getCellAt(loc-boardDim[0]).isWalkway()){
+				if((loc-colCount)>=0  && getCellAt(loc-rowCount).isWalkway()){
 					//Go up?
-					adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist,visited));
+					adjlist.addAll(calcAdjacencies(loc-rowCount,steps-1,adjlist,visited));
 					
 				}
-				if(loc+boardDim[1]<(cells.size()) && getCellAt(loc+boardDim[0]).isWalkway()){
+				if(loc+colCount<(cells.size()) && getCellAt(loc+rowCount).isWalkway()){
 					//Go down?
-					adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist,visited));
+					adjlist.addAll(calcAdjacencies(loc+rowCount,steps-1,adjlist,visited));
 				}
 				if((getCellAt(loc).column-1)>=0 && (loc-1)>=0 && getCellAt(loc-1).isWalkway()){
 					//Go left?
 					adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist,visited));
 				}
-				if((getCellAt(loc+1).column)!=0 && (loc+1)<=(boardDim[0]*boardDim[1]) && getCellAt(loc+1).isWalkway()){
+				if((getCellAt(loc+1).column)!=0 && (loc+1)<=(rowCount*colCount) && getCellAt(loc+1).isWalkway()){
 					//Go right?
 					adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist,visited));
 				}
 				
 			} else {
-				if((loc-boardDim[1])>=0 && (getCellAt(loc-boardDim[0]).isDoorway()||getCellAt(loc-boardDim[0]).isWalkway())){
+				if((loc-colCount)>=0 && (getCellAt(loc-rowCount).isDoorway()||getCellAt(loc-rowCount).isWalkway())){
 					//Go up?
-					if(getCellAt(loc-boardDim[0]).isDoorway() && ((RoomCell)getCellAt(loc-boardDim[0])).getDoorDirection().equals("D")){
-						adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist,visited));
-						adjlist.add(loc-boardDim[0]);
-					} else if(!getCellAt(loc-boardDim[0]).isDoorway()){
-						adjlist.addAll(calcAdjacencies(loc-boardDim[0],steps-1,adjlist,visited));
+					if(getCellAt(loc-rowCount).isDoorway() && ((RoomCell)getCellAt(loc-rowCount)).getDoorDirection().equals("D")){
+						adjlist.addAll(calcAdjacencies(loc-rowCount,steps-1,adjlist,visited));
+						adjlist.add(loc-rowCount);
+					} else if(!getCellAt(loc-rowCount).isDoorway()){
+						adjlist.addAll(calcAdjacencies(loc-rowCount,steps-1,adjlist,visited));
 					}
 				}
-				if((loc+boardDim[1])<(cells.size()) && (getCellAt(loc+boardDim[0]).isDoorway()||getCellAt(loc+boardDim[0]).isWalkway())){
+				if((loc+colCount)<(cells.size()) && (getCellAt(loc+rowCount).isDoorway()||getCellAt(loc+rowCount).isWalkway())){
 					//Go down?
-					if(getCellAt(loc+boardDim[0]).isDoorway() && ((RoomCell)getCellAt(loc+boardDim[0])).getDoorDirection().equals("U")){
-						adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist,visited));
-						adjlist.add(loc+boardDim[0]);
-					} else if(!getCellAt(loc+boardDim[0]).isDoorway()){
-						adjlist.addAll(calcAdjacencies(loc+boardDim[0],steps-1,adjlist,visited));
+					if(getCellAt(loc+rowCount).isDoorway() && ((RoomCell)getCellAt(loc+rowCount)).getDoorDirection().equals("U")){
+						adjlist.addAll(calcAdjacencies(loc+rowCount,steps-1,adjlist,visited));
+						adjlist.add(loc+rowCount);
+					} else if(!getCellAt(loc+rowCount).isDoorway()){
+						adjlist.addAll(calcAdjacencies(loc+rowCount,steps-1,adjlist,visited));
 					}
 				}
 				if((getCellAt(loc).column-1)>=0 && (loc-1)>=0 && (getCellAt(loc-1).isDoorway()||getCellAt(loc-1).isWalkway())){
@@ -233,7 +179,7 @@ public class Board {
 						adjlist.addAll(calcAdjacencies(loc-1,steps-1,adjlist,visited));
 					}
 				}
-				if((getCellAt(loc+1).column)!=0 && (loc+1)<=(boardDim[0]*boardDim[1]) && (getCellAt(loc+1).isDoorway()||getCellAt(loc+1).isWalkway())){
+				if((getCellAt(loc+1).column)!=0 && (loc+1)<=(rowCount*colCount) && (getCellAt(loc+1).isDoorway()||getCellAt(loc+1).isWalkway())){
 					if(getCellAt(loc+1).isDoorway() && ((RoomCell)getCellAt(loc+1)).getDoorDirection().equals("L")){
 						adjlist.addAll(calcAdjacencies(loc+1,steps-1,adjlist,visited));
 						adjlist.add(loc+1);
@@ -252,14 +198,13 @@ public class Board {
 			visited.remove(loc);
 
 			return adjlist;
+			
 		} else {
 			visited.remove(loc);
 
 			return adjlist;
 		}
 	}
-
-
 	public HashSet<Integer> getAdjList(int calcIndex) {
 		HashSet<Integer> adjlist = new HashSet<Integer>();
 		return calcAdjacencies(calcIndex,1,adjlist,new HashSet<Integer>()); 
@@ -279,23 +224,111 @@ public class Board {
 	}
 	public int getNumColumns() {
 
-		return boardDim[1];
+		return colCount;
 	}
 	public int getNumRows() {
-		//System.out.println(boardDim[0]);
-		return boardDim[0]-1;
+
+		return rowCount;
 	}
-	public void loadRoomConfig() {
+	
+	
+	public void loadRoomConfig() throws FileNotFoundException, BadConfigFormatException {
+		rooms = new HashMap<Character, String>();
+		Scanner input = new Scanner(new FileReader(roomConfigFile));
+		int lineCount = 0;
+		while(input.hasNext()) {
+			lineCount++;
+			Character key;
+			
+			// Reads in the first part of the line, up to the space. This should contain one character and then a comma.
+			String temp = input.next();
+			if (!Character.isLetter(temp.charAt(0)) || temp.charAt(1) != ',')
+				throw new BadConfigFormatException("Invalid key provided");
 		
+			key = temp.charAt(0);
+			
+			// Reads in the rest of the line
+			String rest = input.nextLine();
+			
+			// If there is a comma here, then the config file is bad
+			if(rest.contains(",")) {
+				throw new BadConfigFormatException("Too many commas in line " + lineCount + "of the room config file");
+			}
+			
+			// If there is a leading space, remove it
+			if(rest.charAt(0) == ' ')
+				rest = rest.substring(1);
+			
+			// Put the room in the HashMap
+			rooms.put(key, rest);
+		}
+	}
+	
+	public void loadBoardConfig() throws FileNotFoundException, BadConfigFormatException {
+		doorways = 0;
+		Scanner lines = new Scanner(new BufferedReader(new FileReader(boardConfigFile)));
+		String next;
+		String doorString = "UDLR"; //fastest way to search
+		int currentRow = -1;
 		
-
+		while(lines.hasNext()){
+			// Reads in the next line, and increments the row counter
+			String line=lines.nextLine();
+			this.rowCount++;
+			currentRow++;
+			
+			// Defines a new scanner, which will iterate through comma by comma
+			Scanner cell = new Scanner(line).useDelimiter(",");
+			
+			// Start the currentColumn at -1, it is incremented at the start of each loop
+			int currentColumn = -1;
+			
+			while(cell.hasNext()) {
+				currentColumn++;
+				next = cell.next();
+				BoardCell newCell;
+				
+				// If this is the first row we're going through, we want to count the columns
+				if (currentRow == 0) {
+					this.colCount++;
+				}
+				
+				// If it's a W, add a walkwayCell
+				if(next.equals("W")){
+					newCell = new WalkwayCell(currentRow, currentColumn);
+				} else {
+					
+					char firstChar = next.charAt(0);
+					
+					// If the part being read is not a character that's in the rooms map, throw a bad config format exception
+					if(!this.rooms.keySet().contains(firstChar)){
+						throw new BadConfigFormatException("Room character at location (" + currentRow + "," + currentColumn + ") is not in the rooms map");
+					}
+					
+					// Create a new room cell at that location
+					newCell = new RoomCell(currentRow, currentColumn, firstChar);
+					
+					// If it has a length equal to 2, then it's a doorway. Set the dor direction appropriately
+					if(next.length() == 2){
+						if(doorString.contains(String.valueOf(next.charAt(1)))){ //see if the key character for the door is in the string "udlr"
+							((RoomCell) newCell).setRoomDirection(next.charAt(1));
+							doorways++;
+						}
+					}
+				}
+				
+				// Add this new boardCell to your board.
+				cells.add(newCell);
+				
+			}
+			
+			// If this is not true, the number of columns is not constistent for all rows
+			if(colCount != currentColumn + 1){
+				throw new BadConfigFormatException("The number of columns is not consistent for all rows in the file");
+			}
+		
+		}
 	}
-	public void loadBoardConfig() {
-		// TODO Auto-generated method stub
-
-	}
-
-
 }
 
 

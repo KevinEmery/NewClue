@@ -33,11 +33,11 @@ public class BoardInitTests {
 		assertEquals(NUM_ROOMS, rooms.size());
 		// Test retrieving a few from the hash, including the first
 		// and last in the file and a few others
-		assertEquals(" Conservatory", rooms.get('C'));
-		assertEquals(" Ballroom", rooms.get('B'));
-		assertEquals(" Billiard room", rooms.get('R'));
-		assertEquals(" Dining room", rooms.get('D'));
-		assertEquals(" Walkway", rooms.get('W'));
+		assertEquals("Conservatory", rooms.get('C'));
+		assertEquals("Ballroom", rooms.get('B'));
+		assertEquals("Billiard room", rooms.get('R'));
+		assertEquals("Dining room", rooms.get('D'));
+		assertEquals("Walkway", rooms.get('W'));
 	}
 
 	@Test

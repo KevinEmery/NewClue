@@ -3,7 +3,7 @@ public class RoomCell extends BoardCell{
 
 	private char room;
 	public enum DoorDirection {UP,DOWN,LEFT,RIGHT,NONE};
-	public DoorDirection doorDirection=DoorDirection.NONE;
+	public DoorDirection doorDirection = DoorDirection.NONE;
 
 	public RoomCell(int row, int col, char room){
 		super(row, col);
@@ -23,7 +23,7 @@ public class RoomCell extends BoardCell{
 	}
 	@Override
 	public boolean isDoorway(){
-		return doorDirection!=DoorDirection.NONE;
+		return doorDirection != DoorDirection.NONE;
 	}
 	public boolean isRoom(){
 		return true;
