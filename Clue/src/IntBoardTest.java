@@ -1,12 +1,9 @@
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.*;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Scanner;
 import java.util.Set;
 
 import junit.framework.Assert;

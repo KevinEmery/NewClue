@@ -1,11 +1,5 @@
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,13 +24,9 @@ public class Board {
 		this.roomConfigFile = roomConfigFile;
 		this.rowCount = 0;
 		this.colCount = 0;
-		
-		
-		
 	}
 	
 	public Board()	 {
-		
 		this("etc/ClueLayout.csv", "etc/ClueLegend.txt");
 		/*boardDim=new int[2];
 		rowCount=0;
@@ -102,9 +92,11 @@ public class Board {
 	public int calcIndex(int row, int column){	// turns a 2d board into a 1d list
 		return column+row*(colCount);
 	}
+	
 	public void AddRoomCell(BoardCell b){
 		cells.add(b);
 	}
+	
 	public RoomCell getRoomCellAt(int row, int column){
 		return ((RoomCell)cells.get(calcIndex(row,column))) ; 
 	}
@@ -355,7 +347,7 @@ public class Board {
 	
 	public void loadBoardConfig() throws FileNotFoundException, BadConfigFormatException {
 		doorways = 0;
-		Scanner lines = new Scanner(new BufferedReader(new FileReader(boardConfigFile)));
+		Scanner lines = new Scanner(new FileReader(boardConfigFile));
 		String next;
 		String doorString = "UDLR"; //fastest way to search
 		int currentRow = -1;
