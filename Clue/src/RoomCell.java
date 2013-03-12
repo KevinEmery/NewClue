@@ -42,19 +42,8 @@ public class RoomCell extends BoardCell{
 	public char getInitial() {
 		return getRoom();
 	}
-	public String getDoorDirection(){
-		switch(this.doorDirection){
-		case UP:
-			return "U";
-		case DOWN:
-			return "D";
-		case LEFT:
-			return "L";
-		case RIGHT:
-			return "R";
-		default:
-			return "";
-		}
+	public DoorDirection getDoorDirection(){
+		return doorDirection;
 
 	}
 	public DoorDirection getDoorDirection0(){

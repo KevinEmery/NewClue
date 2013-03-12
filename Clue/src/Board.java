@@ -1,3 +1,4 @@
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -16,7 +17,8 @@ import java.util.Set;
 public class Board {
 	private ArrayList<BoardCell> cells = new ArrayList<BoardCell>();
 	private Map<Character,String> rooms;
-	private HashSet<Integer> targetList = new HashSet<Integer>();
+	private Set<BoardCell> targetList;
+	private Map<Integer, LinkedList<Integer>> adjList;
 	int rowCount;
 	int colCount;
 	int doorways;
@@ -122,7 +124,7 @@ public class Board {
 		return cells.get(calcIndex);
 	}
 
-	public HashSet<Integer> calcAdjacencies(int loc,int steps,HashSet<Integer> adjlist,HashSet<Integer> visited){
+	/*public HashSet<Integer> calcAdjacencies(int loc,int steps,HashSet<Integer> adjlist,HashSet<Integer> visited){
 		//This function needs to do a recursive loop that counts down the steps to check if the space to the right, left, top and bottom
 		//are valid places, if so it adds to adjlist, we need not worry about copies since this is a hashset.
 		//		System.out.println(steps+" "+loc+ " "+(getCellAt(loc).isDoorway()+" "+getCellAt(loc).isWalkway()));
@@ -204,23 +206,110 @@ public class Board {
 
 			return adjlist;
 		}
-	}
-	public HashSet<Integer> getAdjList(int calcIndex) {
-		HashSet<Integer> adjlist = new HashSet<Integer>();
-		return calcAdjacencies(calcIndex,1,adjlist,new HashSet<Integer>()); 
-
+	}*/
+	
+	// Determines the neighbors of every cell on the board
+	public void calcAdjacencies() {
+		adjList = new HashMap<Integer, LinkedList<Integer>>();
+		// Initializes an empty adjacency list for each cell on the board
+		for (int i = 0; i < rowCount * colCount ; i++) {
+			this.adjList.put(i, new LinkedList<Integer>());
+		}
+		
+		// Iterates through every row and column, checking the validity of the cells on all four sides of a given cell. 
+		// If it is valid, it adds it to the adjList
+		for (int i = 0; i < rowCount; i++) {
+			for (int j = 0; j < colCount; j++) {
+				if (isValidCell(i + 1, j) && isAdjacent(calcIndex(i, j), calcIndex(i + 1, j), RoomCell.DoorDirection.DOWN, RoomCell.DoorDirection.UP))
+					adjList.get(calcIndex(i,j)).add(calcIndex(i + 1, j));
+				if (isValidCell(i - 1, j) && isAdjacent(calcIndex(i, j), calcIndex(i - 1, j), RoomCell.DoorDirection.UP, RoomCell.DoorDirection.DOWN))
+					adjList.get(calcIndex(i,j)).add(calcIndex(i - 1, j));
+				if (isValidCell(i, j + 1) && isAdjacent(calcIndex(i, j), calcIndex(i, j + 1), RoomCell.DoorDirection.RIGHT, RoomCell.DoorDirection.LEFT))
+					adjList.get(calcIndex(i,j)).add(calcIndex(i, j + 1));
+				if (isValidCell(i, j - 1) && isAdjacent(calcIndex(i, j), calcIndex(i, j - 1), RoomCell.DoorDirection.LEFT, RoomCell.DoorDirection.RIGHT))
+					adjList.get(calcIndex(i,j)).add(calcIndex(i, j - 1));
+			}
+		}
 	}
 	
-	public void calcTargets(int i, int j, int k) {
-		targetList=calcAdjacencies(calcIndex(i,j),k,new HashSet<Integer>(),new HashSet<Integer>());
-		targetList.remove(calcIndex(i,j));
+	// Determines if a given cell is valid on the game board
+	private boolean isValidCell(int row, int column) {
+		return row >= 0 && row < rowCount && column >= 0 && column < colCount;	
 	}
-	public Set<BoardCell> getTargets() {
-		Set<BoardCell> targets = new HashSet<BoardCell>();
-		for(int currTar:targetList){
-			targets.add(getCellAt(currTar));
+	
+	// Determines if a cell is adjacent based on the current index and the index of the new cell, and the directions of doors in the area
+	private boolean isAdjacent(int currentIndex, int newIndex, RoomCell.DoorDirection directionOut, RoomCell.DoorDirection directionIn) {
+
+		// If your new cell is a walkway and you're not in a room, return true
+		if (cells.get(newIndex).isWalkway() && !cells.get(currentIndex).isRoom())
+			return true;
+		
+		// If the current cell is a room, and not a doorway, then there are no adjacencies
+		else if (cells.get(currentIndex).isRoom() && !cells.get(currentIndex).isDoorway())
+			return false;
+		
+		// If you're in a doorway, and the door is facing the direction required to get out as specified by the call, it's adjacent.
+		else if (cells.get(currentIndex).isDoorway() && ((RoomCell) cells.get(currentIndex)).getDoorDirection() == directionOut)
+			return true;
+		
+		// If you're on a walkway and trying to get into a door, and it's facing the correct way to go in, it's adjacent
+		else if (!cells.get(currentIndex).isDoorway() && ((RoomCell) cells.get(newIndex)).getDoorDirection() == directionIn)
+			return true;
+		
+		// Otherwise, it's not adjacent.
+		return false;
+			
+	}
+
+	// Initalies the visted array, targets as empty, and then calls the recursive function to calculate targets
+	public void startTargets(int location, int numSteps) {
+		boolean[] visited = new boolean[rowCount * colCount];
+		targetList = new HashSet<BoardCell>();
+		visited[location] = true;
+		calcTargets(location, numSteps, visited);
+	}
+	
+	// Overloaded form of startTargets
+	public void startTargets(int row, int column, int numSteps) {
+		startTargets(calcIndex(row, column), numSteps);
+	}
+	
+	// Calculates the spaces we can get to from a certain cell
+	private void calcTargets(int location, int numSteps, boolean[] visited) {
+		
+		// Initialized a new LinkedList list of adjacents cells for this location
+		LinkedList<Integer> adjacentCells = new LinkedList<Integer>();
+		
+		// Adds unvisited cells to a new adjacency list
+		for (Integer i : getAdjList(location)) {
+			if (visited[i] == false)
+					adjacentCells.add(i);
 		}
-		return targets;
+		
+		// Recursively finds the targets
+		for (Integer i : adjacentCells) {
+			visited[i] = true;
+			if (numSteps == 1 || cells.get(i).isDoorway()) 
+				targetList.add(cells.get(i));
+			else {
+				calcTargets(i, numSteps - 1, visited);
+			}
+			visited[i] = false;	
+		}
+	}
+	
+	public void calcTargets(int row, int column, int steps) {
+		startTargets(calcIndex(row, column), steps);
+	}
+	
+		
+	
+	public LinkedList<Integer> getAdjList(int calcIndex) {
+		return adjList.get(calcIndex);
+	}
+	
+	public Set<BoardCell> getTargets() {
+		return targetList;
 	}
 	public int getNumColumns() {
 

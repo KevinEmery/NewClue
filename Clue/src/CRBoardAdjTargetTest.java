@@ -17,7 +17,8 @@ public class CRBoardAdjTargetTest {
 	public static void setUp() {
 		board = new Board();
 		board.loadConfigFiles();
-		board.calcAdjacencies(0, 0, new HashSet<Integer>(),new HashSet<Integer>());
+		board.calcAdjacencies();
+		//board.calcAdjacencies(0, 0, new HashSet<Integer>(),new HashSet<Integer>());
 
 	}
 
@@ -27,7 +28,7 @@ public class CRBoardAdjTargetTest {
 	public void testAdjacenciesInsideRooms()
 	{
 		// Test a corner
-		HashSet<Integer> testList = board.getAdjList(board.calcIndex(0, 0));
+		LinkedList<Integer> testList = board.getAdjList(board.calcIndex(0, 0));
 		Assert.assertEquals(0, testList.size());
 		// Test one that has walkway underneath
 		testList = board.getAdjList(board.calcIndex(4, 0));
@@ -54,7 +55,7 @@ public class CRBoardAdjTargetTest {
 	public void testAdjacencyRoomExit()
 	{
 		// TEST DOORWAY RIGHT 
-		HashSet<Integer> testList = board.getAdjList(board.calcIndex(11, 6));
+		LinkedList<Integer> testList = board.getAdjList(board.calcIndex(11, 6));
 		Assert.assertEquals(1, testList.size());
 		Assert.assertTrue(testList.contains(board.calcIndex(11, 7)));
 
@@ -79,7 +80,7 @@ public class CRBoardAdjTargetTest {
 	public void testAdjacencyDoorways()
 	{
 		// Test beside a door direction RIGHT
-		HashSet<Integer> testList = board.getAdjList(board.calcIndex(4, 4));	
+		LinkedList<Integer> testList = board.getAdjList(board.calcIndex(4, 4));	
 		Assert.assertTrue(testList.contains(board.calcIndex(4, 3)));
 		Assert.assertTrue(testList.contains(board.calcIndex(4, 5)));
 		Assert.assertTrue(testList.contains(board.calcIndex(5, 4)));
@@ -112,7 +113,7 @@ public class CRBoardAdjTargetTest {
 	public void testAdjacencyWalkways()
 	{
 		// Test on top edge of board, just one walkway piece
-		HashSet<Integer> testList = board.getAdjList(board.calcIndex(0, 4));
+		LinkedList<Integer> testList = board.getAdjList(board.calcIndex(0, 4));
 		Assert.assertTrue(testList.contains(5));
 		Assert.assertEquals(1, testList.size());
 		

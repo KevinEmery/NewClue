@@ -42,6 +42,7 @@ public class IntBoardTest {
 public static void setup() {
 	board = new Board("etc/Clue_Map.csv","etc/ClueLegend.txt");
 	board.loadConfigFiles();
+	board.calcAdjacencies();
 	
 }
 	@Test
@@ -126,7 +127,7 @@ public static void setup() {
 	public void testAdjacenciesInsideRooms()
 	{
 		// Test a corner
-		HashSet<Integer> testList = board.getAdjList(board.calcIndex(0, 0));
+		LinkedList<Integer> testList = board.getAdjList(board.calcIndex(0, 0));
 		Assert.assertEquals(0, testList.size());
 		// Test one that has walkway underneath
 		testList = board.getAdjList(board.calcIndex(4, 0));
@@ -153,7 +154,7 @@ public static void setup() {
 	public void testAdjacencyRoomExit()
 	{
 		// TEST DOORWAY RIGHT 
-		HashSet<Integer> testList = board.getAdjList(board.calcIndex(11, 6));
+		LinkedList<Integer> testList = board.getAdjList(board.calcIndex(11, 6));
 		Assert.assertEquals(1, testList.size());
 		Assert.assertTrue(testList.contains(board.calcIndex(11, 7)));
 
@@ -178,7 +179,7 @@ public static void setup() {
 	public void testAdjacencyDoorways()
 	{
 		// Test beside a door direction RIGHT
-		HashSet<Integer> testList = board.getAdjList(board.calcIndex(4, 5));
+		LinkedList<Integer> testList = board.getAdjList(board.calcIndex(4, 5));
 		Assert.assertEquals(4, testList.size());
 		Assert.assertTrue(testList.contains(board.calcIndex(4, 4)));
 		Assert.assertTrue(testList.contains(board.calcIndex(4, 6)));
@@ -214,7 +215,7 @@ public static void setup() {
 	public void testAdjacencyWalkways()
 	{
 		// Test on top edge of board, just one walkway piece
-		HashSet<Integer> testList = board.getAdjList(board.calcIndex(0, 4));
+		LinkedList<Integer> testList = board.getAdjList(board.calcIndex(0, 4));
 		Assert.assertTrue(testList.contains(5));
 		Assert.assertEquals(2, testList.size());
 		
@@ -246,9 +247,10 @@ public static void setup() {
 		
 		// Test on right edge of board, next to 1 room piece
 		testList = board.getAdjList(board.calcIndex(13, 21));
-		Assert.assertEquals(2, testList.size());
+		Assert.assertEquals(3, testList.size());
 		Assert.assertTrue(testList.contains(board.calcIndex(13, 20)));
 		Assert.assertTrue(testList.contains(board.calcIndex(12, 21)));
+		Assert.assertTrue(testList.contains(board.calcIndex(13, 22)));
 		
 		// Test on walkway next to  door that is not in the needed
 		// direction to enter
@@ -266,13 +268,13 @@ public static void setup() {
 	// These are LIGHT BLUE on the planning spreadsheet
 	@Test
 	public void testTargetsOneStep() {
-		board.calcTargets(1, 4, 1);
+		board.startTargets(1, 4, 1);
 		Set<BoardCell> targets= board.getTargets();		
 		Assert.assertEquals(2, targets.size());
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(1, 5))));
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(0, 4))));	
 		
-		board.calcTargets(0, 5, 1);
+		board.startTargets(0, 5, 1);
 		targets= board.getTargets();		
 		Assert.assertEquals(3, targets.size());
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(0, 4))));
@@ -286,7 +288,7 @@ public static void setup() {
 		
 		Set<BoardCell> targets= board.getTargets();
 				
-		board.calcTargets(1, 4, 2);
+		board.startTargets(1, 4, 2);
 		targets= board.getTargets();
 		Assert.assertEquals(3, targets.size());
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(0, 5))));
@@ -296,7 +298,7 @@ public static void setup() {
 	
 	@Test
 	public void testTargetsFourSteps() {
-		board.calcTargets(21, 7, 4);
+		board.startTargets(21, 7, 4);
 		Set<BoardCell> targets= board.getTargets();
 		Assert.assertEquals(5, targets.size());
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(17, 7))));
@@ -309,7 +311,7 @@ public static void setup() {
 
 	@Test
 	public void testTargetsSixSteps() {
-		board.calcTargets(21, 7, 6);
+		board.startTargets(21, 7, 6);
 		Set<BoardCell> targets= board.getTargets();
 		Assert.assertEquals(8, targets.size());
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(17, 5))));
@@ -328,7 +330,7 @@ public static void setup() {
 	public void testTargetsIntoRoom()
 	{
 		// One room is exactly 2 away
-		board.calcTargets(3, 5, 2);
+		board.startTargets(3, 5, 2);
 		Set<BoardCell> targets= board.getTargets();
 		Assert.assertEquals(5, targets.size());
 
@@ -347,7 +349,7 @@ public static void setup() {
 	@Test
 	public void testTargetsIntoRoomShortcut() 
 	{
-		board.calcTargets(12, 7, 3);
+		board.startTargets(12, 7, 3);
 		Set<BoardCell> targets= board.getTargets();
 		//Assert.assertEquals(12, targets.size());
 		// directly up and down
@@ -378,13 +380,13 @@ public static void setup() {
 	public void testRoomExit()
 	{
 		// Take one step, essentially just the adj list
-		board.calcTargets(3, 19, 1);
+		board.startTargets(3, 19, 1);
 		Set<BoardCell> targets= board.getTargets();
 		// Ensure doesn't exit through the wall
 		Assert.assertEquals(1, targets.size());
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(3, 18))));
 		// Take two steps
-		board.calcTargets(3, 19, 2);
+		board.startTargets(3, 19, 2);
 		targets= board.getTargets();		
 		Assert.assertEquals(3, targets.size());
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(3, 17))));
