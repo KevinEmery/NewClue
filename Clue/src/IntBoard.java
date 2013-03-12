@@ -1,4 +1,5 @@
 import java.util.HashSet;
+import java.util.LinkedList;
 public class IntBoard {
 	static final int dim=23;
 	int[] boardDim;

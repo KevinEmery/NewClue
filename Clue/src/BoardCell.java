@@ -2,14 +2,11 @@
 
 
 public abstract class BoardCell {
-
-	
 	public int row;
 	public int column;
 	public BoardCell(int row, int column){
 		this.row=row;
 		this.column=column;
-
 	}
 	public boolean isWalkway(){
 		return false;
@@ -21,13 +18,5 @@ public abstract class BoardCell {
 		return false;
 	}
 	abstract void draw();
-
-	public int getColumn() {
-		return column;
-	}
-	public void setColumn(int column) {
-		this.column = column;
-	}
-
 
 }

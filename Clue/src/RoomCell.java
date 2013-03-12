@@ -35,14 +35,13 @@ public class RoomCell extends BoardCell{
 
 	}
 
-	public char getInitial() {
+	public char getRoom() {
 		return room;
 	}
 	
-	public char getRoom() {
-		return getInitial();
+	public char getInitial() {
+		return getRoom();
 	}
-	
 	public String getDoorDirection(){
 		switch(this.doorDirection){
 		case UP:
@@ -59,18 +58,7 @@ public class RoomCell extends BoardCell{
 
 	}
 	public DoorDirection getDoorDirection0(){
-		switch(this.doorDirection){
-		case UP:
-			return DoorDirection.UP;
-		case DOWN:
-			return DoorDirection.DOWN;
-		case LEFT:
-			return DoorDirection.LEFT;
-		case RIGHT:
-			return DoorDirection.RIGHT;
-		default:
-			return DoorDirection.NONE;
-		}
+		return doorDirection;
 
 	}
 	public void setRoom(char room) {
