@@ -1,3 +1,10 @@
+package testing;
+
+
+
+import game.Board;
+import game.BoardCell;
+
 import java.util.LinkedList;
 import java.util.Set;
 
@@ -14,8 +21,6 @@ public class CRBoardAdjTargetTest {
 		board = new Board();
 		board.loadConfigFiles();
 		board.calcAdjacencies();
-		//board.calcAdjacencies(0, 0, new HashSet<Integer>(),new HashSet<Integer>());
-
 	}
 
 	// Ensure that player does not move around within room

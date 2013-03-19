@@ -1,3 +1,4 @@
+package game;
 import java.util.HashSet;
 public class IntBoard {
 	static final int dim=23;

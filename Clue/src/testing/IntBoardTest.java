@@ -1,5 +1,13 @@
+package testing;
+
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.*;
+
+import game.BadConfigFormatException;
+import game.Board;
+import game.BoardCell;
+import game.IntBoard;
+import game.RoomCell;
 
 import java.io.FileNotFoundException;
 import java.util.HashSet;
@@ -10,6 +18,7 @@ import junit.framework.Assert;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 /**Failing tests related to Room legend
 (3) Spreadsheet document (or similar) with tests identified
 Adjacency tests for (note that point value = minimum number of tests):
@@ -71,7 +80,7 @@ public static void setup() {
 		// Test that walkways are not doors
 		BoardCell cell = board.getCellAt(board.calcIndex(0, 6));
 		assertFalse(cell.isDoorway());
-		Assert.assertEquals(17,board.doorways);
+		Assert.assertEquals(17,board.getDoorways());
 
 	}
 	@Test

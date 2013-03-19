@@ -1,3 +1,5 @@
+package game;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -7,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import game.RoomCell.DoorDirection;
 
 public class Board {
 	private ArrayList<BoardCell> cells = new ArrayList<BoardCell>();
@@ -15,21 +18,23 @@ public class Board {
 	private Map<Integer, LinkedList<Integer>> adjList;
 	int rowCount;
 	int colCount;
-	int doorways;
+	private int doorways;
 	private String boardConfigFile;
 	private String roomConfigFile;
 	
+	// Default constructor that calls the parameterized constructor
+	public Board()	 {
+		this("etc/ClueLayout.csv", "etc/ClueLegend.txt");
+	}
+	
+	// Parameterized constructor that sets a few basic variables.
 	public Board(String boardConfigFile, String roomConfigFile) {
 		this.boardConfigFile = boardConfigFile;
 		this.roomConfigFile = roomConfigFile;
 		this.rowCount = 0;
 		this.colCount = 0;
 	}
-	
-	public Board()	 {
-		this("etc/ClueLayout.csv", "etc/ClueLegend.txt");
-	}
-	
+
 	// Loads the provided configuration files for the board and legend
 	public void loadConfigFiles(){
 		try {
@@ -84,13 +89,13 @@ public class Board {
 		// If it is valid, it adds it to the adjList
 		for (int i = 0; i < rowCount; i++) {
 			for (int j = 0; j < colCount; j++) {
-				if (isValidCell(i + 1, j) && isAdjacent(calcIndex(i, j), calcIndex(i + 1, j), RoomCell.DoorDirection.DOWN, RoomCell.DoorDirection.UP))
+				if (isValidCell(i + 1, j) && isAdjacent(calcIndex(i, j), calcIndex(i + 1, j), DoorDirection.DOWN, DoorDirection.UP))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i + 1, j));
-				if (isValidCell(i - 1, j) && isAdjacent(calcIndex(i, j), calcIndex(i - 1, j), RoomCell.DoorDirection.UP, RoomCell.DoorDirection.DOWN))
+				if (isValidCell(i - 1, j) && isAdjacent(calcIndex(i, j), calcIndex(i - 1, j), DoorDirection.UP, DoorDirection.DOWN))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i - 1, j));
-				if (isValidCell(i, j + 1) && isAdjacent(calcIndex(i, j), calcIndex(i, j + 1), RoomCell.DoorDirection.RIGHT, RoomCell.DoorDirection.LEFT))
+				if (isValidCell(i, j + 1) && isAdjacent(calcIndex(i, j), calcIndex(i, j + 1), DoorDirection.RIGHT, DoorDirection.LEFT))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i, j + 1));
-				if (isValidCell(i, j - 1) && isAdjacent(calcIndex(i, j), calcIndex(i, j - 1), RoomCell.DoorDirection.LEFT, RoomCell.DoorDirection.RIGHT))
+				if (isValidCell(i, j - 1) && isAdjacent(calcIndex(i, j), calcIndex(i, j - 1), DoorDirection.LEFT, DoorDirection.RIGHT))
 					adjList.get(calcIndex(i,j)).add(calcIndex(i, j - 1));
 			}
 		}
@@ -102,7 +107,7 @@ public class Board {
 	}
 	
 	// Determines if a cell is adjacent based on the current index and the index of the new cell, and the directions of doors in the area
-	private boolean isAdjacent(int currentIndex, int newIndex, RoomCell.DoorDirection directionOut, RoomCell.DoorDirection directionIn) {
+	private boolean isAdjacent(int currentIndex, int newIndex, DoorDirection directionOut, DoorDirection directionIn) {
 
 		// If your new cell is a walkway and you're not in a room, return true
 		if (cells.get(newIndex).isWalkway() && !cells.get(currentIndex).isRoom())
@@ -267,7 +272,7 @@ public class Board {
 					if(next.length() == 2){
 						if(doorString.contains(String.valueOf(next.charAt(1)))){ //see if the key character for the door is in the string "udlr"
 							((RoomCell) newCell).setRoomDirection(next.charAt(1));
-							doorways++;
+							doorways += 1;
 						}
 					}
 				}
@@ -283,6 +288,10 @@ public class Board {
 			}
 		
 		}
+	}
+
+	public int getDoorways() {
+		return doorways;
 	}
 }
 

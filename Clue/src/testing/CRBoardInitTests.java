@@ -1,9 +1,15 @@
+package testing;
 
 
 // Doing a static import allows me to write assertEquals rather than
 // Assert.assertEquals
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.*;
+
+import game.BadConfigFormatException;
+import game.Board;
+import game.BoardCell;
+import game.RoomCell;
 
 import java.io.FileNotFoundException;
 import java.util.Map;
