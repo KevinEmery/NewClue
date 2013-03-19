@@ -294,5 +294,3 @@ public class Board {
 		return doorways;
 	}
 }
-
-
