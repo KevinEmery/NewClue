@@ -1,41 +1,34 @@
 package game;
 
-
 public class RoomCell extends BoardCell{
 
 	private char room;
+	private DoorDirection doorDirection;
 	public enum DoorDirection {UP,DOWN,LEFT,RIGHT,NONE};
-	public DoorDirection doorDirection = DoorDirection.NONE;
-
+	
 	public RoomCell(int row, int col, char room){
 		super(row, col);
 		this.room=room;
+		doorDirection = DoorDirection.NONE;
 	}
-	public void setRoomDirection(char d){
-		d=Character.toUpperCase(d);
-		if(d=='U'){
+	
+	public void setRoomDirection(char direction){
+		direction=Character.toUpperCase(direction);
+		if(direction=='U'){
 			this.doorDirection=DoorDirection.UP;
-		} else if(d=='R') {
+		} else if(direction=='R') {
 			this.doorDirection=DoorDirection.RIGHT;
-		} else if(d=='L') {
+		} else if(direction=='L') {
 			this.doorDirection=DoorDirection.LEFT;
-		} else if(d=='D') {
+		} else if(direction=='D') {
 			this.doorDirection=DoorDirection.DOWN;
 		}
 	}
-	@Override
-	public boolean isDoorway(){
-		return doorDirection != DoorDirection.NONE;
-	}
+	
 	public boolean isRoom(){
 		return true;
 	}
 
-	@Override
-	void draw() {
-		// TODO Auto-generated method stub
-
-	}
 
 	public char getRoom() {
 		return room;
@@ -44,20 +37,20 @@ public class RoomCell extends BoardCell{
 	public char getInitial() {
 		return getRoom();
 	}
+	
 	public DoorDirection getDoorDirection(){
 		return doorDirection;
 
 	}
-	public DoorDirection getDoorDirection0(){
-		return doorDirection;
+	
+	@Override
+	public boolean isDoorway(){
+		return doorDirection != DoorDirection.NONE;
+	}
+	
+	@Override
+	void draw() {
+		// TODO Auto-generated method stub
 
 	}
-	public void setRoom(char room) {
-		this.room = room;
-	}
-
-
-
-
-
 }

@@ -2,24 +2,33 @@ package game;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Scanner;
+import java.util.HashMap;
 import java.util.Set;
+import java.util.HashSet;
+
 import game.RoomCell.DoorDirection;
 
 public class Board {
-	private ArrayList<BoardCell> cells = new ArrayList<BoardCell>();
+	
+	// This data structures are used to store all of the board information
+	private ArrayList<BoardCell> cells;
 	private Map<Character,String> rooms;
 	private Set<BoardCell> targetList;
 	private Map<Integer, LinkedList<Integer>> adjList;
+	
+	// The board dimensions, as set by the loadBoardConfig() function, are placed here
 	int rowCount;
 	int colCount;
+	
+	// The name of the config files, as set by the constructors, are placed here
 	private String boardConfigFile;
 	private String roomConfigFile;
+	
+	// This variable, set by loadBoardConfig(), is only used for testing purposes
 	private int doorways;
 	
 	// Default constructor that calls the parameterized constructor
@@ -34,49 +43,12 @@ public class Board {
 		this.rowCount = 0;
 		this.colCount = 0;
 	}
-
-	// Loads the provided configuration files for the board and legend
-	public void loadConfigFiles(){
-		try {
-			this.loadRoomConfig();
-			this.loadBoardConfig();
-		} catch (FileNotFoundException e) {
-			System.err.println(e.getMessage());	
-		} catch (BadConfigFormatException e) {
-			System.err.println("While trying to load config files, encountered a file not found: " + e.getMessage());
-		}		
-	}
 	
 	// Calculates the index given a row and column
 	public int calcIndex(int row, int column){	// turns a 2d board into a 1d list
-		return column+row*(colCount);
+		return column + row * colCount;
 	}
 	
-	// Adds a room cell to the board
-	public void AddRoomCell(BoardCell b){
-		cells.add(b);
-	}
-	
-	// Returns a room cell
-	public RoomCell getRoomCellAt(int row, int column){
-		return ((RoomCell)cells.get(calcIndex(row,column))) ; 
-	}
-	
-	// Returns the array List of Board Cells
-	public ArrayList<BoardCell> getCells() {
-		return cells;
-	}
-	
-	// Returns the mapping from a character to the rooms
-	public Map<Character, String> getRooms() {
-		return rooms;
-	}
-	
-	// Returns a Board Cell at a given index
-	public BoardCell getCellAt(int calcIndex) {
-		return cells.get(calcIndex);
-	}
-
 	// Determines the neighbors of every cell on the board
 	public void calcAdjacencies() {
 		adjList = new HashMap<Integer, LinkedList<Integer>>();
@@ -181,22 +153,16 @@ public class Board {
 		startTargets(calcIndex(row, column), steps);
 	}
 	
-	// Returns the adjacency list
-	public LinkedList<Integer> getAdjList(int calcIndex) {
-		return adjList.get(calcIndex);
-	}
-	
-	// Returns the list of targets
-	public Set<BoardCell> getTargets() {
-		return targetList;
-	}
-	
-	public int getNumColumns() {
-		return colCount;
-	}
-	
-	public int getNumRows() {
-		return rowCount;
+	// Loads the provided configuration files for the board and legend
+	public void loadConfigFiles(){
+		try {
+			this.loadRoomConfig();
+			this.loadBoardConfig();
+		} catch (FileNotFoundException e) {
+			System.err.println(e.getMessage());	
+		} catch (BadConfigFormatException e) {
+			System.err.println("While trying to load config files, encountered a file not found: " + e.getMessage());
+		}		
 	}
 	
 	// Loads the room mapping out of the key
@@ -204,6 +170,7 @@ public class Board {
 		rooms = new HashMap<Character, String>();
 		Scanner input = new Scanner(new FileReader(roomConfigFile));
 		int lineCount = 0;
+		
 		while(input.hasNext()) {
 			lineCount++;
 			Character key;
@@ -234,6 +201,7 @@ public class Board {
 	
 	// Loads the board config out of the given file
 	public void loadBoardConfig() throws FileNotFoundException, BadConfigFormatException {
+		cells = new ArrayList<BoardCell>();
 		doorways = 0;
 		Scanner lines = new Scanner(new FileReader(boardConfigFile));
 		String next;
@@ -299,6 +267,40 @@ public class Board {
 		}
 	}
 
+	// Returns a Room Cell at the given row and column
+	public RoomCell getRoomCellAt(int row, int column){
+		return ((RoomCell)cells.get(calcIndex(row,column))) ; 
+	}
+	
+	// Returns a Board Cell at a given index
+	public BoardCell getCellAt(int calcIndex) {
+		return cells.get(calcIndex);
+	}
+	
+	// Returns the mapping from a character to the rooms
+	public Map<Character, String> getRooms() {
+		return rooms;
+	}
+
+	// Returns the adjacency list
+	public LinkedList<Integer> getAdjList(int calcIndex) {
+		return adjList.get(calcIndex);
+	}
+	
+	// Returns the list of targets
+	public Set<BoardCell> getTargets() {
+		return targetList;
+	}
+	
+	public int getNumColumns() {
+		return colCount;
+	}
+	
+	public int getNumRows() {
+		return rowCount;
+	}
+
+	
 	public int getDoorways() {
 		return doorways;
 	}
