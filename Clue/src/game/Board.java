@@ -18,9 +18,9 @@ public class Board {
 	private Map<Integer, LinkedList<Integer>> adjList;
 	int rowCount;
 	int colCount;
-	private int doorways;
 	private String boardConfigFile;
 	private String roomConfigFile;
+	private int doorways;
 	
 	// Default constructor that calls the parameterized constructor
 	public Board()	 {
@@ -80,23 +80,32 @@ public class Board {
 	// Determines the neighbors of every cell on the board
 	public void calcAdjacencies() {
 		adjList = new HashMap<Integer, LinkedList<Integer>>();
-		// Initializes an empty adjacency list for each cell on the board
-		for (int i = 0; i < rowCount * colCount ; i++) {
-			this.adjList.put(i, new LinkedList<Integer>());
-		}
 		
 		// Iterates through every row and column, checking the validity of the cells on all four sides of a given cell. 
 		// If it is valid, it adds it to the adjList
 		for (int i = 0; i < rowCount; i++) {
 			for (int j = 0; j < colCount; j++) {
-				if (isValidCell(i + 1, j) && isAdjacent(calcIndex(i, j), calcIndex(i + 1, j), DoorDirection.DOWN, DoorDirection.UP))
-					adjList.get(calcIndex(i,j)).add(calcIndex(i + 1, j));
-				if (isValidCell(i - 1, j) && isAdjacent(calcIndex(i, j), calcIndex(i - 1, j), DoorDirection.UP, DoorDirection.DOWN))
-					adjList.get(calcIndex(i,j)).add(calcIndex(i - 1, j));
-				if (isValidCell(i, j + 1) && isAdjacent(calcIndex(i, j), calcIndex(i, j + 1), DoorDirection.RIGHT, DoorDirection.LEFT))
-					adjList.get(calcIndex(i,j)).add(calcIndex(i, j + 1));
-				if (isValidCell(i, j - 1) && isAdjacent(calcIndex(i, j), calcIndex(i, j - 1), DoorDirection.LEFT, DoorDirection.RIGHT))
-					adjList.get(calcIndex(i,j)).add(calcIndex(i, j - 1));
+				
+				// Initializes the variables to be used in computations
+				LinkedList<Integer> newList = new LinkedList<Integer>();
+				int currentCell = calcIndex(i, j);
+				int cellAbove = calcIndex(i - 1, j);
+				int cellBelow = calcIndex(i + 1, j);
+				int cellLeft = calcIndex(i, j - 1);
+				int cellRight = calcIndex(i, j + 1);
+				
+				// Checks the validity of each adjacent cell, and whether it is adjacent based on the cell type
+				if (isValidCell(i + 1, j) && isAdjacent(currentCell, cellBelow, DoorDirection.DOWN, DoorDirection.UP))
+					newList.add(cellBelow);
+				if (isValidCell(i - 1, j) && isAdjacent(currentCell, cellAbove, DoorDirection.UP, DoorDirection.DOWN))
+					newList.add(cellAbove);
+				if (isValidCell(i, j + 1) && isAdjacent(currentCell, cellRight, DoorDirection.RIGHT, DoorDirection.LEFT))
+					newList.add(cellRight);
+				if (isValidCell(i, j - 1) && isAdjacent(currentCell, cellLeft, DoorDirection.LEFT, DoorDirection.RIGHT))
+					newList.add(cellLeft);
+				
+				// Adds this mapping to the adjacency list
+				adjList.put(currentCell, newList);
 			}
 		}
 	}
