@@ -12,9 +12,10 @@ public class ClueGame {
 	public ClueGame() {
 		//add call to this (string, string)
 	}
-	public ClueGame(String playersFile, String weaponsFile) {
+	public ClueGame(String playersFile, String weaponsFile, String boardFile, String boardConfigFile) {
 		this.playersFile = playersFile;
 		this.weaponsFile = weaponsFile;
+		this.board = new Board(boardFile, boardConfigFile);
 	}
 	public void deal() {
 		
@@ -34,7 +35,7 @@ public class ClueGame {
 	public String getWeaponsFile() {
 		return weaponsFile;
 	}
-	public void selectAnswers() {
+	public void selectAnswer() {
 		
 	}
 	
