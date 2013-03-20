@@ -20,6 +20,18 @@ public class ClueGame {
 	public void loadConfigFiles() {
 		
 	}
+	public ArrayList<Card> getCards() {
+		return cards;
+	}
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+	public String getPlayersFile() {
+		return playersFile;
+	}
+	public String getWeaponsFile() {
+		return weaponsFile;
+	}
 	public void selectAnswers() {
 		
 	}
