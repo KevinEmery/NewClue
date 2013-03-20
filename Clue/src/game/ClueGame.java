@@ -7,6 +7,8 @@ public class ClueGame {
 	private ArrayList<Player> players;
 	private String playersFile;
 	private String weaponsFile;
+	private Board board;
+	private Solution solution;
 	public ClueGame() {
 		//add call to this (string, string)
 	}
