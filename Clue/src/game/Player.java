@@ -30,4 +30,10 @@ public class Player {
 	public boolean isComputerPlayer() {
 		return false;
 	}
+	public Color getColor() {
+		return color;
+	}
+	public int getStartingLocation() {
+		return startLocation;
+	}
 }

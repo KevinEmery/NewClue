@@ -16,12 +16,21 @@ public class ClueGame {
 		this.playersFile = playersFile;
 		this.weaponsFile = weaponsFile;
 		this.board = new Board(boardFile, boardConfigFile);
+		
 	}
 	public void deal() {
 		
 	}
 	public void loadConfigFiles() {
-		
+		board.loadConfigFiles();
+		loadPlayerFile();
+		loadCardFile();
+	}
+	public void loadPlayerFile() {
+		cards = new ArrayList<Card>();
+	}
+	public void loadCardFile() {
+		players = new ArrayList<Player>();
 	}
 	public ArrayList<Card> getCards() {
 		return cards;
@@ -34,6 +43,10 @@ public class ClueGame {
 	}
 	public String getWeaponsFile() {
 		return weaponsFile;
+	}
+	//keep this, we'll add functionality for removing the cards from the deck.
+	public void selectAnswer(String person, String room, String weapon) {
+		
 	}
 	public void selectAnswer() {
 		
