@@ -38,7 +38,10 @@ public class ComputerPlayer extends Player {
 	
 	// Creates a suggestion that the player is asking.
 	public void createSuggestion() {
-		// Sets suggested Room, Person, and Weapon.
+		this.suggestedRoom = "Cats";
+		this.suggestedPerson = "Cats";
+		this.suggestedWeapon = "Cats";
+		// Sets suggested Room, Person, and Weapon. Draw the room from the current Cell
 	}
 	
 	// Updates the cards they have seen with this new piece of information

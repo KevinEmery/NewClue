@@ -9,7 +9,7 @@ public class Player {
 	private int startLocation;
 	private Color color;
 	private BoardCell currentCell;
-	private int location;
+
 	
 	// Default constructor, should never be used other than in testing 
 	public Player() {
@@ -56,11 +56,12 @@ public class Player {
 		return startLocation;
 	}
 
-	public int getLocation() {
-		return location;
-	}
 	public BoardCell getCurrentCell() {
 		return currentCell;
+	}
+	
+	public void setCurrentCell(BoardCell cell) {
+		this.currentCell = cell;
 	}
 
 }

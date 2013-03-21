@@ -1,5 +1,6 @@
 package game;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class ClueGame {
@@ -31,17 +32,23 @@ public class ClueGame {
 	public void loadConfigFiles() {
 		board.loadConfigFiles();
 		board.calcAdjacencies();
-		loadPlayerFile();
-		loadCardFile();
+		try {
+			loadPlayerFile();
+			loadCardFile();
+		} catch (FileNotFoundException e) {
+			// WILL FIX LATER
+			e.printStackTrace();
+		}
+		
 	}
 	
 	// Loads the player files
-	private void loadPlayerFile() {
+	public void loadPlayerFile() throws FileNotFoundException {
 		cards = new ArrayList<Card>();
 	}
 	
 	// Loads the card files
-	private void loadCardFile() {
+	public void loadCardFile() throws FileNotFoundException {
 		players = new ArrayList<Player>();
 	}
 	
@@ -49,6 +56,7 @@ public class ClueGame {
 	// Sets the "answer" for the game to the parameters passed in, and removes these cards from the deck.
 	public void selectAnswer(String person, String room, String weapon) {
 		this.solution = new Solution(person, room, weapon);
+		// Removes the cards from the deck.
 	}
 	
 	// This is called at the start of every game, and will just be used to call the selectAnswer function above

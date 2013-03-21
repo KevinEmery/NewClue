@@ -5,6 +5,7 @@ import game.ClueGame;
 import game.Player;
 
 import java.awt.Color;
+import java.io.FileNotFoundException;
 
 import junit.framework.Assert;
 import org.junit.BeforeClass;
@@ -51,6 +52,13 @@ public class GameSetupTests {
 		Assert.assertEquals(4, myGame.getPlayers().get(5).getStartingLocation());
 		Assert.assertEquals(Color.blue, myGame.getPlayers().get(5).getColor());
 	}
+	
+	// Tests that a file not found exception is thrown if the player file is missing
+	@Test (expected = FileNotFoundException.class)
+	public void testPlayerFileNotFound() throws FileNotFoundException {
+		ClueGame temp = new ClueGame("etc/PlayersFileNotThere.csv", "etc/dummyCardFile.csv", "etc/Board.csv", "etc/Legend.csv");
+		temp.loadPlayerFile();
+	}
 
 	// Tests to confirm if the cards have been loaded properly
 	@Test
@@ -80,6 +88,13 @@ public class GameSetupTests {
 		Assert.assertTrue(myGame.getCards().contains(colonelMustardCard));
 		Assert.assertTrue(myGame.getCards().contains(ropeCard));
 		Assert.assertTrue(myGame.getCards().contains(ballroomCard));
+	}
+	
+	// Tests that a file not found exception is thrown if the card file is missing
+	@Test (expected = FileNotFoundException.class)
+	public void testCardFileNotFound() throws FileNotFoundException {
+		ClueGame temp = new ClueGame("etc/dummyPlayersFile.csv", "etc/CardFileNotThere.csv", "etc/Board.csv", "etc/Legend.csv");
+		temp.loadCardFile();
 	}
 	
 	// Tests whether or not the cards are dealt properly

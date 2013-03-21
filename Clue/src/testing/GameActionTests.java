@@ -21,8 +21,14 @@ public class GameActionTests {
 	public static ClueGame myGame;
 	public static Card colonelMustardCard;
 	public static Card scarletCard;
+	public static Card peacockCard;
+	public static Card plumCard;
+	public static Card greenCard;
 	public static Card ropeCard;
 	public static Card knifeCard;
+	public static Card revolverCard;
+	public static Card candlestickCard;
+	public static Card leadPipeCard;
 	public static Card ballroomCard;
 	public static Card hallCard;
 	
@@ -35,12 +41,19 @@ public class GameActionTests {
 		// Creates cards to be used in testing
 		colonelMustardCard = new Card("Colonel Mustard", Card.CardType.PERSON);
 		scarletCard = new Card("Mrs. Scarlet", Card.CardType.PERSON);
+		peacockCard = new Card ("Mrs. Peacock", Card.CardType.PERSON);
+		plumCard = new Card("Professor Plum", Card.CardType.PERSON);
+		greenCard = new Card("Mr. Green", Card.CardType.PERSON);
 		ropeCard = new Card("Rope", Card.CardType.WEAPON);
 		knifeCard = new Card("Knife", Card.CardType.WEAPON);
+		revolverCard = new Card("Revolver", Card.CardType.WEAPON);
+		candlestickCard = new Card("Candlestick", Card.CardType.WEAPON);
+		leadPipeCard = new Card("Lead Pipe", Card.CardType.WEAPON);
 		ballroomCard = new Card("Ballroom", Card.CardType.ROOM);
 		hallCard = new Card("Hall", Card.CardType.ROOM);
 	}
 	
+	// Tests that a correct accusation returns true and incorrect solutions return false.
 	@Test
 	public void testAccusation() {
 		myGame.selectAnswer("Mrs. Scarlet", "Kitchen", "Revolver");
@@ -51,10 +64,12 @@ public class GameActionTests {
 		// Checks the players accusation. Since this is correct, it should return true.
 		Assert.assertTrue(myGame.checkAccusation(playerAccusation));
 		
-		// Creates a new, false accusation
+		// Creates new, false accusations (one that is false in each of the three aspects) and tests those
 		playerAccusation = new Solution("Mrs. Scarlet", "Conservatory", "Revolver");
-		
-		// Tests it, it should return false
+		Assert.assertFalse(myGame.checkAccusation(playerAccusation));
+		playerAccusation = new Solution("Mrs.Scarlet", "Kitchen", "Rope");
+		Assert.assertFalse(myGame.checkAccusation(playerAccusation));
+		playerAccusation = new Solution("Mrs. Peacock", "Kitchen", "Revolver");
 		Assert.assertFalse(myGame.checkAccusation(playerAccusation));
 	}
 	
@@ -252,7 +267,6 @@ public class GameActionTests {
 		// Also asserts that the computer player does not disprove their own suggestion.
 		int scarletCount = 0;
 		int ropeCount = 0;
-		int nullCount = 0;
 		for (int i = 0; i < 100; i++) {
 			Card card = myGame.handleSuggestion("Mrs. Scarlet", "Hall", "Rope", myGame.getPlayers().get(5));
 			if (card.equals(scarletCard))
@@ -261,19 +275,120 @@ public class GameActionTests {
 				fail("Computer disproved their own suggestion");
 			else if (card.equals(ropeCard))
 				ropeCount++;
-			else if (card.equals(null))
-				nullCount++;
 			else
 				fail("Invalid card returned");
 		}
-		Assert.assertTrue(nullCount > 10);
 		Assert.assertTrue(scarletCount > 10);
 		Assert.assertTrue(ropeCount > 10);
 	}
 	
-	
+	// Tests that if there is only one suggestion the computer should make that it does in fact make that suggestion
 	@Test
-	public void testMakingSuggestion() {
+	public void testMakingOnlySuggestionPossible() {
+		// Create a new computer player
+		ComputerPlayer p = new ComputerPlayer();
 		
+		// Adds cards to his hand.
+		p.addCardToHand(colonelMustardCard);
+		p.addCardToHand(ropeCard);
+		p.addCardToHand(ballroomCard);
+		p.addCardToHand(hallCard);	
+		
+		// Updates the cards that the person has seen. At this point, there is only one person (Mrs. White) and one weapon (Wrench) that the computer has not seen.
+		p.updateSeen(scarletCard);
+		p.updateSeen(peacockCard);
+		p.updateSeen(plumCard);
+		p.updateSeen(greenCard);
+		p.updateSeen(knifeCard);
+		p.updateSeen(revolverCard);
+		p.updateSeen(candlestickCard);
+		p.updateSeen(leadPipeCard);
+		
+		// Sets the players location to being in the hall
+		p.setCurrentCell(myGame.getBoard().getCellAt(13,5));
+		
+		// Creates a suggestion 10 times, virtually eliminating the chance of it happening by random chance.
+		for (int i = 0; i < 10; i++) {
+			// The computer makes a suggestion. This should match what he hasn't seen.
+			p.createSuggestion();
+			
+			// Asserts that the computer suggests the correct person, room, and weapon.
+			Assert.assertEquals("Mrs. White", p.getSuggestedPerson());
+			Assert.assertEquals("Wrench", p.getSuggestedWeapon());
+			Assert.assertEquals("Hall", p.getSuggestedRoom());
+		}	
+	}
+	
+	// Tests that when a computer has more than one option to choose from, it randomly makes a choice
+	@Test
+	public void testMakingAllSuggestionsPossible() {
+		// Create a new computer player
+		ComputerPlayer p = new ComputerPlayer();
+		
+		// Adds cards to his hand.
+		p.addCardToHand(colonelMustardCard);
+		p.addCardToHand(ballroomCard);
+		p.addCardToHand(hallCard);	
+		
+		// Updates the cards that the person has seen. 
+		// At this point, there are only two people (Mrs. White and Mr. Green) left unseen
+		// At this point, there are only three weapons (Wrench, Knife, Rope) that the computer has not seen.
+		p.updateSeen(scarletCard);
+		p.updateSeen(peacockCard);
+		p.updateSeen(plumCard);
+		p.updateSeen(revolverCard);
+		p.updateSeen(candlestickCard);
+		p.updateSeen(leadPipeCard);
+		
+		// Sets the players location to being in the hall
+		p.setCurrentCell(myGame.getBoard().getCellAt(13,5));
+		
+		// Initializes variables for testing
+		int whiteCount = 0;
+		int greenCount = 0;
+		int knifeCount = 0;
+		int wrenchCount = 0;
+		int ropeCount = 0;
+		String room;
+		String person;
+		String weapon;
+		
+		// We are now going to run simulated suggestions. 
+		// Every suggestion should be in the hall
+		// Suggestions should contain either Mr. Green or Mrs. White
+		// Suggestions should contain either the Wrench, the Knife, or the Rope
+		for (int i = 0; i < 100; i++) {
+			p.createSuggestion();
+			
+			room = p.getSuggestedRoom();
+			person = p.getSuggestedPerson();
+			weapon = p.getSuggestedWeapon();
+			
+			if (!room.equals("Hall"))
+				fail ("Invalid room suggested");
+			
+			if (person.equals("Mr. Green"))
+				greenCount++;
+			else if (person.equals("Mrs. White"))
+				whiteCount++;
+			else
+				fail ("Invalid person suggested");
+			
+			if (weapon.equals("Knife"))
+				knifeCount++;
+			else if (weapon.equals("Wrench"))
+				wrenchCount++;
+			else if (weapon.equals("Rope"))
+				ropeCount++;
+			else
+				fail ("Invalid weapon suggested");
+		}
+
+		// Once this simulation has been run, ensure that all counts are greater than 10.
+		Assert.assertTrue(whiteCount > 10);
+		Assert.assertTrue(greenCount > 10);
+		Assert.assertTrue(knifeCount > 10);
+		Assert.assertTrue(wrenchCount > 10);
+		Assert.assertTrue(ropeCount > 10);		
 	}
 }
