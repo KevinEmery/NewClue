@@ -53,6 +53,7 @@ public class GameSetupTests {
 		Assert.assertEquals(Color.blue, myGame.getPlayers().get(5).getColor());
 	}
 
+	// Tests to confirm if the cards have been loaded properly
 	@Test
 	public void testCardLoading() {
 		// Asserts that the size of the deck is correct
@@ -80,6 +81,7 @@ public class GameSetupTests {
 		Assert.assertTrue(myGame.getCards().contains(ballroomCard));
 	}
 	
+	// Tests whether or not the cards are dealt properly
 	@Test
 	public void testDeal() {
 		// Deals out all of the cards
