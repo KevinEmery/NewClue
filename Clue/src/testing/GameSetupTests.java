@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import junit.framework.Assert;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -112,7 +111,7 @@ public class GameSetupTests {
 			} if (p.getMyCards().contains(ropeCard)) {
 				ropeCardBool = true;
 				ropeCount++;
-			} if (p.getMyCards().contains(ballroomCard) {
+			} if (p.getMyCards().contains(ballroomCard)) {
 				ballroomCardBool = true;
 				ballroomCount++;
 			}
