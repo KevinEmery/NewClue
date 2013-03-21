@@ -9,29 +9,64 @@ public class ClueGame {
 	private String weaponsFile;
 	private Board board;
 	private Solution solution;
+	
+	// Default constructor which calls with some base values
 	public ClueGame() {
-		//add call to this (string, string)
+		this("etc/dummyPlayersFile.csv", "etc/dummyCardFile.csv", "etc/Board.csv", "etc/Legend.csv");
 	}
+	
+	// Parameterized constructor allowing us to set the files
 	public ClueGame(String playersFile, String weaponsFile, String boardFile, String boardConfigFile) {
 		this.playersFile = playersFile;
 		this.weaponsFile = weaponsFile;
 		this.board = new Board(boardFile, boardConfigFile);		
 	}
+	
+	// Deals all of the cards in the deck to the players.
 	public void deal() {
 		
 	}
+	
+	// Loads all of the files associated with playing the game, including the board files
 	public void loadConfigFiles() {
 		board.loadConfigFiles();
 		board.calcAdjacencies();
 		loadPlayerFile();
 		loadCardFile();
 	}
-	public void loadPlayerFile() {
+	
+	// Loads the player files
+	private void loadPlayerFile() {
 		cards = new ArrayList<Card>();
 	}
-	public void loadCardFile() {
+	
+	// Loads the card files
+	private void loadCardFile() {
 		players = new ArrayList<Player>();
 	}
+	
+	
+	// Sets the "answer" for the game to the parameters passed in, and removes these cards from the deck.
+	public void selectAnswer(String person, String room, String weapon) {
+		
+	}
+	
+	// This is called at the start of every game, and will just be used to call the selectAnswer function above
+	public void selectAnswer() {
+		
+	}
+	
+	// When a player mkes a suggestion, this function makes calls to different players and sees if they can disprove it
+	public void handleSuggestion(String person, String room, String weapon, Player accusingPerson) {
+		
+	}
+	
+	// Checks to see if an accusation is correct or not
+	public boolean checkAccusation(Solution solution) {
+		return false;
+	}
+	
+	// Getters for various instance variables
 	public Board getBoard() {
 		return board;
 	}
@@ -47,18 +82,7 @@ public class ClueGame {
 	public String getWeaponsFile() {
 		return weaponsFile;
 	}
-	//keep this, we'll add functionality for removing the cards from the deck.
-	public void selectAnswer(String person, String room, String weapon) {
-		
-	}
-	public void selectAnswer() {
-		
-	}
-	
-	public void handleSuggestion(String person, String room, String weapon, Player accusingPerson) {
-		
-	}
-	public boolean checkAccusation(Solution solution) {
-		return false;
+	public Solution getSolution() {
+		return solution;
 	}
 }
