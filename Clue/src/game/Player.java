@@ -8,6 +8,10 @@ public class Player {
 	private ArrayList<Card> myCards;
 	private int startLocation;
 	private Color color;
+	private int location;
+	public Player() {
+		
+	}
 	
 	public Player(String name, int startLocation, Color color) {
 		this.name = name;

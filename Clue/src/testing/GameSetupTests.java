@@ -21,7 +21,7 @@ public class GameSetupTests {
 	@BeforeClass
 	// Creates a new game from the default constructor and loads the appropriate config files
 	public static void setup() {
-		myGame = new ClueGame();
+		myGame = new ClueGame("etc/dummyPlayersFile.csv", "etc/dummyCardFile.csv", "etc/Board.csv", "etc/Legend.csv");
 		myGame.loadConfigFiles();
 		colonelMustardCard = new Card("Colonel Mustard", Card.CardType.PERSON);
 		ropeCard = new Card("Rope", Card.CardType.WEAPON);
@@ -71,6 +71,8 @@ public class GameSetupTests {
 			else if (card.getCardType().equals(Card.CardType.ROOM))
 				roomCount++;
 		}
+		
+		// Asserts that there is the correct number of each card
 		Assert.assertEquals(6, weaponCount);
 		Assert.assertEquals(6, personCount);
 		Assert.assertEquals(9, roomCount);
@@ -84,8 +86,8 @@ public class GameSetupTests {
 	// Tests whether or not the cards are dealt properly
 	@Test
 	public void testDeal() {
-		// Deals out all of the cards
-		myGame.selectAnswer();
+		// Selects out a preset answer and deals out the rest of the cards
+		myGame.selectAnswer("Mrs. Scarlet", "Kitchen", "Revolver");
 		myGame.deal();
 		
 		// Initializes information to be checked
@@ -118,6 +120,8 @@ public class GameSetupTests {
 				ballroomCount++;
 			}
 		}
+		
+		// Checks to see if there was a good distribution of cards, sets a flag.
 		if (maxCount - minCount <= 1)
 			goodDistribution = true;
 			

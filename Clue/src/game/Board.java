@@ -272,6 +272,10 @@ public class Board {
 		return ((RoomCell)cells.get(calcIndex(row,column))) ; 
 	}
 	
+	public BoardCell getCellAt(int row, int column) {
+		return getCellAt(calcIndex(row, column));
+	}
+	
 	// Returns a Board Cell at a given index
 	public BoardCell getCellAt(int calcIndex) {
 		return cells.get(calcIndex);

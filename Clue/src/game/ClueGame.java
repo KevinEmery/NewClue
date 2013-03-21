@@ -15,14 +15,14 @@ public class ClueGame {
 	public ClueGame(String playersFile, String weaponsFile, String boardFile, String boardConfigFile) {
 		this.playersFile = playersFile;
 		this.weaponsFile = weaponsFile;
-		this.board = new Board(boardFile, boardConfigFile);
-		
+		this.board = new Board(boardFile, boardConfigFile);		
 	}
 	public void deal() {
 		
 	}
 	public void loadConfigFiles() {
 		board.loadConfigFiles();
+		board.calcAdjacencies();
 		loadPlayerFile();
 		loadCardFile();
 	}
@@ -31,6 +31,9 @@ public class ClueGame {
 	}
 	public void loadCardFile() {
 		players = new ArrayList<Player>();
+	}
+	public Board getBoard() {
+		return board;
 	}
 	public ArrayList<Card> getCards() {
 		return cards;
