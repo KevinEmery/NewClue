@@ -5,7 +5,6 @@ import game.ClueGame;
 import game.Player;
 
 import java.awt.Color;
-import java.util.ArrayList;
 
 import junit.framework.Assert;
 import org.junit.BeforeClass;
@@ -37,19 +36,19 @@ public class GameSetupTests {
 		// Checks the first player to see if they are human and if their info is correct.
 		Assert.assertTrue(myGame.getPlayers().get(0).isHumanPlayer());
 		Assert.assertEquals("Mrs. Scarlet", myGame.getPlayers().get(0).getName());
-		Assert.assertEquals(INSERT_STARTING_LOCATION, myGame.getPlayers().get(0).getStartingLocation());
+		Assert.assertEquals(174, myGame.getPlayers().get(0).getStartingLocation());
 		Assert.assertEquals(Color.red, myGame.getPlayers().get(0).getColor());
 		
 		// Checks the name, starting location, and color of the first computer in the file. Also checks to make sure it is a computer player
 		Assert.assertTrue(myGame.getPlayers().get(1).isComputerPlayer());
 		Assert.assertEquals("Colonel Mustard", myGame.getPlayers().get(1).getName());
-		Assert.assertEquals(INSERT_STARTING_LOCATION, myGame.getPlayers().get(1).getStartingLocation());
+		Assert.assertEquals(450, myGame.getPlayers().get(1).getStartingLocation());
 		Assert.assertEquals(Color.yellow, myGame.getPlayers().get(1).getColor());
 		
 		// Checks the name, starting location, and color of the last computer in the file. Also checks to make sure it is a computer player
 		Assert.assertTrue(myGame.getPlayers().get(5).isComputerPlayer());
 		Assert.assertEquals("Mrs. Peacock", myGame.getPlayers().get(5).getName());
-		Assert.assertEquals(INSERT_STARTING_LOCATION, myGame.getPlayers().get(5).getStartingLocation());
+		Assert.assertEquals(4, myGame.getPlayers().get(5).getStartingLocation());
 		Assert.assertEquals(Color.blue, myGame.getPlayers().get(5).getColor());
 	}
 

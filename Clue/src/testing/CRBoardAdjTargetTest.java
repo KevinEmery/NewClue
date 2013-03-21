@@ -212,7 +212,6 @@ public class CRBoardAdjTargetTest {
 		// Includes a path that doesn't have enough length
 		board.calcTargets(14, 0, 4);
 		targets= board.getTargets();
-		System.out.println(board.getCellAt(board.calcIndex(12, 0)).isWalkway());
 		Assert.assertEquals(4, targets.size());
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(14, 4))));
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(15, 3))));	

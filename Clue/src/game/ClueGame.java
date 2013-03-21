@@ -48,7 +48,7 @@ public class ClueGame {
 	
 	// Sets the "answer" for the game to the parameters passed in, and removes these cards from the deck.
 	public void selectAnswer(String person, String room, String weapon) {
-		
+		this.solution = new Solution(person, room, weapon);
 	}
 	
 	// This is called at the start of every game, and will just be used to call the selectAnswer function above
@@ -56,9 +56,10 @@ public class ClueGame {
 		
 	}
 	
-	// When a player mkes a suggestion, this function makes calls to different players and sees if they can disprove it
-	public void handleSuggestion(String person, String room, String weapon, Player accusingPerson) {
-		
+	// When a player mkes a suggestion, this function makes calls to different players and sees if they can disprove it.
+	// If they can, a card is returned.
+	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson) {
+		return new Card();
 	}
 	
 	// Checks to see if an accusation is correct or not
@@ -82,7 +83,10 @@ public class ClueGame {
 	public String getWeaponsFile() {
 		return weaponsFile;
 	}
-	public Solution getSolution() {
-		return solution;
+	
+	// EVERYTHING BELOW HERE IS FOR TESTING ONLY
+	// THESE SHOULD NEVER BE USED IN PRACTICE
+	public void setPlayers(ArrayList<Player> newPlayers) {
+		this.players = newPlayers;
 	}
 }
