@@ -59,6 +59,7 @@ public class ClueGame {
 	// When a player mkes a suggestion, this function makes calls to different players and sees if they can disprove it.
 	// If they can, a card is returned.
 	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson) {
+		// If accusing person is a computer, draw the info from their getters. Otherwise, it comes from the GUI
 		return new Card();
 	}
 	

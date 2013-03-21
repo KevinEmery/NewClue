@@ -1,17 +1,23 @@
 package game;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Set;
 
 public class ComputerPlayer extends Player {
 	
 	private char lastRoomVisited;
+	private ArrayList<Card> cardsSeen;	
+	private String suggestedRoom;
+	private String suggestedPerson;
+	private String suggestedWeapon;
 	
 
-	
+
 	// Creates a default computer player. In practice this should never be used.
 	public ComputerPlayer() {
 		this("Mrs. Peacock", 0, Color.blue);
+		cardsSeen = new ArrayList<Card>();
 	}
 	
 	// Creates a computer player with the given parameters. These will all be read out of a file
@@ -32,24 +38,34 @@ public class ComputerPlayer extends Player {
 	
 	// Creates a suggestion that the player is asking.
 	public void createSuggestion() {
-		
+		// Sets suggested Room, Person, and Weapon.
 	}
 	
 	// Updates the cards they have seen with this new piece of information
 	public void updateSeen(Card seen) {
-		
+		this.cardsSeen.add(seen);
 	}
 	
-	// Returns the character of the last room visited
+	// Getters for the instance variables
 	public char getLastRoomVisited() {
 		return lastRoomVisited;
 	}
+	public ArrayList<Card> getCardsSeen() {
+		return cardsSeen;
+	}
+	public String getSuggestedRoom() {
+		return suggestedRoom;
+	}
+	public String getSuggestedPerson() {
+		return suggestedPerson;
+	}
+	public String getSuggestedWeapon() {
+		return suggestedWeapon;
+	}
 
-	
 	// EVERYTHING BELOW HERE IS FOR TESTING ONLY
 	// THESE SHOULD NEVER BE USED IN PRACTICE
 	public void setLastRoomVisited(char lastRoomVisited) {
 		this.lastRoomVisited = lastRoomVisited;
 	}
-
 }

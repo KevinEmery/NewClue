@@ -8,6 +8,7 @@ public class Player {
 	private ArrayList<Card> myCards;
 	private int startLocation;
 	private Color color;
+	private BoardCell currentCell;
 	private int location;
 	
 	// Default constructor, should never be used other than in testing 
@@ -28,7 +29,7 @@ public class Player {
 		return new Card();
 	}
 	
-	// Used as a part of dealing cards, this will add cards into a players hand
+	// Used as a part of dealing cards, this will add cards into a players hand. Should also update cardsSeen if a computer player
 	public void addCardToHand(Card newCard) {
 		this.myCards.add(newCard);
 	}
@@ -58,4 +59,8 @@ public class Player {
 	public int getLocation() {
 		return location;
 	}
+	public BoardCell getCurrentCell() {
+		return currentCell;
+	}
+
 }
