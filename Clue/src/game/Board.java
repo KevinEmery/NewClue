@@ -16,7 +16,7 @@ public class Board {
 	
 	// This data structures are used to store all of the board information
 	private ArrayList<BoardCell> cells;
-	private Map<Character,String> rooms;
+	private Map<Character, String> rooms;
 	private Set<BoardCell> targetList;
 	private Map<Integer, LinkedList<Integer>> adjList;
 	
@@ -35,7 +35,6 @@ public class Board {
 	public Board()	 {
 		this("etc/ClueLayout.csv", "etc/ClueLegend.txt");
 	}
-	
 	// Parameterized constructor that sets a few basic variables.
 	public Board(String boardConfigFile, String roomConfigFile) {
 		this.boardConfigFile = boardConfigFile;
@@ -45,8 +44,8 @@ public class Board {
 	}
 	
 	// Calculates the index given a row and column
-	public int calcIndex(int row, int column){	// turns a 2d board into a 1d list
-		return column + row * colCount;
+	public  int calcIndex(int row, int col){	// turns a 2d board into a 1d list
+		return col + row * colCount;
 	}
 	
 	// Determines the neighbors of every cell on the board

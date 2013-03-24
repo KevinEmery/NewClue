@@ -21,7 +21,7 @@ public class GameSetupTests {
 	@BeforeClass
 	// Creates a new game from the default constructor and loads the appropriate config files
 	public static void setup() {
-		myGame = new ClueGame("etc/dummyPlayersFile.csv", "etc/dummyCardFile.csv", "etc/Board.csv", "etc/Legend.csv");
+		myGame = new ClueGame("etc/personFile.dat", "etc/weaponsFile.dat", "etc/Board.csv", "etc/Legend.csv");
 		myGame.loadConfigFiles();
 		colonelMustardCard = new Card("Colonel Mustard", Card.CardType.PERSON);
 		ropeCard = new Card("Rope", Card.CardType.WEAPON);

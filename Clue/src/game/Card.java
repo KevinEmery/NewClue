@@ -1,6 +1,6 @@
 package game;
 
-public class Card {
+public class Card  {
 	public enum CardType {
 		ROOM,
 		WEAPON,
@@ -23,4 +23,12 @@ public class Card {
 	public CardType getCardType() {
 		return cardType;
 	}
+	@Override
+	public boolean equals(Object object) {
+		Card compare = (Card)object;
+		if(compare.cardType.equals(cardType) && compare.name.equals(name))
+			return true;
+		return false;
+	}
+	
 }
