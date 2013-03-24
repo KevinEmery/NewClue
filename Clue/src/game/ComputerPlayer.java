@@ -18,13 +18,13 @@ public class ComputerPlayer extends Player {
 	// Creates a default computer player. In practice this should never be used.
 	public ComputerPlayer() {
 		this("Mrs. Peacock", 0, Color.blue);
-		cardsSeen = new ArrayList<Card>();
 	}
 	
 	// Creates a computer player with the given parameters. These will all be read out of a file
 	public ComputerPlayer(String name, int startLocation, Color color) {
 		super(name, startLocation, color);
 		lastRoomVisited = ' ';
+		cardsSeen = new ArrayList<Card>();
 	}
 
 	// Used for testing, could also be used in determining the flow of the game
