@@ -35,7 +35,7 @@ public class GameActionTests {
 	@BeforeClass
 	public static void setup() {
 		// Creates a new board using our files, and then loads those files.
-		myGame = new ClueGame("etc/dummyPlayersFile.csv", "etc/dummyCardFile.csv", "etc/Board.csv", "etc/Legend.csv");
+		myGame = new ClueGame("etc/personFile.dat", "etc/weaponsFile.dat", "etc/Board.csv", "etc/Legend.csv");
 		myGame.loadConfigFiles();
 		
 		// Creates cards to be used in testing

@@ -46,7 +46,7 @@ public class IntBoardTest {
 // Creates a new board and loads the config files
 @BeforeClass
 public static void setup() {
-	board = new Board("etc/Clue_Map.csv","etc/ClueLegend.txt");
+	board = new Board("etc/Clue_map.csv","etc/ClueLegend.txt");
 	board.loadConfigFiles();
 	board.calcAdjacencies();
 	

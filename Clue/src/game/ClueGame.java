@@ -162,12 +162,22 @@ public class ClueGame {
 	// When a player mkes a suggestion, this function makes calls to different players and sees if they can disprove it.
 	// If they can, a card is returned.
 	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson) {
+		ArrayList<Card> disprovingCards = new ArrayList<Card>();
+		for(Player player: players) {
+			Card result = player.disproveSuggestion(person, room, weapon);
+			if(result != null && !(accusingPerson ==  player)) {
+				disprovingCards.add(result);
+			}
+		}
+		if(disprovingCards.size() > 0) return disprovingCards.get((new Random()).nextInt(disprovingCards.size()));
 		// If accusing person is a computer, draw the info from their getters. Otherwise, it comes from the GUI
-		return new Card();
+		return null;
 	}
 	
 	// Checks to see if an accusation is correct or not
 	public boolean checkAccusation(Solution solution) {
+		if(this.solution.equals(solution))
+			return true;
 		return false;
 	}
 	

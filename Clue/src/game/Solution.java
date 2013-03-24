@@ -21,5 +21,18 @@ public class Solution {
 	public String getRoom() {
 		return room;
 	}
+	@Override
+	public boolean equals(Object compare) {
+		if(!(compare instanceof Solution)) {
+			return false;
+		}
+		Solution compareSolution = (Solution) compare;
+		if (compareSolution.person.equals(person)
+				&& compareSolution.room.equals(room)
+				&& compareSolution.weapon.equals(weapon))
+			return true;
+		return false;
+				
+	}
 	
 }

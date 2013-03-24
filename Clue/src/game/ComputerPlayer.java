@@ -2,6 +2,7 @@ package game;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Set;
 
 public class ComputerPlayer extends Player {
@@ -23,6 +24,7 @@ public class ComputerPlayer extends Player {
 	// Creates a computer player with the given parameters. These will all be read out of a file
 	public ComputerPlayer(String name, int startLocation, Color color) {
 		super(name, startLocation, color);
+		lastRoomVisited = ' ';
 	}
 
 	// Used for testing, could also be used in determining the flow of the game
@@ -33,7 +35,21 @@ public class ComputerPlayer extends Player {
 	
 	// Out of a list of possible locations, picks a location to travel to.
 	public BoardCell pickLocation(Set<BoardCell> targets) {
-		return new WalkwayCell(0, 0);
+		int randInt = (new Random()).nextInt(targets.size());
+		int counter=0;
+		BoardCell targetCell=null;
+		for(BoardCell cell: targets) {
+			if(counter == randInt) {
+				targetCell = cell;
+			}
+			if(cell.isRoom() && ((RoomCell)cell).getRoom() != lastRoomVisited) {
+				lastRoomVisited = ((RoomCell)cell).getRoom();
+				targetCell = cell;
+				break;
+			}
+			++counter;
+		}
+		return targetCell;
 	}
 	
 	// Creates a suggestion that the player is asking.
