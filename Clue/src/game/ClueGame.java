@@ -47,11 +47,10 @@ public class ClueGame {
 		Random randInt = new Random();
 		int cardsToGive = cards.size()/players.size();
 		int extraCards = cards.size()%players.size();
-		int randomIndex = randInt.nextInt(players.size());
+
 		int randomCardNo=randInt.nextInt(cards.size());
 		for(int i=0; i< players.size(); ++i) {
 			for(int j=0; j<(i >= extraCards ? cardsToGive : cardsToGive+1); j++) {
-				System.out.println("Cards.size: " + cards.size());
 				randomCardNo = randInt.nextInt(cards.size());
 				players.get(i).addCardToHand(cards.get(randomCardNo));
 				cards.remove(randomCardNo);
