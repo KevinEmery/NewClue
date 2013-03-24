@@ -310,7 +310,7 @@ public class GameActionTests {
 		// Creates a suggestion 10 times, virtually eliminating the chance of it happening by random chance.
 		for (int i = 0; i < 10; i++) {
 			// The computer makes a suggestion. This should match what he hasn't seen.
-			p.createSuggestion();
+			p.createSuggestion(myGame);
 			
 			// Asserts that the computer suggests the correct person, room, and weapon.
 			Assert.assertEquals("Mrs. White", p.getSuggestedPerson());
@@ -358,7 +358,7 @@ public class GameActionTests {
 		// Suggestions should contain either Mr. Green or Mrs. White
 		// Suggestions should contain either the Wrench, the Knife, or the Rope
 		for (int i = 0; i < 100; i++) {
-			p.createSuggestion();
+			p.createSuggestion(myGame);
 			
 			room = p.getSuggestedRoom();
 			person = p.getSuggestedPerson();

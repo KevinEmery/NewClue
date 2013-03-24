@@ -13,6 +13,7 @@ import java.util.Scanner;
 
 public class ClueGame {
 	private ArrayList<Card> cards;
+	private ArrayList<Card> originalDeck;
 	private ArrayList<Player> players;
 	private String playersFile;
 	private String weaponsFile;
@@ -59,16 +60,19 @@ public class ClueGame {
 	}
 	
 	// Loads all of the files associated with playing the game, including the board files
+
 	public void loadConfigFiles() {
 		board.loadConfigFiles();
 		board.calcAdjacencies();
 		cards = new ArrayList<Card>();
 		players = new ArrayList<Player>();
+		
 		for(String str: board.getRooms().values()) {
 			if(str.equalsIgnoreCase("Walkway")) continue ;
 			if(str.equalsIgnoreCase("Closet")) continue;
 			cards.add(new Card(str, CardType.ROOM));
 		}
+		
 		try {
 			loadPlayerFile();
 			loadCardFile();
@@ -76,6 +80,9 @@ public class ClueGame {
 			// WILL FIX LATER
 			e.printStackTrace();
 		}
+		
+		// Copies the deck as configured into a separate arraylist.
+		originalDeck = new ArrayList<Card>(cards);
 		
 	}
 	
@@ -196,10 +203,15 @@ public class ClueGame {
 	public String getWeaponsFile() {
 		return weaponsFile;
 	}
+	public ArrayList<Card> getOriginalDeck() {
+		return originalDeck;
+	}
 	
 	// EVERYTHING BELOW HERE IS FOR TESTING ONLY
 	// THESE SHOULD NEVER BE USED IN PRACTICE
 	public void setPlayers(ArrayList<Player> newPlayers) {
 		this.players = newPlayers;
 	}
+
+
 }

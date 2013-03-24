@@ -1,5 +1,7 @@
 package game;
 
+import game.Card.CardType;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
@@ -53,11 +55,26 @@ public class ComputerPlayer extends Player {
 	}
 	
 	// Creates a suggestion that the player is asking.
-	public void createSuggestion() {
-		this.suggestedRoom = "Cats";
-		this.suggestedPerson = "Cats";
-		this.suggestedWeapon = "Cats";
-		// Sets suggested Room, Person, and Weapon. Draw the room from the current Cell
+	public void createSuggestion(ClueGame game) {
+		
+		ArrayList<Card> peopleList = new ArrayList<Card>();
+		ArrayList<Card> weaponList = new ArrayList<Card>();
+		
+		for (Card c : game.getOriginalDeck()) {
+			if (!cardsSeen.contains(c) && !getMyCards().contains(c)) {
+				if (c.getCardType().equals(CardType.PERSON)) {
+					peopleList.add(c);
+				} else if (c.getCardType().equals(CardType.WEAPON)) {
+					weaponList.add(c);
+				}
+			}
+		}
+		
+		Random randInt = new Random();
+		
+		this.suggestedPerson = peopleList.get(randInt.nextInt(peopleList.size())).getName();
+		this.suggestedWeapon = weaponList.get(randInt.nextInt(weaponList.size())).getName();
+		this.suggestedRoom = game.getBoard().getRooms().get(((RoomCell) getCurrentCell()).getInitial());
 	}
 	
 	// Updates the cards they have seen with this new piece of information
