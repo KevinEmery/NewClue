@@ -24,17 +24,22 @@ public class Player {
 		this.myCards = new ArrayList<Card>();
 	}
 	
-	// Allows the computer player to disprove a suggestion, if possible.
+	// Allows the player to disprove a suggestion, if possible.
 	public Card disproveSuggestion(String person, String room, String weapon) {
 		ArrayList<Card> validCards = new ArrayList<Card>();
+		
+		// Searchs through the players cards and sees if it matches one of the suggested cards
 		for(Card card: myCards) {
 			if(card.getName().equals(person) || card.getName().equals(room) || card.getName().equals(weapon)) {
 				validCards.add(card);
 			}
 		}
 		
+		// If one/more of those cards is there, return one of them
 		if(validCards.size() > 0) 
 			return validCards.get((new Random()).nextInt(validCards.size()));
+		
+		// Otherwise, return null
 		return null;
 	}
 	
@@ -69,6 +74,9 @@ public class Player {
 		return currentCell;
 	}
 	
+	
+	// EVERYTHING BELOW HERE IS FOR TESTING ONLY
+	// THESE SHOULD NEVER BE USED IN PRACTICE
 	public void setCurrentCell(BoardCell cell) {
 		this.currentCell = cell;
 	}

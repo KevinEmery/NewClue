@@ -5,7 +5,6 @@ import game.Card.CardType;
 import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.text.NumberFormat.Field;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -20,20 +19,12 @@ public class ClueGame {
 	private Board board;
 	private Solution solution;
 	private int noWeapons;
-	// Be sure to trim the color, we don't want spaces around the name
-	public Color convertColor(String strColor) {
-		Color color;
-		try {
-			// We can use reflection to convert the string to a color
-			color = (Color) Class.forName("java.awt.Color").getField(strColor.trim()).get(null);
-		} catch (Exception e) {
-			color = null; // Not defined }
-		}
-		return color;
-	}
+	
+	
+	
 	// Default constructor which calls with some base values
 	public ClueGame() {
-		this("etc/dummyPlayersFile.csv", "etc/dummyCardFile.csv", "etc/Board.csv", "etc/Legend.csv");
+		this("etc/personFile.dat", "etc/weaponsFile.dat", "etc/Board.csv", "etc/Legend.csv");
 	}
 	
 	// Parameterized constructor allowing us to set the files
@@ -46,39 +37,53 @@ public class ClueGame {
 	// Deals all of the cards in the deck to the players.
 	public void deal() {
 		Random randInt = new Random();
+		
+		// Performs integer division to determine how many cards to deal out to each player
 		int cardsToGive = cards.size()/players.size();
+		
+		// In case of an uneven distribution, this will determine the number of players who get one extra card.
 		int extraCards = cards.size()%players.size();
 
-		int randomCardNo=randInt.nextInt(cards.size());
+		// This is the index of the card to be dealt
+		int randomCardNo;
+		
+		// Iterates through every player
 		for(int i=0; i< players.size(); ++i) {
+			
+			// Iterates through the number of cards to be given to each player
 			for(int j=0; j<(i >= extraCards ? cardsToGive : cardsToGive+1); j++) {
 				randomCardNo = randInt.nextInt(cards.size());
 				players.get(i).addCardToHand(cards.get(randomCardNo));
+				
+				// Once the card is dealt, it is removed so that it is not dealt again
 				cards.remove(randomCardNo);
 			}
 		}
 	}
 	
 	// Loads all of the files associated with playing the game, including the board files
-
 	public void loadConfigFiles() {
+		// Loads the board files and calculates all of the adjacencies
 		board.loadConfigFiles();
 		board.calcAdjacencies();
+		
+		// Initializes new arraylists
 		cards = new ArrayList<Card>();
 		players = new ArrayList<Player>();
 		
+		// Creates cards for the rooms, as specified by the Legend, ignoring the Walkway and Closet
 		for(String str: board.getRooms().values()) {
-			if(str.equalsIgnoreCase("Walkway")) continue ;
+			if(str.equalsIgnoreCase("Walkway")) continue;
 			if(str.equalsIgnoreCase("Closet")) continue;
 			cards.add(new Card(str, CardType.ROOM));
 		}
 		
+		// Loads the player and card files
 		try {
 			loadPlayerFile();
 			loadCardFile();
 		} catch (FileNotFoundException e) {
-			// WILL FIX LATER
-			e.printStackTrace();
+			System.err.println("While trying to load config files, encountered a file not found: " + e.getMessage());
 		}
 		
 		// Copies the deck as configured into a separate arraylist.
@@ -87,17 +92,24 @@ public class ClueGame {
 	}
 	
 	// Loads the player files
-	//player file format:
-	//player_name, color, (row, column)
+	// Player file format: player_name, color, (row, column)
 	public void loadPlayerFile() throws FileNotFoundException {
+		
+		// Creates the file scanner
 		FileReader playerFile = new FileReader(playersFile);
 		Scanner playerIn = new Scanner(playerFile);
+		
+		// Splits the file around commas
 		String[] lineParts;
 		lineParts = playerIn.nextLine().split(",\\s+");
+		
+		// Adds a human player to the players list and cards list as specified in the file
 		players.add(new HumanPlayer(lineParts[0],  
 					board.calcIndex(Integer.parseInt(lineParts[2].substring(1)), Integer.parseInt(lineParts[3].substring(0, lineParts[3].length()-1))), 
 					convertColor(lineParts[1])));
 		cards.add(new Card(lineParts[0], CardType.PERSON));
+		
+		// Adds all of the computer players to the game and card list as specified
 		while(playerIn.hasNext()) {
 			lineParts = playerIn.nextLine().split(",\\s+");
 			players.add(new ComputerPlayer(lineParts[0],  
@@ -105,17 +117,23 @@ public class ClueGame {
 						convertColor(lineParts[1])));
 			cards.add(new Card(lineParts[0], CardType.PERSON));
 		}
+		
+		// Closes the players file
 		playerIn.close();
 		
 	}
 	
 	// Loads the card file
-	//just a bunch of text lines, 
-	//with weapon names.
+	// Just a bunch of text lines with weapon names.
 	public void loadCardFile() throws FileNotFoundException {
-		int weaponCount=0;
+		
+		
+		// Opens a scanner for the file
 		FileReader cardFile = new FileReader(weaponsFile);
 		Scanner cardIn = new Scanner(cardFile);
+		int weaponCount=0;
+		
+		// Reads in the weapons and adds them to the card list
 		while(cardIn.hasNext()) {
 			++weaponCount;
 			cards.add(new Card(cardIn.nextLine(), CardType.WEAPON));
@@ -124,23 +142,17 @@ public class ClueGame {
 		cardIn.close();
 	}
 	
-	
-	// Sets the "answer" for the game to the parameters passed in, and removes these cards from the deck.
-	public void selectAnswer(String person, String room, String weapon) {
-		this.solution = new Solution(person, room, weapon);
-		cards.remove(new Card(person, Card.CardType.PERSON));
-		cards.remove(new Card(weapon, Card.CardType.WEAPON));
-		cards.remove(new Card(room, Card.CardType.ROOM));
-		// Removes the cards from the deck.
-	}
-	
 	// This is called at the start of every game, and will just be used to call the selectAnswer function above
 	public void selectAnswer() {
 		Random randInt = new Random();
+		
+		// Sets the random numbers for the room and weapon
 		int roomNumber = randInt.nextInt(9);
 		int weaponNumber = randInt.nextInt(noWeapons);
 		int currentWeapon=0, currentRoom=0;
 		String weaponName="", roomName="", player="";
+		
+		// Iterates through and pulls out that weapon and room
 		for(Card card: cards) {
 			if(card.getCardType().equals(Card.CardType.WEAPON)) {
 				++currentWeapon;
@@ -159,10 +171,13 @@ public class ClueGame {
 			}
 			
 		}
+		
+		// Selects a random player, and removes them
 		player = players.get(randInt.nextInt(players.size())).getName();
 		cards.remove(new Card(player, Card.CardType.PERSON));
-		solution = new Solution(player, weaponName, roomName);
 		
+		// Sets the solution
+		solution = new Solution(player, weaponName, roomName);
 	}
 	
 	// When a player mkes a suggestion, this function makes calls to different players and sees if they can disprove it.
@@ -175,8 +190,8 @@ public class ClueGame {
 				disprovingCards.add(result);
 			}
 		}
-		if(disprovingCards.size() > 0) return disprovingCards.get((new Random()).nextInt(disprovingCards.size()));
-		// If accusing person is a computer, draw the info from their getters. Otherwise, it comes from the GUI
+		if(disprovingCards.size() > 0) 
+			return disprovingCards.get((new Random()).nextInt(disprovingCards.size()));
 		return null;
 	}
 	
@@ -187,22 +202,39 @@ public class ClueGame {
 		return false;
 	}
 	
+	// Used to convert color from a string to a java class
+	public Color convertColor(String strColor) {
+		Color color;
+		try {
+			// We can use reflection to convert the string to a color
+			color = (Color) Class.forName("java.awt.Color").getField(strColor.trim()).get(null);
+		} catch (Exception e) {
+			color = null; // Color not defined
+		}
+		return color;
+	}
+	
 	// Getters for various instance variables
 	public Board getBoard() {
 		return board;
 	}
+	
 	public ArrayList<Card> getCards() {
 		return cards;
 	}
+	
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}
+	
 	public String getPlayersFile() {
 		return playersFile;
 	}
+	
 	public String getWeaponsFile() {
 		return weaponsFile;
 	}
+	
 	public ArrayList<Card> getOriginalDeck() {
 		return originalDeck;
 	}
@@ -211,6 +243,17 @@ public class ClueGame {
 	// THESE SHOULD NEVER BE USED IN PRACTICE
 	public void setPlayers(ArrayList<Player> newPlayers) {
 		this.players = newPlayers;
+	}
+	
+	// Sets the "answer" for the game to the parameters passed in, and removes these cards from the deck.
+	public void selectAnswer(String person, String room, String weapon) {
+		this.solution = new Solution(person, room, weapon);
+		
+		// Removes the cards from the deck.
+		cards.remove(new Card(person, Card.CardType.PERSON));
+		cards.remove(new Card(weapon, Card.CardType.WEAPON));
+		cards.remove(new Card(room, Card.CardType.ROOM));
+		
 	}
 
 

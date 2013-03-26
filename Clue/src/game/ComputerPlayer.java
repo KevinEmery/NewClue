@@ -29,7 +29,7 @@ public class ComputerPlayer extends Player {
 		cardsSeen = new ArrayList<Card>();
 	}
 
-	// Used for testing, could also be used in determining the flow of the game
+	// Used for finding a computer player in the array list
 	@Override
 	public boolean isComputerPlayer() {
 		return true;
@@ -37,13 +37,20 @@ public class ComputerPlayer extends Player {
 	
 	// Out of a list of possible locations, picks a location to travel to.
 	public BoardCell pickLocation(Set<BoardCell> targets) {
+		// Sets a new random int, based on the size of the targets set
 		int randInt = (new Random()).nextInt(targets.size());
 		int counter=0;
 		BoardCell targetCell=null;
+		
+		// Selects the target
 		for(BoardCell cell: targets) {
+			
+			// If the counter equals the random int, then set the target to that cell
 			if(counter == randInt) {
 				targetCell = cell;
 			}
+			
+			// However, if you find a room that is not the last visited, then you ALWAYS go there instead
 			if(cell.isRoom() && ((RoomCell)cell).getRoom() != lastRoomVisited) {
 				lastRoomVisited = ((RoomCell)cell).getRoom();
 				targetCell = cell;
@@ -57,9 +64,11 @@ public class ComputerPlayer extends Player {
 	// Creates a suggestion that the player is asking.
 	public void createSuggestion(ClueGame game) {
 		
+		// Creates a temporary data structure
 		ArrayList<Card> peopleList = new ArrayList<Card>();
 		ArrayList<Card> weaponList = new ArrayList<Card>();
 		
+		// Adds the card to the temp structure if it has not been seen
 		for (Card c : game.getOriginalDeck()) {
 			if (!cardsSeen.contains(c) && !getMyCards().contains(c)) {
 				if (c.getCardType().equals(CardType.PERSON)) {
@@ -70,8 +79,10 @@ public class ComputerPlayer extends Player {
 			}
 		}
 		
+		// Creates a new random generator
 		Random randInt = new Random();
 		
+		// Sets the player's suggestion
 		this.suggestedPerson = peopleList.get(randInt.nextInt(peopleList.size())).getName();
 		this.suggestedWeapon = weaponList.get(randInt.nextInt(weaponList.size())).getName();
 		this.suggestedRoom = game.getBoard().getRooms().get(((RoomCell) getCurrentCell()).getInitial());

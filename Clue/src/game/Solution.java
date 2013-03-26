@@ -21,6 +21,8 @@ public class Solution {
 	public String getRoom() {
 		return room;
 	}
+	
+	// Used to compare two solutions
 	@Override
 	public boolean equals(Object compare) {
 		if(!(compare instanceof Solution)) {
