@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-
+@SuppressWarnings("serial")
 public class ClueGUI extends JFrame {
 	//constructor
 	public ClueGUI() {

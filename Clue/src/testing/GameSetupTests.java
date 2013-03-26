@@ -56,7 +56,7 @@ public class GameSetupTests {
 	// Tests that a file not found exception is thrown if the player file is missing
 	@Test (expected = FileNotFoundException.class)
 	public void testPlayerFileNotFound() throws FileNotFoundException {
-		ClueGame temp = new ClueGame("etc/PlayersFileNotThere.csv", "etc/dummyCardFile.csv", "etc/Board.csv", "etc/Legend.csv");
+		ClueGame temp = new ClueGame("etc/PlayersFileNotThere.csv", "etc/weaponsFile.dat", "etc/Board.csv", "etc/Legend.csv");
 		temp.loadPlayerFile();
 	}
 
@@ -93,7 +93,7 @@ public class GameSetupTests {
 	// Tests that a file not found exception is thrown if the card file is missing
 	@Test (expected = FileNotFoundException.class)
 	public void testCardFileNotFound() throws FileNotFoundException {
-		ClueGame temp = new ClueGame("etc/dummyPlayersFile.csv", "etc/CardFileNotThere.csv", "etc/Board.csv", "etc/Legend.csv");
+		ClueGame temp = new ClueGame("etc/playersFile.dat", "etc/CardFileNotThere.csv", "etc/Board.csv", "etc/Legend.csv");
 		temp.loadCardFile();
 	}
 	
@@ -115,7 +115,8 @@ public class GameSetupTests {
 		boolean colonelCardBool = false;
 		boolean ropeCardBool = false;
 		boolean ballroomCardBool = false;
-		
+
+		// Counted out the total number of cards dealt, and checked that certain cards are dealt out.
 		for (Player p : myGame.getPlayers()) {
 			int temp = p.getMyCards().size();
 			total += temp;
