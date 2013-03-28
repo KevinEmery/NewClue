@@ -19,6 +19,7 @@ public class Board extends JPanel {
 	
 	// This data structures are used to store all of the board information
 	private ArrayList<BoardCell> cells;
+	private ArrayList<Player> players;
 	private Map<Character, String> rooms;
 	private Set<BoardCell> targetList;
 	private Map<Integer, LinkedList<Integer>> adjList;
@@ -36,15 +37,22 @@ public class Board extends JPanel {
 	
 	// Default constructor that calls the parameterized constructor
 	public Board()	 {
-		this("etc/ClueLayout.csv", "etc/ClueLegend.txt");
+		this("etc/ClueLayout.csv", "etc/ClueLegend.txt", null);
 	}
-	// Parameterized constructor that sets a few basic variables.
+	
 	public Board(String boardConfigFile, String roomConfigFile) {
+		this(boardConfigFile, roomConfigFile, null);
+	}
+	
+	// Parameterized constructor that sets a few basic variables.
+	public Board(String boardConfigFile, String roomConfigFile, ArrayList<Player> players) {
 		this.boardConfigFile = boardConfigFile;
 		this.roomConfigFile = roomConfigFile;
 		this.rowCount = 0;
 		this.colCount = 0;
+		this.players = players;
 		loadConfigFiles();
+		calcAdjacencies();
 	}
 	
 	// Calculates the index given a row and column
@@ -272,17 +280,20 @@ public class Board extends JPanel {
 
 	// Draws the board cell by cell
 	public void paintComponent(Graphics g) {
-		int counter = 0;
 		for (BoardCell cell : cells) {
 			cell.draw(g, this);
-			counter++;
 		}
+		drawPlayers(g);
 	}
 	
-	public void drawPeople(Graphics g, ArrayList<Player> players) {
+	public void drawPlayers(Graphics g) {
 		for (Player p : players) {
 			p.draw(g);
 		}
+	}
+	
+	public void setPlayers(ArrayList<Player> players) {
+		this.players = players;
 	}
 	
 	// Returns a Room Cell at the given row and column

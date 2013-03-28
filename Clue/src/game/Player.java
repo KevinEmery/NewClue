@@ -81,7 +81,9 @@ public class Player {
 	
 	public void draw(Graphics g) {
 		g.setColor(color);
-		g.fillOval(location%25 + 3, location/25 + 3, 24, 24);
+		g.fillOval(location % 25 * ClueGame.CELL_WIDTH + 3, location / 25 * ClueGame.CELL_HEIGHT + 3, 24, 24);
+		g.setColor(Color.black);
+		g.drawOval(location % 25 * ClueGame.CELL_WIDTH + 3, location / 25 * ClueGame.CELL_HEIGHT + 3, 24, 24);
 	}
 	
 	

@@ -127,7 +127,7 @@ public class BoardInitTests {
 	public void testBadColumns() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file names
 		
-		Board b = new Board("etc/ClueLayoutBadColumns.csv", "etc/ClueLegend.txt");
+		Board b = new Board("etc/ClueLayoutBadColumns.csv", "etc/ClueLegend.txt", null);
 		
 		// You may change these calls if needed to match your function names
 		// My loadConfigFiles has a try/catch, so I can't call it directly to
@@ -140,7 +140,7 @@ public class BoardInitTests {
 	public void testBadRoom() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file name
 		
-		Board b = new Board("etc/ClueLayoutBadRoom.csv", "etc/ClueLegend.txt");
+		Board b = new Board("etc/ClueLayoutBadRoom.csv", "etc/ClueLegend.txt", null);
 		
 
 		b.loadRoomConfig();
@@ -152,7 +152,7 @@ public class BoardInitTests {
 		// overloaded Board ctor takes config file name
 		
 
-		Board b = new Board("etc/ClueLayout.csv", "etc/ClueLegendBadFormat.txt");
+		Board b = new Board("etc/ClueLayout.csv", "etc/ClueLegendBadFormat.txt", null);
 		b.loadRoomConfig();
 		b.loadBoardConfig();
 	}

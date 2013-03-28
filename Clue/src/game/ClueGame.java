@@ -30,33 +30,45 @@ public class ClueGame extends JFrame {
 	private Solution solution;
 	private int noWeapons;
 	
+	public final static int CELL_WIDTH = 30;
+	public final static int CELL_HEIGHT = 30;
+	
 	
 	// Default constructor which calls with some base values
 	public ClueGame() {
 		this("etc/personFile.dat", "etc/weaponsFile.dat", "etc/Board.csv", "etc/Legend.csv");
 	}
 	
-	// Parameterized constructor allowing us to set the files
+	// Parameterized constructor allowing us to set the files, and builds the GUI
 	public ClueGame(String playersFile, String weaponsFile, String boardFile, String boardConfigFile) {
 		this.playersFile = playersFile;
 		this.weaponsFile = weaponsFile;
-		//this.board = new Board(boardFile, boardConfigFile);
+		board = new Board(boardFile, boardConfigFile, null);
+		loadConfigFiles();
+		board.setPlayers(players);
+		
+		// Sets the standard window information
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue");
 		setSize(900, 900);
 		
+		// Instantiates a new file menu
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
 		
+		// Adds menu options to the file file menu
 		JMenuItem notesAction = new JMenuItem("Show Detective Notes");
-		JMenuItem exitAction = new JMenuItem("Exit");
-		
-		fileMenu.add(exitAction);
 		fileMenu.add(notesAction);
+		JMenuItem exitAction = new JMenuItem("Exit");
+		fileMenu.add(exitAction);	
 		
+		// Adds the file menu to the menu bar
 		menuBar.add(fileMenu);
 		
-		add(board = new Board(boardFile, boardConfigFile), BorderLayout.CENTER);
+		// Instantiates and adds the board
+		add(board, BorderLayout.CENTER);
+		
+		// Adds the menu bar
 		add(menuBar, BorderLayout.NORTH);
 		
 	}
@@ -90,9 +102,6 @@ public class ClueGame extends JFrame {
 	
 	// Loads all of the files associated with playing the game, including the board files
 	public void loadConfigFiles() {
-		// Loads the board files and calculates all of the adjacencies
-		// board.loadConfigFiles();
-		board.calcAdjacencies();
 		
 		// Initializes new arraylists
 		cards = new ArrayList<Card>();
@@ -268,6 +277,12 @@ public class ClueGame extends JFrame {
 	public ArrayList<Card> getOriginalDeck() {
 		return originalDeck;
 	}
+
+	
+	public static void main(String[] args) {
+		ClueGame game = new ClueGame();
+		game.setVisible(true);
+	}
 	
 	// EVERYTHING BELOW HERE IS FOR TESTING ONLY
 	// THESE SHOULD NEVER BE USED IN PRACTICE
@@ -286,9 +301,5 @@ public class ClueGame extends JFrame {
 		
 	}
 
-	public static void main(String[] args) {
-		ClueGame game = new ClueGame();
-		game.setVisible(true);
-	}
 
 }

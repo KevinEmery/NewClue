@@ -56,22 +56,22 @@ public class RoomCell extends BoardCell{
 	@Override
 	void draw(Graphics g, Board board) {
 		g.setColor(Color.gray);
-		g.fillRect(column * cellWidth, row * cellHeight, cellWidth, cellHeight);
+		g.fillRect(column * ClueGame.CELL_WIDTH, row * ClueGame.CELL_HEIGHT, ClueGame.CELL_WIDTH, ClueGame.CELL_HEIGHT);
 		
 		if (isDoorway()) {
 			g.setColor(Color.blue);
 			if (this.doorDirection == DoorDirection.LEFT) {
-				g.fillRect(column * cellWidth, row * cellHeight, cellWidth/5, cellHeight);
+				g.fillRect(column * ClueGame.CELL_WIDTH, row * ClueGame.CELL_HEIGHT, ClueGame.CELL_WIDTH/5, ClueGame.CELL_HEIGHT);
 			} else if (this.doorDirection == DoorDirection.UP) {
-				g.fillRect(column * cellWidth, row * cellHeight, cellWidth, cellHeight/5);
+				g.fillRect(column * ClueGame.CELL_WIDTH, row * ClueGame.CELL_HEIGHT, ClueGame.CELL_WIDTH, ClueGame.CELL_HEIGHT/5);
 			} else if (this.doorDirection == DoorDirection.RIGHT) {
-				g.fillRect((int) (column * cellWidth + cellWidth * 0.8), row * cellHeight, cellWidth/5, cellHeight);
+				g.fillRect((int) (column * ClueGame.CELL_WIDTH + ClueGame.CELL_WIDTH * 0.8), row * ClueGame.CELL_HEIGHT, ClueGame.CELL_WIDTH/5, ClueGame.CELL_HEIGHT);
 			} else if (this.doorDirection == DoorDirection.DOWN) {
-				g.fillRect(column * cellWidth, (int) (row * cellHeight + cellHeight * 0.8), cellWidth, cellHeight/5);
+				g.fillRect(column * ClueGame.CELL_WIDTH, (int) (row * ClueGame.CELL_HEIGHT + ClueGame.CELL_HEIGHT * 0.8), ClueGame.CELL_WIDTH, ClueGame.CELL_HEIGHT/5);
 			} 
 		} else if (this.doorDirection == DoorDirection.NAME) {
 			g.setColor(Color.blue);
-			g.drawString(board.getRooms().get(room), column * cellWidth, row * cellHeight - cellHeight/2);
+			g.drawString(board.getRooms().get(room), column * ClueGame.CELL_WIDTH, row * ClueGame.CELL_HEIGHT - ClueGame.CELL_HEIGHT/2);
 		}
 
 	}
