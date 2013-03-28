@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Graphics;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
@@ -10,9 +11,11 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 
+import javax.swing.JPanel;
+
 import game.RoomCell.DoorDirection;
 
-public class Board {
+public class Board extends JPanel {
 	
 	// This data structures are used to store all of the board information
 	private ArrayList<BoardCell> cells;
@@ -41,6 +44,7 @@ public class Board {
 		this.roomConfigFile = roomConfigFile;
 		this.rowCount = 0;
 		this.colCount = 0;
+		loadConfigFiles();
 	}
 	
 	// Calculates the index given a row and column
@@ -204,7 +208,7 @@ public class Board {
 		doorways = 0;
 		Scanner lines = new Scanner(new FileReader(boardConfigFile));
 		String next;
-		String doorString = "UDLR"; //fastest way to search
+		String doorString = "UDLRN"; //fastest way to search
 		int currentRow = -1;
 		
 		while(lines.hasNext()){
@@ -266,6 +270,21 @@ public class Board {
 		}
 	}
 
+	// Draws the board cell by cell
+	public void paintComponent(Graphics g) {
+		int counter = 0;
+		for (BoardCell cell : cells) {
+			cell.draw(g, this);
+			counter++;
+		}
+	}
+	
+	public void drawPeople(Graphics g, ArrayList<Player> players) {
+		for (Player p : players) {
+			p.draw(g);
+		}
+	}
+	
 	// Returns a Room Cell at the given row and column
 	public RoomCell getRoomCellAt(int row, int column){
 		return ((RoomCell)cells.get(calcIndex(row,column))) ; 

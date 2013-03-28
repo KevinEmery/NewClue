@@ -2,15 +2,25 @@ package game;
 
 import game.Card.CardType;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
-public class ClueGame {
+
+public class ClueGame extends JFrame {
+
+	
 	private ArrayList<Card> cards;
 	private ArrayList<Card> originalDeck;
 	private ArrayList<Player> players;
@@ -19,7 +29,6 @@ public class ClueGame {
 	private Board board;
 	private Solution solution;
 	private int noWeapons;
-	
 	
 	
 	// Default constructor which calls with some base values
@@ -31,7 +40,25 @@ public class ClueGame {
 	public ClueGame(String playersFile, String weaponsFile, String boardFile, String boardConfigFile) {
 		this.playersFile = playersFile;
 		this.weaponsFile = weaponsFile;
-		this.board = new Board(boardFile, boardConfigFile);		
+		//this.board = new Board(boardFile, boardConfigFile);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Clue");
+		setSize(900, 900);
+		
+		JMenuBar menuBar = new JMenuBar();
+		JMenu fileMenu = new JMenu("File");
+		
+		JMenuItem notesAction = new JMenuItem("Show Detective Notes");
+		JMenuItem exitAction = new JMenuItem("Exit");
+		
+		fileMenu.add(exitAction);
+		fileMenu.add(notesAction);
+		
+		menuBar.add(fileMenu);
+		
+		add(board = new Board(boardFile, boardConfigFile), BorderLayout.CENTER);
+		add(menuBar, BorderLayout.NORTH);
+		
 	}
 	
 	// Deals all of the cards in the deck to the players.
@@ -64,7 +91,7 @@ public class ClueGame {
 	// Loads all of the files associated with playing the game, including the board files
 	public void loadConfigFiles() {
 		// Loads the board files and calculates all of the adjacencies
-		board.loadConfigFiles();
+		// board.loadConfigFiles();
 		board.calcAdjacencies();
 		
 		// Initializes new arraylists
@@ -202,6 +229,9 @@ public class ClueGame {
 		return false;
 	}
 	
+	
+	
+	
 	// Used to convert color from a string to a java class
 	public Color convertColor(String strColor) {
 		Color color;
@@ -256,5 +286,9 @@ public class ClueGame {
 		
 	}
 
+	public static void main(String[] args) {
+		ClueGame game = new ClueGame();
+		game.setVisible(true);
+	}
 
 }

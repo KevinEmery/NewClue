@@ -1,10 +1,13 @@
 package game;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 public class RoomCell extends BoardCell{
 
 	private char room;
 	private DoorDirection doorDirection;
-	public enum DoorDirection {UP,DOWN,LEFT,RIGHT,NONE};
+	public enum DoorDirection {UP,DOWN,LEFT,RIGHT,NONE, NAME};
 	
 	public RoomCell(int row, int col, char room){
 		super(row, col);
@@ -22,6 +25,8 @@ public class RoomCell extends BoardCell{
 			this.doorDirection=DoorDirection.LEFT;
 		} else if(direction=='D') {
 			this.doorDirection=DoorDirection.DOWN;
+		} else if(direction=='N') {
+			this.doorDirection=DoorDirection.NAME;
 		}
 	}
 	
@@ -45,12 +50,29 @@ public class RoomCell extends BoardCell{
 	
 	@Override
 	public boolean isDoorway(){
-		return doorDirection != DoorDirection.NONE;
+		return doorDirection != DoorDirection.NONE && doorDirection != DoorDirection.NAME;
 	}
 	
 	@Override
-	void draw() {
-		// TODO Auto-generated method stub
+	void draw(Graphics g, Board board) {
+		g.setColor(Color.gray);
+		g.fillRect(column * cellWidth, row * cellHeight, cellWidth, cellHeight);
+		
+		if (isDoorway()) {
+			g.setColor(Color.blue);
+			if (this.doorDirection == DoorDirection.LEFT) {
+				g.fillRect(column * cellWidth, row * cellHeight, cellWidth/5, cellHeight);
+			} else if (this.doorDirection == DoorDirection.UP) {
+				g.fillRect(column * cellWidth, row * cellHeight, cellWidth, cellHeight/5);
+			} else if (this.doorDirection == DoorDirection.RIGHT) {
+				g.fillRect((int) (column * cellWidth + cellWidth * 0.8), row * cellHeight, cellWidth/5, cellHeight);
+			} else if (this.doorDirection == DoorDirection.DOWN) {
+				g.fillRect(column * cellWidth, (int) (row * cellHeight + cellHeight * 0.8), cellWidth, cellHeight/5);
+			} 
+		} else if (this.doorDirection == DoorDirection.NAME) {
+			g.setColor(Color.blue);
+			g.drawString(board.getRooms().get(room), column * cellWidth, row * cellHeight - cellHeight/2);
+		}
 
 	}
 }

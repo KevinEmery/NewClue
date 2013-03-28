@@ -1,12 +1,13 @@
 package game;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
 public class Player {
 	private String name;
 	private ArrayList<Card> myCards;
-	private int startLocation;
+	private int location;
 	private Color color;
 	private BoardCell currentCell;
 
@@ -19,7 +20,7 @@ public class Player {
 	// Creates a new player with the given parameters, and initializes their hand as a new, empty array list.
 	public Player(String name, int startLocation, Color color) {
 		this.name = name;
-		this.startLocation = startLocation;
+		this.location = startLocation;
 		this.color = color;
 		this.myCards = new ArrayList<Card>();
 	}
@@ -67,11 +68,20 @@ public class Player {
 		return color;
 	}
 	public int getStartingLocation() {
-		return startLocation;
+		return location;
 	}
+	public int getLocation() {
+		return location;
+	}
+	
 
 	public BoardCell getCurrentCell() {
 		return currentCell;
+	}
+	
+	public void draw(Graphics g) {
+		g.setColor(color);
+		g.fillOval(location%25 + 3, location/25 + 3, 24, 24);
 	}
 	
 	
