@@ -71,6 +71,11 @@ public class ClueGame extends JFrame {
 		// Adds the menu bar
 		add(menuBar, BorderLayout.NORTH);
 		
+		DetectiveNotes notes=new DetectiveNotes();
+		//need to alter this line to control whether the detective notes are seen
+		//I am leaving it on so I can see what I am doing
+		notes.setVisible(true);
+		
 	}
 	
 	// Deals all of the cards in the deck to the players.
