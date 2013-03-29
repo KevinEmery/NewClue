@@ -23,7 +23,7 @@ public class DetectiveNotes extends JFrame {
 		JComboBox WeaponsCombo=new JComboBox(weaponsList);
 		WeaponsCombo.setBorder( new TitledBorder(new EtchedBorder(),"Weapons Guess"));
 		JPanel Rooms=new JPanel();
-		People.setBorder( new TitledBorder(new EtchedBorder(),"Rooms"));
+		Rooms.setBorder( new TitledBorder(new EtchedBorder(),"Rooms"));
 		String[] roomList={"Unsure","Kitchen","Dining Room","Lounge","Ballroom","Conservatory","Hall","Study",
 				"Library","Billiard Room"};
 		JComboBox RoomsCombo=new JComboBox(roomList);
@@ -39,6 +39,7 @@ public class DetectiveNotes extends JFrame {
 		addWeapons(Weapons);
 		add(Weapons);
 		add(WeaponsCombo);
+		
 		addRooms(Rooms);
 		add(Rooms);
 		add(RoomsCombo);
