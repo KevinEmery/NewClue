@@ -2,6 +2,7 @@ package game;
 import java.awt.GridLayout;
 
 import javax.swing.*;
+import javax.swing.border.*;
 
 @SuppressWarnings("serial")
 public class DetectiveNotes extends JFrame {
@@ -11,16 +12,23 @@ public class DetectiveNotes extends JFrame {
 		setTitle("Detective Notes");
 		setSize(450, 650);
 		JPanel People=new JPanel();
+		People.setBorder( new TitledBorder(new EtchedBorder(),"People"));
 		String[] peopleList={ "Unsure","Ms. Scarlet","Colonel Mustard","Mr. Green","Ms. White",
 				"Professor Plum","Mrs. Peacock"};
 		JComboBox PeopleCombo=new JComboBox(peopleList);
+		PeopleCombo.setBorder( new TitledBorder(new EtchedBorder(),"People Guess"));
 		JPanel Weapons=new JPanel();
+		Weapons.setBorder( new TitledBorder(new EtchedBorder(),"Weapons"));
 		String[] weaponsList={"Unsure","Candlestick","Knife","Lead Pipe","Gun","Rope","Wrench"};
 		JComboBox WeaponsCombo=new JComboBox(weaponsList);
+		WeaponsCombo.setBorder( new TitledBorder(new EtchedBorder(),"Weapons Guess"));
 		JPanel Rooms=new JPanel();
+		People.setBorder( new TitledBorder(new EtchedBorder(),"Rooms"));
 		String[] roomList={"Unsure","Kitchen","Dining Room","Lounge","Ballroom","Conservatory","Hall","Study",
 				"Library","Billiard Room"};
 		JComboBox RoomsCombo=new JComboBox(roomList);
+		RoomsCombo.setBorder( new TitledBorder(new EtchedBorder(),"Rooms Guess"));
+
 		//Just to cut down on the clutter
 		//creates the Checkboxex
 		addPeople(People);
