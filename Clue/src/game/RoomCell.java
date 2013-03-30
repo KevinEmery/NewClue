@@ -53,6 +53,7 @@ public class RoomCell extends BoardCell{
 		return doorDirection != DoorDirection.NONE && doorDirection != DoorDirection.NAME;
 	}
 	
+	// Draws the room, the name of the room if the correct cell is selected, and the doorways.
 	@Override
 	void draw(Graphics g, Board board) {
 		g.setColor(Color.gray);

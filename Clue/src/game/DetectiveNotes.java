@@ -15,9 +15,8 @@ public class DetectiveNotes extends JFrame {
 	private ArrayList<String> roomList;
 	
 	public DetectiveNotes(ArrayList<Card> cards) {
-		// Sets the default characteristics of the JFrame
+		// Sets the standard window information		
 		this.setLayout(new GridLayout(0,2));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Detective Notes");
 		setSize(600, 700);
 		

@@ -19,7 +19,6 @@ import javax.swing.JMenuItem;
 
 
 public class ClueGame extends JFrame {
-
 	
 	private ArrayList<Card> cards;
 	private ArrayList<Card> originalDeck;
@@ -29,9 +28,19 @@ public class ClueGame extends JFrame {
 	private Board board;
 	private Solution solution;
 	private int noWeapons;
+	private DetectiveNotes detectiveNotes;
 	
 	public final static int CELL_WIDTH = 30;
 	public final static int CELL_HEIGHT = 30;
+	
+	
+	// Sets up a listener that opens the detective notes when activated
+	private class detectiveNotesListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			detectiveNotes.setVisible(true);
+		}
+	}
 	
 	
 	// Default constructor which calls with some base values
@@ -41,11 +50,17 @@ public class ClueGame extends JFrame {
 	
 	// Parameterized constructor allowing us to set the files, and builds the GUI
 	public ClueGame(String playersFile, String weaponsFile, String boardFile, String boardConfigFile) {
+		// Loads the board using the given config files
+		board = new Board(boardFile, boardConfigFile);
+		
+		// Sets the player and weapon file names, and loads those config files
 		this.playersFile = playersFile;
 		this.weaponsFile = weaponsFile;
-		board = new Board(boardFile, boardConfigFile);
 		loadConfigFiles();
 		board.setPlayers(players);
+		
+		// Sets up a new instance of detective notes
+		detectiveNotes = new DetectiveNotes(originalDeck);
 		
 		// Sets the standard window information
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,8 +71,9 @@ public class ClueGame extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
 		
-		// Adds menu options to the file file menu
+		// Adds menu options to the file menu
 		JMenuItem notesAction = new JMenuItem("Show Detective Notes");
+		notesAction.addActionListener(new detectiveNotesListener());
 		fileMenu.add(notesAction);
 		JMenuItem exitAction = new JMenuItem("Exit");
 		fileMenu.add(exitAction);	
@@ -69,13 +85,7 @@ public class ClueGame extends JFrame {
 		add(board, BorderLayout.CENTER);
 		
 		// Adds the menu bar
-		add(menuBar, BorderLayout.NORTH);
-		
-		DetectiveNotes notes=new DetectiveNotes(originalDeck);
-		//need to alter this line to control whether the detective notes are seen
-		//I am leaving it on so I can see what I am doing
-		notes.setVisible(true);
-		
+		add(menuBar, BorderLayout.NORTH);		
 	}
 	
 	// Deals all of the cards in the deck to the players.

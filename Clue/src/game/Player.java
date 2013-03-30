@@ -79,6 +79,8 @@ public class Player {
 		return currentCell;
 	}
 	
+	
+	// Draws a player using their given color with a black outline
 	public void draw(Graphics g) {
 		g.setColor(color);
 		g.fillOval(location % 25 * ClueGame.CELL_WIDTH + 3, location / 25 * ClueGame.CELL_HEIGHT + 3, 24, 24);
