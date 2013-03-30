@@ -43,7 +43,7 @@ public class ClueGame extends JFrame {
 	public ClueGame(String playersFile, String weaponsFile, String boardFile, String boardConfigFile) {
 		this.playersFile = playersFile;
 		this.weaponsFile = weaponsFile;
-		board = new Board(boardFile, boardConfigFile, null);
+		board = new Board(boardFile, boardConfigFile);
 		loadConfigFiles();
 		board.setPlayers(players);
 		
@@ -71,7 +71,7 @@ public class ClueGame extends JFrame {
 		// Adds the menu bar
 		add(menuBar, BorderLayout.NORTH);
 		
-		DetectiveNotes notes=new DetectiveNotes();
+		DetectiveNotes notes=new DetectiveNotes(originalDeck);
 		//need to alter this line to control whether the detective notes are seen
 		//I am leaving it on so I can see what I am doing
 		notes.setVisible(true);
