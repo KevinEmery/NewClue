@@ -1,6 +1,7 @@
 package game;
 
 import game.Card.CardType;
+import gui.ClueGUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -59,7 +60,7 @@ public class ClueGame extends JFrame {
 		this.weaponsFile = weaponsFile;
 		loadConfigFiles();
 		board.setPlayers(players);
-		
+		deal();
 		// Sets up a new instance of detective notes
 		detectiveNotes = new DetectiveNotes(originalDeck);
 		
@@ -67,6 +68,9 @@ public class ClueGame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue");
 		setSize(900, 900);
+		
+		
+		
 		
 		// Instantiates a new file menu
 		JMenuBar menuBar = new JMenuBar();
@@ -88,10 +92,17 @@ public class ClueGame extends JFrame {
 		// Adds the menu bar
 		add(menuBar, BorderLayout.NORTH);	
 		
-		// Adds the starting message
-		String message="You are Ms. Scarlet, press Next Player to begin play";
-		JOptionPane.showMessageDialog(null, message);
-	}
+		//creates the action menu
+		ClueGUI gui=new ClueGUI();
+		add(gui,BorderLayout.SOUTH);
+		
+		
+		// Creates a card Menu
+		CardMenu cardmenu=new CardMenu(players.get(0));
+		add(cardmenu, BorderLayout.EAST);
+		
+		
+		}
 	
 	// Deals all of the cards in the deck to the players.
 	public void deal() {
@@ -302,6 +313,10 @@ public class ClueGame extends JFrame {
 	public static void main(String[] args) {
 		ClueGame game = new ClueGame();
 		game.setVisible(true);
+		// Adds the starting message
+		String message="You are Ms. Scarlet, press Next Player to begin play";
+		JOptionPane.showMessageDialog(null, message);
+
 	}
 	
 	// EVERYTHING BELOW HERE IS FOR TESTING ONLY
@@ -320,6 +335,5 @@ public class ClueGame extends JFrame {
 		cards.remove(new Card(room, Card.CardType.ROOM));
 		
 	}
-
 
 }

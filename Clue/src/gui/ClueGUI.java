@@ -8,13 +8,13 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 @SuppressWarnings("serial")
-public class ClueGUI extends JFrame {
+public class ClueGUI extends JPanel{ //JFrame {
 	//constructor
 	public ClueGUI() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(new CluePanel(), BorderLayout.CENTER);
 		setSize(new Dimension(900, 200));
-		setTitle("Clue");
+		//setTitle("Clue");
 	}
 	//overall panel that contains everything. We add this in the constructor. 
 	//It uses a t-row 3-column grid layout.
@@ -41,6 +41,7 @@ public class ClueGUI extends JFrame {
 			setLayout(new GridLayout(0, 1));
 			add(new JLabel(textLabel));
 			textField = new JTextField(10);
+			textField.setEditable(false);
 			add(textField);
 		}
 	}
