@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 
 public class ClueGame extends JFrame {
@@ -85,7 +86,11 @@ public class ClueGame extends JFrame {
 		add(board, BorderLayout.CENTER);
 		
 		// Adds the menu bar
-		add(menuBar, BorderLayout.NORTH);		
+		add(menuBar, BorderLayout.NORTH);	
+		
+		// Adds the starting message
+		String message="You are Ms. Scarlet, press Next Player to begin play";
+		JOptionPane.showMessageDialog(null, message);
 	}
 	
 	// Deals all of the cards in the deck to the players.
