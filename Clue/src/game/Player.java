@@ -10,6 +10,7 @@ public class Player {
 	private int location;
 	private Color color;
 	private BoardCell currentCell;
+	public boolean endturn;
 
 	
 	// Default constructor, should never be used other than in testing 
@@ -93,6 +94,12 @@ public class Player {
 	// THESE SHOULD NEVER BE USED IN PRACTICE
 	public void setCurrentCell(BoardCell cell) {
 		this.currentCell = cell;
+	}
+
+	public void makeMove() {
+		this.makeMove();
+		endturn=true;
+		
 	}
 
 }

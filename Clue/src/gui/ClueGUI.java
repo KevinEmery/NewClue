@@ -1,14 +1,18 @@
 package gui;
+import game.ClueGame;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 @SuppressWarnings("serial")
-public class ClueGUI extends JPanel{ //JFrame {
+public class ClueGUI extends JPanel{
 	//constructor
 	public ClueGUI() {
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -24,6 +28,8 @@ public class ClueGUI extends JPanel{ //JFrame {
 		public CluePanel() {
 			nextPlayer = new JButton("Next player");
 			makeAccusation = new JButton("Make an accusation");
+			nextPlayer.addActionListener(new nextPlayerListener());
+			makeAccusation.addActionListener(new AccusationListener());
 			setLayout(new GridLayout(2, 3));
 			add(new TextInputFrame("Whose turn?"));
 			add(nextPlayer);
@@ -44,6 +50,9 @@ public class ClueGUI extends JPanel{ //JFrame {
 			textField.setEditable(false);
 			add(textField);
 		}
+		public void updatePlayer(String name){
+			textField.setText(name);
+		}
 	}
 	//numberdisplayPanel is a class where you have a bordered grid with a label 
 	//and below it a label and an output box that can't be written to. 
@@ -58,8 +67,22 @@ public class ClueGUI extends JPanel{ //JFrame {
 			add(label);
 			add(number);
 		}
-		
+
 	}
+	private class nextPlayerListener implements ActionListener	{
+		public void actionPerformed(ActionEvent e){
+			ClueGame.nextPlayer();
+		}
+	}
+
+	private class AccusationListener implements ActionListener	{
+
+		public void actionPerformed(ActionEvent e){
+			//to finish later
+			System.out.println("Accuation");
+		}
+	}
+	
 	public static void main(String[] args) {
 		ClueGUI gui = new ClueGUI();
 		gui.setVisible(true);
