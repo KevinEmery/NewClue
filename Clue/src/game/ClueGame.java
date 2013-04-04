@@ -61,6 +61,7 @@ public class ClueGame extends JFrame {
 		loadConfigFiles();
 		board.setPlayers(players);
 		deal();
+		selectAnswer();
 		// Sets up a new instance of detective notes
 		detectiveNotes = new DetectiveNotes(originalDeck);
 		
@@ -245,6 +246,7 @@ public class ClueGame extends JFrame {
 		
 		// Sets the solution
 		solution = new Solution(player, weaponName, roomName);
+		//System.out.println(solution.getPerson()+" "+solution.getWeapon()+" "+solution.getRoom());
 	}
 	
 	// When a player mkes a suggestion, this function makes calls to different players and sees if they can disprove it.
