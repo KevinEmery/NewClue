@@ -60,7 +60,9 @@ public class ClueGame extends JFrame {
 		this.weaponsFile = weaponsFile;
 		loadConfigFiles();
 		board.setPlayers(players);
+		selectAnswer();
 		deal();
+
 		// Sets up a new instance of detective notes
 		detectiveNotes = new DetectiveNotes(originalDeck);
 		
@@ -213,38 +215,37 @@ public class ClueGame extends JFrame {
 	public void selectAnswer() {
 		Random randInt = new Random();
 		
-		// Sets the random numbers for the room and weapon
-		int roomNumber = randInt.nextInt(9);
-		int weaponNumber = randInt.nextInt(noWeapons);
-		int currentWeapon=0, currentRoom=0;
-		String weaponName="", roomName="", player="";
+		ArrayList<Card> weapons = new ArrayList<Card>();
+		ArrayList<Card> rooms = new ArrayList<Card>();
 		
-		// Iterates through and pulls out that weapon and room
+		// Sets the random numbers for the room and weapon
+		String weapon="", room="", player="";
+		
+		// Iterates through sorts the weapons and rooms into their own lists
 		for(Card card: cards) {
 			if(card.getCardType().equals(Card.CardType.WEAPON)) {
-				++currentWeapon;
-				if(currentWeapon == weaponNumber) {
-					weaponName = card.getName();
-					cards.remove(card);
-				}
-				
+				weapons.add(card);	
 			}
-			if(card.getCardType().equals(Card.CardType.ROOM)) {
-				if(currentRoom == roomNumber) {
-					roomName = card.getName();
-					cards.remove(card);	
-				}
-				++currentRoom;
+			else if(card.getCardType().equals(Card.CardType.ROOM)) {
+				rooms.add(card);
 			}
 			
 		}
+		
+		// Selects a random weapon and removes it
+		room = rooms.get(randInt.nextInt(rooms.size())).getName();
+		cards.remove(new Card(room, Card.CardType.ROOM));		
+		
+		// Selects a random weapon and removes it
+		weapon = weapons.get(randInt.nextInt(weapons.size())).getName();
+		cards.remove(new Card(weapon, Card.CardType.WEAPON));		
 		
 		// Selects a random player, and removes them
 		player = players.get(randInt.nextInt(players.size())).getName();
 		cards.remove(new Card(player, Card.CardType.PERSON));
 		
 		// Sets the solution
-		solution = new Solution(player, weaponName, roomName);
+		solution = new Solution(player, weapon, room);
 	}
 	
 	// When a player mkes a suggestion, this function makes calls to different players and sees if they can disprove it.
