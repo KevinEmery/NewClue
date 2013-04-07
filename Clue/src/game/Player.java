@@ -97,7 +97,6 @@ public class Player {
 	}
 
 	public void makeMove() {
-		this.makeMove();
 		endturn=true;
 		
 	}

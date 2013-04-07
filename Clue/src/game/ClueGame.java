@@ -322,11 +322,11 @@ public class ClueGame extends JFrame {
 	public static void nextPlayer(){
 		if(firstTurn){playerIndex=0; players.get(playerIndex).makeMove(); firstTurn=false;}
 		else{
-			if(players.get(playerIndex).endturn){
-				players.get(playerIndex).endturn=false;
-				playerIndex=playerIndex++;
-				playerIndex=playerIndex%6;
-				System.out.println(players.get(playerIndex).getName());
+			if(players.get(playerIndex).endturn){	//if a players turn is ended
+				playerIndex++;			//it moves to the next player
+				if(playerIndex==6){playerIndex=0;}	//loops back around
+				System.out.println(playerIndex+" "+players.get(playerIndex).getName());
+				players.get(playerIndex).makeMove();
 			}else{String message="You are not done with your turn";
 				JOptionPane.showMessageDialog(null, message);
 			}
