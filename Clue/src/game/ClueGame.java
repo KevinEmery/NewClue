@@ -18,6 +18,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import gui.ClueGUI;
 
 
 public class ClueGame extends JFrame {
@@ -27,7 +28,7 @@ public class ClueGame extends JFrame {
 	private static ArrayList<Player> players;
 	private String playersFile;
 	private String weaponsFile;
-	private Board board;
+	private static Board board;
 	private Solution solution;
 	private int noWeapons;
 	private DetectiveNotes detectiveNotes;
@@ -320,13 +321,24 @@ public class ClueGame extends JFrame {
 	}
 
 	public static void nextPlayer(){
-		if(firstTurn){playerIndex=0; players.get(playerIndex).makeMove(); firstTurn=false;}
-		else{
+		Random r=new Random();
+		if(firstTurn){				//first turn done by Mrs. Scarlet
+		
+			playerIndex=0; 
+			int dieRoll=r.nextInt(6)+1;	//makes a dieroll from 1 to 6
+			ClueGUI.TextInputFrame.updatePlayer(players.get(playerIndex).getName());
+			ClueGUI.NumberDisplayPanel.updateRoll(dieRoll);
+			players.get(playerIndex).makeMove(board,dieRoll);
+			
+			firstTurn=false;}
+		else{										//all other turns following
 			if(players.get(playerIndex).endturn){	//if a players turn is ended
-				playerIndex++;			//it moves to the next player
+				playerIndex++;						//it moves to the next player
 				if(playerIndex==6){playerIndex=0;}	//loops back around
-				System.out.println(playerIndex+" "+players.get(playerIndex).getName());
-				players.get(playerIndex).makeMove();
+				ClueGUI.TextInputFrame.updatePlayer(players.get(playerIndex).getName());
+				int dieRoll=r.nextInt(6)+1;	//makes a dieroll from 1 to 6
+				ClueGUI.NumberDisplayPanel.updateRoll(dieRoll);
+				players.get(playerIndex).makeMove(board,dieRoll);
 			}else{String message="You are not done with your turn";
 				JOptionPane.showMessageDialog(null, message);
 			}

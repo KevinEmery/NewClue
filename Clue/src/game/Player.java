@@ -96,9 +96,11 @@ public class Player {
 		this.currentCell = cell;
 	}
 
-	public void makeMove() {
+	public void makeMove(Board board, int dieRoll) {
 		endturn=true;
 		
 	}
+
+	
 
 }

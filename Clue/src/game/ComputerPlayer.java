@@ -109,6 +109,14 @@ public class ComputerPlayer extends Player {
 	public String getSuggestedWeapon() {
 		return suggestedWeapon;
 	}
+	@Override
+	public void makeMove(Board board, int dieRoll){
+		endturn=true;
+		//Set<BoardCell> targets = board.getTargets();
+		//BoardCell bc= pickLocation(targets);
+		
+		
+	}
 
 	// EVERYTHING BELOW HERE IS FOR TESTING ONLY
 	// THESE SHOULD NEVER BE USED IN PRACTICE
