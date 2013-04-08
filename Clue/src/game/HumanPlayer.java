@@ -16,5 +16,11 @@ public class HumanPlayer extends Player {
 	public boolean isHumanPlayer() {
 		return true;
 	}
-
+	@Override
+	public void makeMove(Board board, int dieRoll){
+		endturn=false;
+		//stuff to add
+		
+		endturn=true;
+	}
 }

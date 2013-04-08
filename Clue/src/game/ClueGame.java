@@ -18,7 +18,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import gui.ClueGUI;
 
 
 public class ClueGame extends JFrame {
@@ -323,13 +322,11 @@ public class ClueGame extends JFrame {
 	public static void nextPlayer(){
 		Random r=new Random();
 		if(firstTurn){				//first turn done by Mrs. Scarlet
-		
 			playerIndex=0; 
 			int dieRoll=r.nextInt(6)+1;	//makes a dieroll from 1 to 6
 			ClueGUI.TextInputFrame.updatePlayer(players.get(playerIndex).getName());
 			ClueGUI.NumberDisplayPanel.updateRoll(dieRoll);
 			players.get(playerIndex).makeMove(board,dieRoll);
-			
 			firstTurn=false;}
 		else{										//all other turns following
 			if(players.get(playerIndex).endturn){	//if a players turn is ended

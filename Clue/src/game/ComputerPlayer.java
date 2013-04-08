@@ -112,8 +112,7 @@ public class ComputerPlayer extends Player {
 	@Override
 	public void makeMove(Board board, int dieRoll){
 		endturn=true;
-		//Set<BoardCell> targets = board.getTargets();
-		//BoardCell bc= pickLocation(targets);
+		
 		
 		
 	}
