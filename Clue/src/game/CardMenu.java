@@ -20,12 +20,15 @@ public class CardMenu extends JPanel {
 		JPanel rooms=new JPanel();
 		rooms.setBorder( new TitledBorder(new EtchedBorder(), "Rooms"));
 		
-		for(Card c:p.getMyCards()){
-			if (c.getCardType()==CardType.PERSON){
-				people.add(new JTextField(c.getName()));
-			}else if(c.getCardType()==CardType.WEAPON){
-				weapons.add(new JTextField(c.getName()));
-			}else{rooms.add(new JTextField(c.getName()));}
+		for(Card c : p.getMyCards()) {
+			JTextField textField = new JTextField(c.getName());
+			textField.setEditable(false);
+			if (c.getCardType()==CardType.PERSON)
+				people.add(textField);
+			else if (c.getCardType()==CardType.WEAPON)
+				weapons.add(textField);
+			else 
+				rooms.add(textField);
 			add(people);
 			add(weapons);
 			add(rooms);

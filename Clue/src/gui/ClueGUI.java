@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.Caret;
 
 @SuppressWarnings("serial")
 public class ClueGUI extends JPanel{
@@ -20,7 +19,7 @@ public class ClueGUI extends JPanel{
 
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(new CluePanel(), BorderLayout.CENTER);
-		setSize(new Dimension(900, 200));
+		setSize(1000, 200);
 		//setTitle("Clue");
 	}
 	//overall panel that contains everything. We add this in the constructor. 
@@ -30,6 +29,7 @@ public class ClueGUI extends JPanel{
 		private JButton makeAccusation;
 		
 		public CluePanel() {
+			
 			nextPlayer = new JButton("Next player");
 			makeAccusation = new JButton("Make an accusation");
 			nextPlayer.addActionListener(new nextPlayerListener());
@@ -102,7 +102,9 @@ public class ClueGUI extends JPanel{
 			number.setEditable(false);
 			add(label);
 			add(number);
-		}public static void updateRoll(int dieRoll){
+		}
+		
+		public static void updateRoll(int dieRoll){
 			number.setText(Integer.toString(dieRoll));
 		}
 

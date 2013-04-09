@@ -31,7 +31,7 @@ public class ClueGame extends JFrame {
 	private Solution solution;
 	private int noWeapons;
 	private DetectiveNotes detectiveNotes;
-	private static boolean firstTurn=true;
+	private static boolean firstTurn = true;
 	private static int playerIndex;
 
 	public final static int CELL_WIDTH = 30;
@@ -71,7 +71,7 @@ public class ClueGame extends JFrame {
 		// Sets the standard window information
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue");
-		setSize(900, 900);
+		setSize(1000, 1000);
 
 
 
