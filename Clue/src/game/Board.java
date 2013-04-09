@@ -1,6 +1,8 @@
 package game;
 
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
@@ -15,7 +17,7 @@ import javax.swing.JPanel;
 
 import game.RoomCell.DoorDirection;
 
-public class Board extends JPanel {
+public class Board extends JPanel implements MouseListener {
 	
 	// This data structures are used to store all of the board information
 	private ArrayList<BoardCell> cells;
@@ -23,6 +25,9 @@ public class Board extends JPanel {
 	private Map<Character, String> rooms;
 	private Set<BoardCell> targetList;
 	private Map<Integer, LinkedList<Integer>> adjList;
+	private int mouseX;
+	private int mouseY;
+
 	
 	// The board dimensions, as set by the loadBoardConfig() function, are placed here
 	int rowCount;
@@ -53,6 +58,7 @@ public class Board extends JPanel {
 		this.players = players;
 		loadConfigFiles();
 		calcAdjacencies();
+		addMouseListener(this);
 	}
 	
 	// Calculates the index given a row and column
@@ -333,8 +339,38 @@ public class Board extends JPanel {
 		return rowCount;
 	}
 
-	
 	public int getDoorways() {
 		return doorways;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		mouseX=e.getX();
+		mouseY=e.getY();
+		((HumanPlayer)players.get(0)).checkValidity(mouseX, mouseY, this);
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

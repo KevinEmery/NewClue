@@ -7,9 +7,9 @@ import java.util.Random;
 public class Player {
 	private String name;
 	private ArrayList<Card> myCards;
-	private int location;
+	protected int location;
 	private Color color;
-	private BoardCell currentCell;
+	protected BoardCell currentCell;
 	public boolean endturn;
 
 	
@@ -22,6 +22,7 @@ public class Player {
 	public Player(String name, int startLocation, Color color) {
 		this.name = name;
 		this.location = startLocation;
+		this.currentCell = new WalkwayCell(location%25, location/25);
 		this.color = color;
 		this.myCards = new ArrayList<Card>();
 	}
@@ -98,7 +99,6 @@ public class Player {
 
 	public void makeMove(Board board, int dieRoll) {
 		endturn=true;
-		
 	}
 
 	

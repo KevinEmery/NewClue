@@ -112,9 +112,13 @@ public class ComputerPlayer extends Player {
 	@Override
 	public void makeMove(Board board, int dieRoll){
 		endturn=true;
-		
-		
-		
+		board.startTargets(location, dieRoll);
+		currentCell= pickLocation(board.getTargets());
+		location=board.calcIndex(currentCell.row, currentCell.column);
+		if(currentCell.isRoom()){
+			lastRoomVisited=((RoomCell)currentCell).getInitial();
+		}
+		board.repaint();
 	}
 
 	// EVERYTHING BELOW HERE IS FOR TESTING ONLY

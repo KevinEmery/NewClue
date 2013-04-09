@@ -38,6 +38,7 @@ public class ClueGame extends JFrame {
 	public final static int CELL_HEIGHT = 30;
 
 
+
 	// Sets up a listener that opens the detective notes when activated
 	private class detectiveNotesListener implements ActionListener {
 		@Override
@@ -333,10 +334,12 @@ public class ClueGame extends JFrame {
 				playerIndex++;						//it moves to the next player
 				if(playerIndex==6){playerIndex=0;}	//loops back around
 				ClueGUI.TextInputFrame.updatePlayer(players.get(playerIndex).getName());
-				int dieRoll=r.nextInt(6)+1;	//makes a dieroll from 1 to 6
+				int dieRoll=r.nextInt(6)+1;			//makes a dieroll from 1 to 6
 				ClueGUI.NumberDisplayPanel.updateRoll(dieRoll);
 				players.get(playerIndex).makeMove(board,dieRoll);
-			}else{String message="You are not done with your turn";
+				
+			}else{
+				String message="You are not done with your turn";
 				JOptionPane.showMessageDialog(null, message);
 			}
 		}

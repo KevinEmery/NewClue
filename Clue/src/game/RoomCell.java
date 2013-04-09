@@ -55,8 +55,12 @@ public class RoomCell extends BoardCell{
 	
 	// Draws the room, the name of the room if the correct cell is selected, and the doorways.
 	@Override
-	void draw(Graphics g, Board board) {
-		g.setColor(Color.gray);
+	public void draw(Graphics g, Board board) {
+		if (drawingPossible) {
+			g.setColor(Color.cyan);
+		} else {
+			g.setColor(Color.gray);
+		}
 		g.fillRect(column * ClueGame.CELL_WIDTH, row * ClueGame.CELL_HEIGHT, ClueGame.CELL_WIDTH, ClueGame.CELL_HEIGHT);
 		
 		if (isDoorway()) {
