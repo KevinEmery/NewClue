@@ -1,7 +1,9 @@
 package game;
 
 import game.Card.CardType;
+import game.AccusationPanel;
 import gui.ClueGUI;
+
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -28,11 +30,14 @@ public class ClueGame extends JFrame {
 	private String playersFile;
 	private String weaponsFile;
 	private static Board board;
-	private Solution solution;
+	private static Solution solution;
 	private int noWeapons;
 	private DetectiveNotes detectiveNotes;
+	private static AccusationPanel ac;
 	private static boolean firstTurn = true;
 	private static int playerIndex;
+
+
 
 	public final static int CELL_WIDTH = 30;
 	public final static int CELL_HEIGHT = 30;
@@ -45,6 +50,14 @@ public class ClueGame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			detectiveNotes.setVisible(true);
 		}
+	}
+	private class exitListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			System.exit(0);
+		}
+
 	}
 
 
@@ -86,7 +99,12 @@ public class ClueGame extends JFrame {
 		notesAction.addActionListener(new detectiveNotesListener());
 		fileMenu.add(notesAction);
 		JMenuItem exitAction = new JMenuItem("Exit");
+		exitAction.addActionListener(new exitListener());
 		fileMenu.add(exitAction);	
+
+		//adds an accusation pop-up
+		ac=new AccusationPanel(originalDeck);
+
 
 		// Adds the file menu to the menu bar
 		menuBar.add(fileMenu);
@@ -267,12 +285,50 @@ public class ClueGame extends JFrame {
 	}
 
 	// Checks to see if an accusation is correct or not
-	public boolean checkAccusation(Solution solution) {
-		if(this.solution.equals(solution))
-			return true;
+	public static boolean checkAccusation(Solution solution) {
+		if(getSolution().equals(solution)){
+			return true;}
 		return false;
 	}
+	private static Object getSolution() {
+		return solution;
+	}
 
+	public static void checkAccusationHandler(Solution solution) {
+		String message;
+		if(!players.get(playerIndex).isCanMakeAccusation()){
+			ac.setVisible(false);
+			message="You can only make one Accusation per turn";
+			JOptionPane.showMessageDialog(null, message);
+		}else{	
+			players.get(playerIndex).setCanMakeSuggestion(false);
+			if(playerIndex==0){
+				if(checkAccusation(solution)){
+					message="That is Correct";
+					JOptionPane.showMessageDialog(null, message);
+					System.exit(0);
+				}else{
+					message="That is not Correct";
+					JOptionPane.showMessageDialog(null, message);
+				}
+			}else{
+
+				if(checkAccusation(solution)){
+					message ="Computer Player "+players.get(playerIndex).getName()+
+							" Accused "+solution.getPerson()+" of using "+solution.getWeapon()+
+							" in the "+solution.getRoom()+" and was correct";
+					JOptionPane.showMessageDialog(null, message);
+					System.exit(0);
+				}else{
+					message ="Computer Player "+players.get(playerIndex).getName()+
+							" Accused "+solution.getPerson()+" of using "+solution.getWeapon()+
+							" in the "+solution.getRoom()+" and was incorrect";
+					JOptionPane.showMessageDialog(null, message);
+				}
+				
+			}
+		}
+	}
 	// Used to convert color from a string to a java class
 	public Color convertColor(String strColor) {
 		Color color;
@@ -310,7 +366,6 @@ public class ClueGame extends JFrame {
 		return originalDeck;
 	}
 
-
 	public static void main(String[] args) {
 		ClueGame game = new ClueGame();
 		game.setVisible(true);
@@ -337,7 +392,7 @@ public class ClueGame extends JFrame {
 				int dieRoll=r.nextInt(6)+1;			//makes a dieroll from 1 to 6
 				ClueGUI.NumberDisplayPanel.updateRoll(dieRoll);
 				players.get(playerIndex).makeMove(board,dieRoll);
-				
+
 			}else{
 				String message="You are not done with your turn";
 				JOptionPane.showMessageDialog(null, message);
@@ -361,5 +416,16 @@ public class ClueGame extends JFrame {
 		cards.remove(new Card(room, Card.CardType.ROOM));
 
 	}
+
+	public static void makeAccusation() {
+		if(playerIndex==0&&players.get(0).isCanMakeAccusation()){
+			ac.setVisible(true);
+		}else{
+			String message="You cannot make an accusation on another players turn.";
+			JOptionPane.showMessageDialog(null, message);
+		}
+
+	}
+
 
 }

@@ -26,6 +26,7 @@ public class HumanPlayer extends Player {
 	}
 	@Override
 	public void makeMove(Board board, int dieRoll){
+		canMakeAccusation=true;
 		endturn=false;
 		board.startTargets(location, dieRoll);
 		possibleTargets = board.getTargets();

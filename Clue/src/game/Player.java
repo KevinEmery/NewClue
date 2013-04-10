@@ -11,7 +11,7 @@ public class Player {
 	private Color color;
 	protected BoardCell currentCell;
 	public boolean endturn;
-
+	protected boolean canMakeAccusation=true;
 	
 	// Default constructor, should never be used other than in testing 
 	public Player() {
@@ -100,6 +100,17 @@ public class Player {
 	public void makeMove(Board board, int dieRoll) {
 		endturn=true;
 	}
+
+	public boolean isCanMakeAccusation() {
+		return canMakeAccusation;
+	}
+
+	public void setCanMakeSuggestion(boolean b) {
+		canMakeAccusation=b;
+		
+	}
+
+	
 
 	
 

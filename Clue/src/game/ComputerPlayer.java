@@ -14,6 +14,8 @@ public class ComputerPlayer extends Player {
 	private String suggestedRoom;
 	private String suggestedPerson;
 	private String suggestedWeapon;
+	private boolean haveAccusation;
+	private Solution accusationSolution;
 	
 
 
@@ -112,11 +114,18 @@ public class ComputerPlayer extends Player {
 	@Override
 	public void makeMove(Board board, int dieRoll){
 		endturn=true;
+		canMakeAccusation=true;
 		board.startTargets(location, dieRoll);
 		currentCell= pickLocation(board.getTargets());
 		location=board.calcIndex(currentCell.row, currentCell.column);
+		if(haveAccusation){
+			ClueGame.checkAccusationHandler(accusationSolution);
+		}
 		if(currentCell.isRoom()){
 			lastRoomVisited=((RoomCell)currentCell).getInitial();
+		}
+		if(haveAccusation){
+			ClueGame.checkAccusationHandler(accusationSolution);
 		}
 		board.repaint();
 	}

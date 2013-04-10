@@ -2,7 +2,6 @@ package gui;
 import game.ClueGame;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -116,10 +115,8 @@ public class ClueGUI extends JPanel{
 	}
 
 	private class AccusationListener implements ActionListener	{
-
 		public void actionPerformed(ActionEvent e){
-			//to finish later
-			System.out.println("Accuation");
+			ClueGame.makeAccusation();
 		}
 	}
 
