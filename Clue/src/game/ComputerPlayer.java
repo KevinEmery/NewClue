@@ -16,20 +16,26 @@ public class ComputerPlayer extends Player {
 	private String suggestedWeapon;
 	private boolean haveAccusation;
 	private Solution accusationSolution;
+	private ClueGame game;
 	
-
 
 	// Creates a default computer player. In practice this should never be used.
 	public ComputerPlayer() {
-		this("Mrs. Peacock", 0, Color.blue);
+		this("Mrs. Peacock", 0, Color.blue, new ClueGame());
+	}
+	
+	public ComputerPlayer(String name, int startLocation, Color color) {
+		this(name, startLocation, color, new ClueGame());
 	}
 	
 	// Creates a computer player with the given parameters. These will all be read out of a file
-	public ComputerPlayer(String name, int startLocation, Color color) {
+	public ComputerPlayer(String name, int startLocation, Color color, ClueGame game) {
 		super(name, startLocation, color);
 		lastRoomVisited = ' ';
 		cardsSeen = new ArrayList<Card>();
+		this.game = game;
 	}
+
 
 	// Used for finding a computer player in the array list
 	@Override
@@ -118,15 +124,15 @@ public class ComputerPlayer extends Player {
 		board.startTargets(location, dieRoll);
 		currentCell= pickLocation(board.getTargets());
 		location=board.calcIndex(currentCell.row, currentCell.column);
-		if(haveAccusation){
-			ClueGame.checkAccusationHandler(accusationSolution);
-		}
 		if(currentCell.isRoom()){
 			lastRoomVisited=((RoomCell)currentCell).getInitial();
 		}
 		if(haveAccusation){
-			ClueGame.checkAccusationHandler(accusationSolution);
+			game.checkAccusationHandler(accusationSolution);
 		}
+		/*if(haveAccusation){
+			game.checkAccusationHandler(accusationSolution);
+		}*/
 		board.repaint();
 	}
 

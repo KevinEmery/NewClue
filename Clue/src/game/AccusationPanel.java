@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
@@ -26,8 +27,10 @@ public class AccusationPanel extends JFrame{
 	JComboBox PersonCombo;
 	JComboBox WeaponCombo;
 	JComboBox RoomCombo;
-	AccusationPanel(ArrayList<Card> cards){
-		setSize(600, 350);
+	ClueGame game;
+	AccusationPanel(ClueGame game){
+		this.game = game;
+		setSize(300, 250);
 		// Initialize the lists
 		playerList = new ArrayList<String>();
 		weaponList = new ArrayList<String>();
@@ -38,7 +41,7 @@ public class AccusationPanel extends JFrame{
 		JButton cancelbutton=new JButton("Cancel");
 		submitbutton.addActionListener(new submitListener());
 		cancelbutton.addActionListener(new cancelListener());
-		for (Card card : cards) {
+		for (Card card : game.getOriginalDeck()) {
 			if (card.getCardType() == CardType.PERSON) 
 				playerList.add(card.getName());
 			else if (card.getCardType() == CardType.WEAPON)
@@ -47,23 +50,24 @@ public class AccusationPanel extends JFrame{
 				roomList.add(card.getName());
 		}
 		ComboListener listener=new ComboListener();
-		JPanel person=new JPanel();
-		person.setBorder( new TitledBorder(new EtchedBorder(), "Person"));
+		
+		JLabel person=new JLabel();
+		person.setText("Person");
 		PersonCombo = new JComboBox(playerList.toArray());
 		PersonCombo.addActionListener(listener);
-		PersonCombo.setBorder( new TitledBorder(new EtchedBorder(),"Person Guess"));
+		//PersonCombo.setBorder( new TitledBorder(new EtchedBorder(),"Person Guess"));
 
-		JPanel weapon=new JPanel();
-		weapon.setBorder( new TitledBorder(new EtchedBorder(), "Weapon"));
+		JLabel weapon=new JLabel();
+		weapon.setText("Weapon");
 		WeaponCombo = new JComboBox(weaponList.toArray());
 		WeaponCombo.addActionListener(listener);
-		WeaponCombo.setBorder( new TitledBorder(new EtchedBorder(),"Weapon Guess"));
+		//WeaponCombo.setBorder( new TitledBorder(new EtchedBorder(),"Weapon Guess"));
 
-		JPanel room=new JPanel();
-		room.setBorder( new TitledBorder(new EtchedBorder(), "Room"));
+		JLabel room=new JLabel();
+		room.setText("Room");
 		RoomCombo = new JComboBox(roomList.toArray());
 		RoomCombo.addActionListener(listener);
-		RoomCombo.setBorder( new TitledBorder(new EtchedBorder(),"Room Guess"));
+		//RoomCombo.setBorder( new TitledBorder(new EtchedBorder(),"Room Guess"));
 
 		add(person);
 		add(PersonCombo);
@@ -92,7 +96,7 @@ public class AccusationPanel extends JFrame{
 	private class submitListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			ClueGame.checkAccusationHandler(new Solution(personChoice, weaponChoice, roomChoice));
+			game.checkAccusationHandler(new Solution(personChoice, weaponChoice, roomChoice));
 		}
 	}
 	private class cancelListener implements ActionListener{

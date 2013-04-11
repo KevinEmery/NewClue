@@ -13,8 +13,12 @@ import javax.swing.border.TitledBorder;
 @SuppressWarnings("serial")
 public class ClueGUI extends JPanel{
 	
+	ClueGame game;
+	
 	//constructor
-	public ClueGUI() {
+	public ClueGUI(ClueGame game) {
+		
+		this.game = game;
 
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(new CluePanel(), BorderLayout.CENTER);
@@ -110,18 +114,13 @@ public class ClueGUI extends JPanel{
 	}
 	private class nextPlayerListener implements ActionListener	{
 		public void actionPerformed(ActionEvent e){
-			ClueGame.nextPlayer();
+			game.nextPlayer();
 		}
 	}
 
 	private class AccusationListener implements ActionListener	{
 		public void actionPerformed(ActionEvent e){
-			ClueGame.makeAccusation();
+			game.makeAccusation();
 		}
-	}
-
-	public static void main(String[] args) {
-		ClueGUI gui = new ClueGUI();
-		gui.setVisible(true);
 	}
 }

@@ -11,7 +11,7 @@ public class Player {
 	private Color color;
 	protected BoardCell currentCell;
 	public boolean endturn;
-	protected boolean canMakeAccusation=true;
+	protected boolean canMakeAccusation = true;
 	
 	// Default constructor, should never be used other than in testing 
 	public Player() {
@@ -105,7 +105,7 @@ public class Player {
 		return canMakeAccusation;
 	}
 
-	public void setCanMakeSuggestion(boolean b) {
+	public void setCanMakeAccusation(boolean b) {
 		canMakeAccusation=b;
 		
 	}

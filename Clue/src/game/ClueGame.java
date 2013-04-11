@@ -26,16 +26,16 @@ public class ClueGame extends JFrame {
 
 	private ArrayList<Card> cards;
 	private ArrayList<Card> originalDeck;
-	private static ArrayList<Player> players;
+	private ArrayList<Player> players;
 	private String playersFile;
 	private String weaponsFile;
-	private static Board board;
-	private static Solution solution;
+	private Board board;
+	private Solution solution;
 	private int noWeapons;
 	private DetectiveNotes detectiveNotes;
-	private static AccusationPanel ac;
-	private static boolean firstTurn = true;
-	private static int playerIndex;
+	private AccusationPanel ac;
+	private boolean firstTurn = true;
+	private int playerIndex;
 
 
 
@@ -87,9 +87,6 @@ public class ClueGame extends JFrame {
 		setTitle("Clue");
 		setSize(1000, 1000);
 
-
-
-
 		// Instantiates a new file menu
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
@@ -103,7 +100,7 @@ public class ClueGame extends JFrame {
 		fileMenu.add(exitAction);	
 
 		//adds an accusation pop-up
-		ac=new AccusationPanel(originalDeck);
+		ac = new AccusationPanel(this);
 
 
 		// Adds the file menu to the menu bar
@@ -116,7 +113,7 @@ public class ClueGame extends JFrame {
 		add(menuBar, BorderLayout.NORTH);	
 
 		//creates the action menu
-		ClueGUI gui=new ClueGUI();
+		ClueGUI gui=new ClueGUI(this);
 		add(gui,BorderLayout.SOUTH);
 
 
@@ -204,7 +201,7 @@ public class ClueGame extends JFrame {
 			lineParts = playerIn.nextLine().split(",\\s+");
 			players.add(new ComputerPlayer(lineParts[0],
 					board.calcIndex(Integer.parseInt(lineParts[2].substring(1)), Integer.parseInt(lineParts[3].substring(0, lineParts[3].length()-1))),
-					convertColor(lineParts[1])));
+					convertColor(lineParts[1]), this));
 			cards.add(new Card(lineParts[0], CardType.PERSON));
 		}
 
@@ -285,24 +282,22 @@ public class ClueGame extends JFrame {
 	}
 
 	// Checks to see if an accusation is correct or not
-	public static boolean checkAccusation(Solution solution) {
-		if(getSolution().equals(solution)){
+	public boolean checkAccusation(Solution solution) {
+		if(this.solution.equals(solution)){
 			return true;}
 		return false;
 	}
-	private static Object getSolution() {
-		return solution;
-	}
 
-	public static void checkAccusationHandler(Solution solution) {
+	public void checkAccusationHandler(Solution solution) {
 		String message;
-		if(!players.get(playerIndex).isCanMakeAccusation()){
+		if(!players.get(playerIndex).isCanMakeAccusation()) {
 			ac.setVisible(false);
 			message="You can only make one Accusation per turn";
 			JOptionPane.showMessageDialog(null, message);
-		}else{	
-			players.get(playerIndex).setCanMakeSuggestion(false);
+		} else {	
+			players.get(playerIndex).setCanMakeAccusation(false);
 			if(playerIndex==0){
+				// Need to find a way to make this non-static
 				if(checkAccusation(solution)){
 					message="That is Correct";
 					JOptionPane.showMessageDialog(null, message);
@@ -311,16 +306,16 @@ public class ClueGame extends JFrame {
 					message="That is not Correct";
 					JOptionPane.showMessageDialog(null, message);
 				}
-			}else{
+			} else {
 
 				if(checkAccusation(solution)){
-					message ="Computer Player "+players.get(playerIndex).getName()+
+					message ="Computer Player "+ players.get(playerIndex).getName() +
 							" Accused "+solution.getPerson()+" of using "+solution.getWeapon()+
-							" in the "+solution.getRoom()+" and was correct";
+							" in the "+solution.getRoom()+" and was correct!";
 					JOptionPane.showMessageDialog(null, message);
 					System.exit(0);
-				}else{
-					message ="Computer Player "+players.get(playerIndex).getName()+
+				} else {
+					message ="Computer Player "+ players.get(playerIndex).getName()+
 							" Accused "+solution.getPerson()+" of using "+solution.getWeapon()+
 							" in the "+solution.getRoom()+" and was incorrect";
 					JOptionPane.showMessageDialog(null, message);
@@ -329,6 +324,7 @@ public class ClueGame extends JFrame {
 			}
 		}
 	}
+	
 	// Used to convert color from a string to a java class
 	public Color convertColor(String strColor) {
 		Color color;
@@ -375,7 +371,7 @@ public class ClueGame extends JFrame {
 
 	}
 
-	public static void nextPlayer(){
+	public void nextPlayer(){
 		Random r=new Random();
 		if(firstTurn){				//first turn done by Mrs. Scarlet
 			playerIndex=0; 
@@ -399,7 +395,17 @@ public class ClueGame extends JFrame {
 			}
 		}
 	}
+	
+	public void makeAccusation() {
+		if(playerIndex==0 && players.get(0).isCanMakeAccusation()){
+			ac.setVisible(true);
+		} else if (playerIndex == 0) {
+			String message="You can only make one accusation per turn";
+			JOptionPane.showMessageDialog(null, message);
+		}
+	}
 
+	
 	// EVERYTHING BELOW HERE IS FOR TESTING ONLY
 	// THESE SHOULD NEVER BE USED IN PRACTICE
 	public void setPlayers(ArrayList<Player> newPlayers) {
@@ -417,15 +423,6 @@ public class ClueGame extends JFrame {
 
 	}
 
-	public static void makeAccusation() {
-		if(playerIndex==0&&players.get(0).isCanMakeAccusation()){
-			ac.setVisible(true);
-		}else{
-			String message="You cannot make an accusation on another players turn.";
-			JOptionPane.showMessageDialog(null, message);
-		}
-
-	}
 
 
 }
