@@ -19,13 +19,13 @@ public class HumanPlayer extends Player {
 		super(name, startingLocation, color);
 		possibleTargets = new HashSet<BoardCell>();
 	}
-	
+
 	@Override
 	public boolean isHumanPlayer() {
 		return true;
 	}
 	@Override
-	public void makeMove(Board board, int dieRoll){
+	public void makeMove(Board board, int dieRoll, ClueGame game){
 		canMakeAccusation=true;
 		endturn=false;
 		board.startTargets(location, dieRoll);

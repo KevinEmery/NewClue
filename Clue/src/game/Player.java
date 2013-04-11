@@ -17,6 +17,7 @@ public class Player {
 	public Player() {
 		this("Mrs. Scarlet", 0, Color.red);
 	}
+
 	
 	// Creates a new player with the given parameters, and initializes their hand as a new, empty array list.
 	public Player(String name, int startLocation, Color color) {
@@ -90,14 +91,7 @@ public class Player {
 		g.drawOval(location % 25 * ClueGame.CELL_WIDTH + 3, location / 25 * ClueGame.CELL_HEIGHT + 3, 24, 24);
 	}
 	
-	
-	// EVERYTHING BELOW HERE IS FOR TESTING ONLY
-	// THESE SHOULD NEVER BE USED IN PRACTICE
-	public void setCurrentCell(BoardCell cell) {
-		this.currentCell = cell;
-	}
-
-	public void makeMove(Board board, int dieRoll) {
+	public void makeMove(Board board, int dieRoll, ClueGame game) {
 		endturn=true;
 	}
 
@@ -109,6 +103,22 @@ public class Player {
 		canMakeAccusation=b;
 		
 	}
+
+	public void forceMove(Board board, BoardCell currentCell) {
+		
+		this.currentCell = currentCell;
+		this.location = board.calcIndex(currentCell.row, currentCell.column);
+		
+		board.repaint();
+	}
+	
+	
+	// EVERYTHING BELOW HERE IS FOR TESTING ONLY
+	// THESE SHOULD NEVER BE USED IN PRACTICE
+	public void setCurrentCell(BoardCell cell) {
+		this.currentCell = cell;
+	}
+
 
 	
 

@@ -4,9 +4,9 @@ import game.Card.CardType;
 import game.AccusationPanel;
 import gui.ClueGUI;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -34,15 +34,12 @@ public class ClueGame extends JFrame {
 	private int noWeapons;
 	private DetectiveNotes detectiveNotes;
 	private AccusationPanel ac;
+	private ClueGUI controlPanel;
 	private boolean firstTurn = true;
 	private int playerIndex;
 
-
-
 	public final static int CELL_WIDTH = 30;
 	public final static int CELL_HEIGHT = 30;
-
-
 
 	// Sets up a listener that opens the detective notes when activated
 	private class detectiveNotesListener implements ActionListener {
@@ -85,7 +82,7 @@ public class ClueGame extends JFrame {
 		// Sets the standard window information
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue");
-		setSize(1000, 1000);
+		setSize(910, 1050);
 
 		// Instantiates a new file menu
 		JMenuBar menuBar = new JMenuBar();
@@ -102,26 +99,22 @@ public class ClueGame extends JFrame {
 		//adds an accusation pop-up
 		ac = new AccusationPanel(this);
 
-
+		// Instantiates and adds the board
+		add(board, BorderLayout.CENTER);		
+		
+		// Creates a card Menu
+		CardMenu cardmenu=new CardMenu(players.get(0));
+		add(cardmenu, BorderLayout.EAST);
+		
 		// Adds the file menu to the menu bar
 		menuBar.add(fileMenu);
-
-		// Instantiates and adds the board
-		add(board, BorderLayout.CENTER);
 
 		// Adds the menu bar
 		add(menuBar, BorderLayout.NORTH);	
 
 		//creates the action menu
-		ClueGUI gui=new ClueGUI(this);
-		add(gui,BorderLayout.SOUTH);
-
-
-		// Creates a card Menu
-		CardMenu cardmenu=new CardMenu(players.get(0));
-		add(cardmenu, BorderLayout.EAST);
-
-
+		controlPanel = new ClueGUI(this);
+		add(controlPanel, BorderLayout.SOUTH);
 	}
 
 	// Deals all of the cards in the deck to the players.
@@ -201,7 +194,7 @@ public class ClueGame extends JFrame {
 			lineParts = playerIn.nextLine().split(",\\s+");
 			players.add(new ComputerPlayer(lineParts[0],
 					board.calcIndex(Integer.parseInt(lineParts[2].substring(1)), Integer.parseInt(lineParts[3].substring(0, lineParts[3].length()-1))),
-					convertColor(lineParts[1]), this));
+					convertColor(lineParts[1])));
 			cards.add(new Card(lineParts[0], CardType.PERSON));
 		}
 
@@ -268,16 +261,30 @@ public class ClueGame extends JFrame {
 
 	// When a player mkes a suggestion, this function makes calls to different players and sees if they can disprove it.
 	// If they can, a card is returned.
-	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson) {
+	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson, BoardCell currentCell) {
+		System.out.println("Suggestion Made");
 		ArrayList<Card> disprovingCards = new ArrayList<Card>();
 		for(Player player: players) {
+			// Moves the accused player to that cell
+			if (person.equals(player.getName())) {
+				player.forceMove(board, currentCell);
+			}
 			Card result = player.disproveSuggestion(person, room, weapon);
 			if(result != null && !(accusingPerson == player)) {
 				disprovingCards.add(result);
 			}
 		}
-		if(disprovingCards.size() > 0)
-			return disprovingCards.get((new Random()).nextInt(disprovingCards.size()));
+		
+		// Updates the display results, and returns the appropriate variable
+		controlPanel.cluePanel.guessPanel.updateGuess(person + " in the " + room + " with the " + weapon);
+	
+		if(disprovingCards.size() > 0) {
+			Card result = disprovingCards.get((new Random()).nextInt(disprovingCards.size()));
+			controlPanel.cluePanel.resultPanel.updateResult(result.getName());
+			return result;
+		} 
+		
+		controlPanel.cluePanel.resultPanel.updateResult("No new clue");
 		return null;
 	}
 
@@ -299,11 +306,11 @@ public class ClueGame extends JFrame {
 			if(playerIndex==0){
 				// Need to find a way to make this non-static
 				if(checkAccusation(solution)){
-					message="That is Correct";
+					message="That is correct! You win!";
 					JOptionPane.showMessageDialog(null, message);
 					System.exit(0);
 				}else{
-					message="That is not Correct";
+					message="That is not correct";
 					JOptionPane.showMessageDialog(null, message);
 				}
 			} else {
@@ -366,7 +373,7 @@ public class ClueGame extends JFrame {
 		ClueGame game = new ClueGame();
 		game.setVisible(true);
 		// Adds the starting message
-		String message="You are Ms. Scarlet, press Next Player to begin play";
+		String message="You are " + game.getPlayers().get(0).getName() + ", press Next Player to begin play";
 		JOptionPane.showMessageDialog(null, message);
 
 	}
@@ -375,21 +382,21 @@ public class ClueGame extends JFrame {
 		Random r=new Random();
 		if(firstTurn){				//first turn done by Mrs. Scarlet
 			playerIndex=0; 
-			int dieRoll=r.nextInt(6)+1;	//makes a dieroll from 1 to 6
+			int dieRoll = r.nextInt(6) + 1;	//makes a dieroll from 1 to 6
 			ClueGUI.TextInputFrame.updatePlayer(players.get(playerIndex).getName());
 			ClueGUI.NumberDisplayPanel.updateRoll(dieRoll);
-			players.get(playerIndex).makeMove(board,dieRoll);
-			firstTurn=false;}
-		else{										//all other turns following
-			if(players.get(playerIndex).endturn){	//if a players turn is ended
+			players.get(playerIndex).makeMove(board,dieRoll, this);
+			firstTurn=false;
+		} else {										//all other turns following
+			if(players.get(playerIndex).endturn) {	//if a players turn is ended
 				playerIndex++;						//it moves to the next player
 				if(playerIndex==6){playerIndex=0;}	//loops back around
 				ClueGUI.TextInputFrame.updatePlayer(players.get(playerIndex).getName());
 				int dieRoll=r.nextInt(6)+1;			//makes a dieroll from 1 to 6
 				ClueGUI.NumberDisplayPanel.updateRoll(dieRoll);
-				players.get(playerIndex).makeMove(board,dieRoll);
+				players.get(playerIndex).makeMove(board,dieRoll, this);
 
-			}else{
+			} else {
 				String message="You are not done with your turn";
 				JOptionPane.showMessageDialog(null, message);
 			}

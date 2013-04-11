@@ -1,7 +1,9 @@
 package gui;
+
 import game.ClueGame;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,38 +15,56 @@ import javax.swing.border.TitledBorder;
 @SuppressWarnings("serial")
 public class ClueGUI extends JPanel{
 	
-	ClueGame game;
+	private ClueGame game;
+	public CluePanel cluePanel;
 	
 	//constructor
 	public ClueGUI(ClueGame game) {
 		
 		this.game = game;
-
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		add(new CluePanel(), BorderLayout.CENTER);
-		setSize(1000, 200);
-		//setTitle("Clue");
+		
+		cluePanel = new CluePanel();
+		add(cluePanel, BorderLayout.SOUTH);
+		
 	}
 	//overall panel that contains everything. We add this in the constructor. 
 	//It uses a t-row 3-column grid layout.
 	public class CluePanel extends JPanel {
 		private JButton nextPlayer;
 		private JButton makeAccusation;
+		public GuessPanel guessPanel;
+		public ResultPanel resultPanel;
+		private NumberDisplayPanel diePanel;
 		
 		public CluePanel() {
-			
 			nextPlayer = new JButton("Next player");
 			makeAccusation = new JButton("Make an accusation");
 			nextPlayer.addActionListener(new nextPlayerListener());
 			makeAccusation.addActionListener(new AccusationListener());
-			setLayout(new GridLayout(2, 3));
-			add(new TextInputFrame("Whose turn?"));
-			add(nextPlayer);
-			add(makeAccusation);
-			add(new NumberDisplayPanel("Die", "Roll"));
-	
-			add(new GuessPanel("Guess", "Guess"));
-			add(new ResultPanel("Guess Result", "Response"));
+			setPreferredSize(new Dimension(900, 200));
+			JPanel topRow = new JPanel();
+			topRow.setLayout(new GridLayout(0, 3));
+			topRow.add(new TextInputFrame("Whose turn?"));
+			topRow.add(nextPlayer);
+			topRow.add(makeAccusation);
+			topRow.setPreferredSize(new Dimension(800, 50));
+			
+			diePanel = new NumberDisplayPanel("Die", "Roll");
+			diePanel.setPreferredSize(new Dimension(100, 100));
+			guessPanel = new GuessPanel("Guess", "Guess");
+			guessPanel.setPreferredSize(new Dimension(500, 100));
+			resultPanel = new ResultPanel("Guess Result", "Response");
+			resultPanel.setPreferredSize(new Dimension(200, 100));
+			JPanel bottomRow = new JPanel();
+			bottomRow.add(diePanel);
+			bottomRow.add(guessPanel);
+			bottomRow.add(resultPanel);
+			
+
+
+			
+			add(topRow, BorderLayout.NORTH);
+			add(bottomRow, BorderLayout.SOUTH);
 			
 		}
 	}
@@ -63,33 +83,37 @@ public class ClueGUI extends JPanel{
 			textField.setText(name);
 		}
 	}
-	public static class GuessPanel extends JPanel {
-		private static JTextField guess;
+	public class GuessPanel extends JPanel {
+		private JTextField guess;
 		public GuessPanel(String panelLabel, String textLabel) {
 			setBorder(new TitledBorder (new EtchedBorder(), panelLabel));
-			setLayout(new GridLayout(0, 2));
+			setLayout(new GridLayout(2, 0));
 			JLabel label = new JLabel(textLabel);
+			label.setPreferredSize(new Dimension(100, 50));
 			guess = new JTextField(2);
+			guess.setSize(new Dimension(400, 50));
 			guess.setEditable(false);
 			add(label);
 			add(guess);
 		}
-		public static void updateGuess(String guessed){
+		public void updateGuess(String guessed){
 			guess.setText(guessed);
 		}
 	}
+	
 	public static class ResultPanel extends JPanel {
-		private static JTextField result;
+		private JTextField result;
 		public ResultPanel(String panelLabel, String textLabel) {
 			setBorder(new TitledBorder (new EtchedBorder(), panelLabel));
-			setLayout(new GridLayout(0, 2));
+			setLayout(new GridLayout(2, 0));
 			JLabel label = new JLabel(textLabel);
 			result = new JTextField(2);
 			result.setEditable(false);
 			add(label);
 			add(result);
 		}
-		public static void updateGuess(String results){
+		
+		public void updateResult(String results){
 			result.setText(results);
 		}
 	}
@@ -99,7 +123,7 @@ public class ClueGUI extends JPanel{
 		private static JTextField number; //For changing it during runtime we made the number a member var.
 		public NumberDisplayPanel(String panelLabel, String textLabel) {
 			setBorder(new TitledBorder (new EtchedBorder(), panelLabel));
-			setLayout(new GridLayout(0, 2));
+			setLayout(new GridLayout(2, 0));
 			JLabel label = new JLabel(textLabel);
 			number = new JTextField(2);
 			number.setEditable(false);
@@ -110,8 +134,8 @@ public class ClueGUI extends JPanel{
 		public static void updateRoll(int dieRoll){
 			number.setText(Integer.toString(dieRoll));
 		}
-
 	}
+	
 	private class nextPlayerListener implements ActionListener	{
 		public void actionPerformed(ActionEvent e){
 			game.nextPlayer();
@@ -123,4 +147,5 @@ public class ClueGUI extends JPanel{
 			game.makeAccusation();
 		}
 	}
+	
 }

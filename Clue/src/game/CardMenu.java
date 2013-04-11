@@ -2,6 +2,7 @@ package game;
 
 import game.Card.CardType;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ import javax.swing.border.TitledBorder;
 
 public class CardMenu extends JPanel {
 	CardMenu(Player p){
+		setPreferredSize(new Dimension(150, 550));
 		setBorder( new TitledBorder(new EtchedBorder(), "My Cards"));
 		setLayout(new GridLayout(3,0));
 		JPanel people=new JPanel();

@@ -14,27 +14,23 @@ public class ComputerPlayer extends Player {
 	private String suggestedRoom;
 	private String suggestedPerson;
 	private String suggestedWeapon;
-	private boolean haveAccusation;
+	private boolean hasAccusation = false;
 	private Solution accusationSolution;
-	private ClueGame game;
 	
 
 	// Creates a default computer player. In practice this should never be used.
 	public ComputerPlayer() {
-		this("Mrs. Peacock", 0, Color.blue, new ClueGame());
-	}
-	
-	public ComputerPlayer(String name, int startLocation, Color color) {
-		this(name, startLocation, color, new ClueGame());
+		this("Mrs. Peacock", 0, Color.blue);
 	}
 	
 	// Creates a computer player with the given parameters. These will all be read out of a file
-	public ComputerPlayer(String name, int startLocation, Color color, ClueGame game) {
+	public ComputerPlayer(String name, int startLocation, Color color) {
 		super(name, startLocation, color);
 		lastRoomVisited = ' ';
 		cardsSeen = new ArrayList<Card>();
-		this.game = game;
 	}
+	
+	
 
 
 	// Used for finding a computer player in the array list
@@ -118,21 +114,30 @@ public class ComputerPlayer extends Player {
 		return suggestedWeapon;
 	}
 	@Override
-	public void makeMove(Board board, int dieRoll){
+	public void makeMove(Board board, int dieRoll, ClueGame game){
 		endturn=true;
-		canMakeAccusation=true;
 		board.startTargets(location, dieRoll);
 		currentCell= pickLocation(board.getTargets());
 		location=board.calcIndex(currentCell.row, currentCell.column);
+		if(hasAccusation){
+			game.checkAccusationHandler(accusationSolution);
+		}
+		
 		if(currentCell.isRoom()){
+			// Updates last visited room
 			lastRoomVisited=((RoomCell)currentCell).getInitial();
+			
+			// Prompts for a suggestion
+			createSuggestion(game);
+			Card shownCard = game.handleSuggestion(suggestedPerson, suggestedRoom, suggestedWeapon, this, currentCell);
+			if (!(shownCard == null)) {
+				updateSeen(shownCard);
+			} else {
+				accusationSolution = new Solution(suggestedPerson, suggestedRoom, suggestedWeapon);
+				hasAccusation = true;
+			}
 		}
-		if(haveAccusation){
-			game.checkAccusationHandler(accusationSolution);
-		}
-		/*if(haveAccusation){
-			game.checkAccusationHandler(accusationSolution);
-		}*/
+		
 		board.repaint();
 	}
 

@@ -12,6 +12,7 @@ import game.ComputerPlayer;
 import game.HumanPlayer;
 import game.Player;
 import game.Solution;
+import game.WalkwayCell;
 import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -254,13 +255,13 @@ public class GameActionTests {
 		myGame.getPlayers().get(5).addCardToHand(hallCard);
 		
 		// Asserts that if the human player makes a suggestion that can only be disproven using their own cards, null is returned
-		Assert.assertNull(myGame.handleSuggestion("Mrs. Scarlet", "Dining Room", "Revolver", myGame.getPlayers().get(0)));
+		Assert.assertNull(myGame.handleSuggestion("Mrs. Scarlet", "Dining Room", "Revolver", myGame.getPlayers().get(0), new WalkwayCell(0, 0)));
 		
 		// Asserts that if a player makes a suggest that no one can disprove, null is returned
-		Assert.assertNull(myGame.handleSuggestion("Mrs. Peacock", "Dining Room", "Revolver", myGame.getPlayers().get(0)));
+		Assert.assertNull(myGame.handleSuggestion("Mrs. Peacock", "Dining Room", "Revolver", myGame.getPlayers().get(0), new WalkwayCell(0, 0)));
 		
 		// Asserts that if the suggestion is such that only the human player can disprove it, they do
-		Assert.assertEquals(scarletCard, myGame.handleSuggestion("Mrs. Scarlet", "Dining Room", "Revolver", myGame.getPlayers().get(1)));
+		Assert.assertEquals(scarletCard, myGame.handleSuggestion("Mrs. Scarlet", "Dining Room", "Revolver", myGame.getPlayers().get(1), new WalkwayCell(0, 0)));
 		
 		// Asserts that if multiple players have cards to disprove a suggestion, they both can given multiple opportunities
 		// This tests that players are asked to disprove suggestions in random order
@@ -268,7 +269,7 @@ public class GameActionTests {
 		int scarletCount = 0;
 		int ropeCount = 0;
 		for (int i = 0; i < 100; i++) {
-			Card card = myGame.handleSuggestion("Mrs. Scarlet", "Hall", "Rope", myGame.getPlayers().get(5));
+			Card card = myGame.handleSuggestion("Mrs. Scarlet", "Hall", "Rope", myGame.getPlayers().get(5), new WalkwayCell(0, 0));
 			if (card.equals(scarletCard))
 				scarletCount++;
 			else if (card.equals(hallCard))
