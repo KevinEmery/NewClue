@@ -34,6 +34,7 @@ public class ClueGame extends JFrame {
 	private int noWeapons;
 	private DetectiveNotes detectiveNotes;
 	private AccusationPanel ac;
+	private SuggestionPane suggestionPane;
 	private ClueGUI controlPanel;
 	private boolean firstTurn = true;
 	private int playerIndex;
@@ -75,6 +76,7 @@ public class ClueGame extends JFrame {
 		board.setPlayers(players);
 		selectAnswer();
 		deal();
+		board.setGame(this);
 
 		// Sets up a new instance of detective notes
 		detectiveNotes = new DetectiveNotes(originalDeck);
@@ -262,7 +264,6 @@ public class ClueGame extends JFrame {
 	// When a player mkes a suggestion, this function makes calls to different players and sees if they can disprove it.
 	// If they can, a card is returned.
 	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson, BoardCell currentCell) {
-		System.out.println("Suggestion Made");
 		ArrayList<Card> disprovingCards = new ArrayList<Card>();
 		for(Player player: players) {
 			// Moves the accused player to that cell
@@ -290,8 +291,8 @@ public class ClueGame extends JFrame {
 
 	// Checks to see if an accusation is correct or not
 	public boolean checkAccusation(Solution solution) {
-		if(this.solution.equals(solution)){
-			return true;}
+		if(this.solution.equals(solution))
+			return true;
 		return false;
 	}
 
@@ -304,7 +305,6 @@ public class ClueGame extends JFrame {
 		} else {	
 			players.get(playerIndex).setCanMakeAccusation(false);
 			if(playerIndex==0){
-				// Need to find a way to make this non-static
 				if(checkAccusation(solution)){
 					message="That is correct! You win!";
 					JOptionPane.showMessageDialog(null, message);
@@ -388,9 +388,11 @@ public class ClueGame extends JFrame {
 			players.get(playerIndex).makeMove(board,dieRoll, this);
 			firstTurn=false;
 		} else {										//all other turns following
-			if(players.get(playerIndex).endturn) {	//if a players turn is ended
+			if(players.get(playerIndex).endturn) {	//if a players turn is ended				
 				playerIndex++;						//it moves to the next player
-				if(playerIndex==6){playerIndex=0;}	//loops back around
+				if(playerIndex==6) {
+					playerIndex=0;
+				}	//loops back around
 				ClueGUI.TextInputFrame.updatePlayer(players.get(playerIndex).getName());
 				int dieRoll=r.nextInt(6)+1;			//makes a dieroll from 1 to 6
 				ClueGUI.NumberDisplayPanel.updateRoll(dieRoll);
@@ -403,6 +405,11 @@ public class ClueGame extends JFrame {
 		}
 	}
 	
+	public void makeSuggestion() {
+		suggestionPane = new SuggestionPane(this, true, this);
+		suggestionPane.setVisible(true);	
+	}
+
 	public void makeAccusation() {
 		if(playerIndex==0 && players.get(0).isCanMakeAccusation()){
 			ac.setVisible(true);

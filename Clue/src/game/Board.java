@@ -27,6 +27,7 @@ public class Board extends JPanel implements MouseListener {
 	private Map<Integer, LinkedList<Integer>> adjList;
 	private int mouseX;
 	private int mouseY;
+	private ClueGame game;
 
 	
 	// The board dimensions, as set by the loadBoardConfig() function, are placed here
@@ -347,7 +348,7 @@ public class Board extends JPanel implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		mouseX=e.getX();
 		mouseY=e.getY();
-		((HumanPlayer)players.get(0)).checkValidity(mouseX, mouseY, this);
+		((HumanPlayer)players.get(0)).checkValidity(mouseX, mouseY, this, game);
 	}
 
 	@Override
@@ -372,5 +373,9 @@ public class Board extends JPanel implements MouseListener {
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void setGame(ClueGame game) {
+		this.game = game;
 	}
 }

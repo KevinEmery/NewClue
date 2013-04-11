@@ -35,11 +35,13 @@ public class HumanPlayer extends Player {
 		}
 		board.repaint();
 	}
-	public void checkValidity(int mouseX, int mouseY, Board board){
+	
+	public void checkValidity(int mouseX, int mouseY, Board board, ClueGame game){
 		if(board.getCellAt(mouseY/ClueGame.CELL_WIDTH, mouseX/ClueGame.CELL_HEIGHT).drawingPossible){
 			currentCell= board.getCellAt(mouseY/ClueGame.CELL_WIDTH, mouseX/ClueGame.CELL_HEIGHT);
 			location=board.calcIndex(currentCell.row, currentCell.column);
 			board.repaint();
+			makeSuggestion(game);
 			endMove(board);
 		}else{
 			String message="That is not a valid cell";
@@ -47,10 +49,16 @@ public class HumanPlayer extends Player {
 		}
 	}
 	
+	private void makeSuggestion(ClueGame game) {
+		if (currentCell.isRoom()) {
+			game.makeSuggestion();
+		}
+	}
+
 	public void endMove(Board board){
 		for (BoardCell cell : possibleTargets) {
 			cell.setDrawingPossible(false);
-		}
+		}		
 		endturn=true;
 	}
 }

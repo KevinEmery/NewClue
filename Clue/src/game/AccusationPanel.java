@@ -21,9 +21,9 @@ public class AccusationPanel extends JFrame{
 	private ArrayList<String> playerList;
 	private ArrayList<String> weaponList;
 	private ArrayList<String> roomList;
-	private String personChoice="Mrs. Scarlet";
-	private String weaponChoice="Rope";
-	private String roomChoice="Conservatory";
+	private String personChoice;
+	private String weaponChoice;
+	private String roomChoice;
 	JComboBox PersonCombo;
 	JComboBox WeaponCombo;
 	JComboBox RoomCombo;
@@ -55,19 +55,17 @@ public class AccusationPanel extends JFrame{
 		person.setText("Person");
 		PersonCombo = new JComboBox(playerList.toArray());
 		PersonCombo.addActionListener(listener);
-		//PersonCombo.setBorder( new TitledBorder(new EtchedBorder(),"Person Guess"));
 
 		JLabel weapon=new JLabel();
 		weapon.setText("Weapon");
 		WeaponCombo = new JComboBox(weaponList.toArray());
 		WeaponCombo.addActionListener(listener);
-		//WeaponCombo.setBorder( new TitledBorder(new EtchedBorder(),"Weapon Guess"));
+
 
 		JLabel room=new JLabel();
 		room.setText("Room");
 		RoomCombo = new JComboBox(roomList.toArray());
 		RoomCombo.addActionListener(listener);
-		//RoomCombo.setBorder( new TitledBorder(new EtchedBorder(),"Room Guess"));
 
 		add(person);
 		add(PersonCombo);
@@ -77,6 +75,9 @@ public class AccusationPanel extends JFrame{
 		add(RoomCombo);
 		add(submitbutton);
 		add(cancelbutton);
+		personChoice = playerList.get(0);
+		weaponChoice = weaponList.get(0);
+		roomChoice = roomList.get(0);
 	}
 	private class ComboListener implements ActionListener{
 
